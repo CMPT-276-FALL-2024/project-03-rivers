@@ -1,11 +1,19 @@
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=16373834&assignment_repo_type=AssignmentRepo)
 
-##  Rivers 03 - Music Therapy
+## Rivers 03 - Music Therapy
 
-##  Group Members:
+## Group Members
+
 1. Ryota Kato
-2. Eito Nishikawa 
-3. Tulika Varma 
+2. Eito Nishikawa
+3. Tulika Varma
 4. Ansh Aggarwal
 
-##  Project Description:
+## Project Description
+
+First, weather information (weather, temperature, humidity) is acquired using the Weather API.
+
+The acquired weather information is sent to ChatGPT using the OpenAI API, and ChatGPT is asked to suggest some music that matches the weather information.
+
+Display the suggested music information using Spotify API, and display the music information and thumbnails on the website and play them (also create a section to play the music).
+
