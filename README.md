@@ -13,3 +13,7 @@
 
 In the web project, the user logs in to Spotify. According to the emotions being detected by the user, a personalized song recommendation list is provided through Spotify API via ChatGPT, showing the details of the song on an accordant screen. Thereafter, users can create a playlist of suggested songs and push it directly into their Spotify account.
 
+AI report PDF:
+
+[M0](/AI-Form/M0/)
+
