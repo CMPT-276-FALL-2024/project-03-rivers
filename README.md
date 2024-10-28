@@ -11,9 +11,8 @@
 
 ## Project Description
 
-In the web project, the user logs in to Spotify. According to the emotions being detected by the user, a personalized song recommendation list is provided through Spotify API via ChatGPT, showing the details of the song on an accordant screen. Thereafter, users can create a playlist of suggested songs and push it directly into their Spotify account.
+This project aims to develop a web application that will allow students and health conscious users to find new recipes based on ingredients they have and review nutritional information. Key features include searching for recipes, cooking instructions, displaying nutritional information, and filtering by specific dietary restrictions and food genres
 
 AI report PDF:
 
 [M0](/AI-Form/M0/)
-
