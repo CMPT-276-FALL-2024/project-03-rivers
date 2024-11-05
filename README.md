@@ -16,3 +16,4 @@ This project aims to develop a web application that will allow students and heal
 AI report PDF:
 
 [M0](/AI-Form/M0/)
+[M1](/AI-Form/M1/)
