@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import MenuBar from "@/components/menu-bar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,7 +36,13 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <header>
+              <MenuBar />
+            </header>
+
+            <main className="relative flex justify-center min-h-screen">
             {children}
+            </main>
           </ThemeProvider>
       </body>
     </html>
