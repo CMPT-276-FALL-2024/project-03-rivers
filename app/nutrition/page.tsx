@@ -7,7 +7,7 @@ export default function Nutrition() {
     return (
         <div className="container">
             <div className="min-h-screen p-4">
-                <h1 className="text-center text-5xl font-bold mb-4 text-orange-600">
+                <h1 className="text-center text-5xl font-bold mb-8 text-orange-600">
                 Potato Nutrition Facts
                 </h1>
             
