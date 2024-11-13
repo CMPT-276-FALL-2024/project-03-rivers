@@ -1,32 +1,40 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
+interface Recipe {
+    id: number;
+    image: string;
+    title: string;
+}
 
-export default function RecipeCard() {
+export default function RecipeCard({ recipe }: { recipe: Recipe }) {
+    const router = useRouter();
+
+    const handleViewClick = () => {
+        router.push(`/recipe/result?id=${recipe.id}`);
+    };
+
     return (
-        <div>
-            <Card className="w-[300px] shadow-md m-5">
-                <CardHeader>
-                    <Image 
-                        src="/recipe/pic1.jpg"
-                        alt="recipe image"
-                        width={360}
-                        height={240}
-                        className="rounded-t-lg"
-                    />
-                </CardHeader>
-                <CardContent>
-                    <div className="flex justify-between items-center pt-5">
-                        <p>Calories</p>
-                        <Button>View</Button>                     
-                    </div>
-
-                </CardContent>
-                {/* <CardFooter>
-                    <p>Card Footer</p>
-                </CardFooter> */}
-            </Card>
-        </div>
+        <Card className="w-full shadow-md">
+            <CardHeader className="p-0">
+                <Image 
+                    src={recipe.image}
+                    alt={recipe.title}
+                    width={300}
+                    height={200}
+                    className="w-full h-48 object-cover rounded-t-lg"
+                />
+            </CardHeader>
+            <CardContent className="p-4">
+                <CardTitle className="text-lg mb-2">{recipe.title}</CardTitle>
+                <div className="flex justify-between items-center">
+                    <Button onClick={handleViewClick} size="sm">View</Button>
+                </div>
+            </CardContent>
+        </Card>
     );
 }

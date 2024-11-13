@@ -1,38 +1,52 @@
+"use client";
+
 import Image from "next/image";
 import RecipeCard from "./components/recipe-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { SelectFruits } from "./components/cuisine-selector";
+import { CheckboxIngredients } from "./components/nutrition-selector";
+import { useState } from "react";
 
+interface Recipe {
+  id: number;
+  title: string;
+  image: string;
+}
 
-export default function Home() {
+export default function Recipe() {
+    const [recipes, setRecipes] = useState<Recipe[]>([]);
+
+    const handleRecipesFetched = (fetchedRecipes: Recipe[]) => {
+      console.log("Recipes received in page component:", fetchedRecipes); // デバッグ用ログ
+      setRecipes(fetchedRecipes);
+    };
+
     return (
-        <div className="">
-            <div className="flex items-center justify-center mt-20 gap-6">
-                <SelectFruits />
+        <div className="container mx-auto px-4 py-8">
+            <div className="flex flex-col md:flex-row items-center justify-center mt-20 gap-6">
+                <div className="w-full md:w-1/3">
+                    <CheckboxIngredients onRecipesFetched={handleRecipesFetched} />
+                </div>
+
                 <Image 
                     src="/recipe/arrow.png"
                     alt="recipe image"
-                    width={177}
-                    height={121}
-                    className="rounded-t-lg"
+                    width={100}
+                    height={68}
+                    className="hidden md:block"
                 />
-                <ScrollArea className="w-[700px] h-[700px] rounded-md border p-4">
-                    <div className="grid grid-cols-2 gap-1">
-                        <RecipeCard />            
-                        <RecipeCard />            
-                        <RecipeCard />            
-                        <RecipeCard />            
-                        <RecipeCard />            
-                        <RecipeCard />            
-                        <RecipeCard />            
-                        <RecipeCard />            
-                        <RecipeCard />            
+
+                <ScrollArea className="w-full md:w-2/3 h-[700px] rounded-md border p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {recipes.length === 0 ? (
+                            <p className="col-span-full text-center">Select ingredients to search for recipes...</p>
+                        ) : (
+                            recipes.map((recipe) => (
+                                <RecipeCard key={recipe.id} recipe={recipe} />
+                            ))
+                        )}
                     </div>        
                 </ScrollArea>
-
             </div>
-
         </div>
-
     );
 }
