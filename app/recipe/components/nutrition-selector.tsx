@@ -87,7 +87,7 @@ export function CheckboxIngredients({ onRecipesFetched }: { onRecipesFetched: (r
         throw new Error("Expected an array of recipes, but got: " + JSON.stringify(data));
       }
 
-      const recipes: Recipe[] = data.map((recipe: any) => ({
+      const recipes: Recipe[] = data.map((recipe: { id: number; title: string; image: string }) => ({
         id: recipe.id,
         title: recipe.title,
         image: recipe.image,
