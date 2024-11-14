@@ -16,7 +16,7 @@ export default function Recipe() {
     const [recipes, setRecipes] = useState<Recipe[]>([]);
 
     const handleRecipesFetched = (fetchedRecipes: Recipe[]) => {
-      console.log("Recipes received in page component:", fetchedRecipes); // デバッグ用ログ
+      console.log("Recipes received in page component:", fetchedRecipes); 
       setRecipes(fetchedRecipes);
     };
 
@@ -38,7 +38,7 @@ export default function Recipe() {
                 <ScrollArea className="w-full md:w-2/3 h-[700px] rounded-md border p-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {recipes.length === 0 ? (
-                            <p className="col-span-full text-center">Select ingredients to search for recipes...</p>
+                            <p className="col-span-full text-center items-center justify-center text-gray-400">Select ingredients to search for recipes...</p>
                         ) : (
                             recipes.map((recipe) => (
                                 <RecipeCard key={recipe.id} recipe={recipe} />
@@ -50,3 +50,4 @@ export default function Recipe() {
         </div>
     );
 }
+
