@@ -3,7 +3,7 @@
 import Image from "next/image";
 import RecipeCard from "./components/recipe-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { CheckboxIngredients } from "./components/nutrition-selector";
+import { CheckboxIngredients } from "./components/ingredients-selector";
 import { useState } from "react";
 
 interface Recipe {

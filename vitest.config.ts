@@ -1,12 +1,16 @@
+// vite.config.ts
 import { defineConfig } from "vitest/config";
-// vitest.setup.ts
-import "@testing-library/jest-dom";
-
+import path from "path";
 
 export default defineConfig({
   test: {
-    environment: "jsdom", // Provides a DOM environment
+    environment: "jsdom",
     globals: true,
-    setupFiles: "./vitest.setup.ts", // Setup file for global mocks or configurations
+    setupFiles: "./vitest.setup.ts",
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./"), // ルートディレクトリを指すエイリアス
+    },
   },
 });
