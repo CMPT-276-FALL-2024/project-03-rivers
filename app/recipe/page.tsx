@@ -1,5 +1,5 @@
 "use client";
-
+//test
 import Image from "next/image";
 import RecipeCard from "./components/recipe-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
