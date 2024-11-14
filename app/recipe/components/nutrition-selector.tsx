@@ -50,7 +50,7 @@ const FormSchema = z.object({
   }),
 });
 
-const apiKey = process.env.SPOONACULAR_API_KEY;
+const apiKey = process.env.NEXT_PUBLIC_SPOONACULAR_API_KEY;
 
 interface Recipe {
   id: number;
