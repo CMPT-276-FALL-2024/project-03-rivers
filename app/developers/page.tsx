@@ -1,4 +1,4 @@
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
 import Image from "next/image";
 import DeveloperCard from "./components/dev-card";
 

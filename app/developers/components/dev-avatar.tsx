@@ -1,6 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import Image from "next/image";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { CardHeader} from "@/components/ui/card";
+
 
 interface DeveloperAvatarProps {
     imageSrc?: string;
