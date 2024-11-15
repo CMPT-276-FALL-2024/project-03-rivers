@@ -1,7 +1,7 @@
 // app/recipe/result/components/Instructions.tsx
 "use client";
 
-const Instructions = () => {
+const Instructions = ({ recipeId }: { recipeId: number }) => {
   const steps = [
     { step: 1, description: "Start by bringing a large pot of salted water to a boil. Add the pasta and cook according to the package instructions until al dente. Drain and set aside, reserving a cup of pasta water." },
     { step: 2, description: "In a large skillet, heat olive oil over medium heat. Add minced garlic and sauté until fragrant, about 1 minute. Be careful not to burn the garlic." },
