@@ -3,50 +3,53 @@ import { useEffect, useState } from "react";
 import { CaloreisCard } from "./components/caloreis-card";
 import { ImageCard } from "./components/image-card";
 import { NutritionFactsCard } from "./components/nutrition-card";
-import { useRecipeContext } from "../context/RecipeContext";
 
 export default function Nutrition() {
-    const { selectedRecipe } = useRecipeContext();
+    const [selectedRecipe, setSelectedRecipe] = useState(() => {
+        if (typeof window !== "undefined") {
+            const savedRecipe = localStorage.getItem('selectedRecipe');
+            return savedRecipe ? JSON.parse(savedRecipe) : null;
+        }
+        return null;
+    });
     const [nutritionData, setNutritionData] = useState(null);
 
     useEffect(() => {
-        // selectedRecipeが存在しない場合は早期リターン
-        if (!selectedRecipe || !selectedRecipe.title) {
-            console.log("No selected recipe or title is undefined."); // デバッグログ
-            return;
-        }
-
-        console.log("Selected recipe title:", selectedRecipe.title); // デバッグログ
-
-        async function fetchNutritionData() {
-            try {
-                // URLエンコードされたクエリを使用
-                const query = encodeURIComponent(selectedRecipe.title);
-                const response = await fetch(`https://api.nutritionix.com/v1_1/search/${query}?results=0:1&fields=item_name,nf_calories,nf_total_fat,nf_saturated_fat,nf_cholesterol,nf_sodium,nf_total_carbohydrate,nf_dietary_fiber,nf_sugars,nf_protein&appId=YOUR_APP_ID&appKey=YOUR_APP_KEY`);
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+        if (selectedRecipe && selectedRecipe.title) {
+            async function fetchNutritionData() {
+                try {
+                    const query = encodeURIComponent(selectedRecipe.title);
+                    const response = await fetch(`https://api.nutritionix.com/v1_1/search/${query}?results=0:1&fields=item_name,nf_calories,nf_total_fat,nf_saturated_fat,nf_cholesterol,nf_sodium,nf_total_carbohydrate,nf_dietary_fiber,nf_sugars,nf_protein&appId=2a191a39&appKey=880295eca6b8b0e18e5545f1b9bd057b`);
+    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}, statusText: ${response.statusText}`);
+                    }
+    
+                    const data = await response.json();
+                    console.log("Fetched data:", data);
+    
+                    if (data.hits && data.hits.length > 0) {
+                        setNutritionData(data.hits[0].fields || data.hits[0]);
+                    } else {
+                        console.error("No nutrition data found for the selected recipe");
+                        setNutritionData(null);
+                    }
+                } catch (error) {
+                    // エラーの内容を確認するために、詳細を出力
+                    console.error("Error fetching nutrition data:", error);
+                    console.error("Error details (as string):", String(error));
                 }
-
-                const data = await response.json();
-                console.log("Nutrition data:", data); // デバッグログ
-
-                if (data.hits && data.hits.length > 0) {
-                    setNutritionData(data.hits[0]);
-                } else {
-                    console.error("No nutrition data found for the selected recipe");
-                    setNutritionData(null);
-                }
-            } catch (error) {
-                console.error("Error fetching nutrition data:", error);
             }
+    
+            fetchNutritionData();
         }
-
-        fetchNutritionData();
     }, [selectedRecipe]);
+    
+    
+    
 
     if (!selectedRecipe) {
-        return <div className="text-center p-4"> no slect</div>;
+        return <div className="text-center p-4">レシピが選択されていません。</div>;
     }
 
     return (

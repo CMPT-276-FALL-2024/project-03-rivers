@@ -1,11 +1,9 @@
 "use client";
-//test
 import Image from "next/image";
 import RecipeCard from "./components/recipe-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CheckboxIngredients } from "./components/ingredients-selector";
-import { useState } from "react";
-import { useRecipeContext } from "../context/RecipeContext"; // RecipeContextをインポート
+import { useState, useEffect } from "react";
 
 interface Recipe {
   id: number;
@@ -15,17 +13,23 @@ interface Recipe {
 
 export default function Recipe() {
     const [recipes, setRecipes] = useState<Recipe[]>([]);
-    const { setSelectedRecipe } = useRecipeContext(); // RecipeContextからsetSelectedRecipeを取得
 
     const handleRecipesFetched = (fetchedRecipes: Recipe[]) => {
       console.log("Recipes received in page component:", fetchedRecipes); 
       setRecipes(fetchedRecipes);
 
-      // 最初のレシピを選択してグローバル状態に設定
       if (fetchedRecipes.length > 0) {
-        setSelectedRecipe(fetchedRecipes[0]);
+        localStorage.setItem('selectedRecipe', JSON.stringify(fetchedRecipes[0])); // 初期レシピを localStorage に保存
       }
     };
+
+    useEffect(() => {
+      // コンポーネントのマウント時に選択されたレシピを読み込み
+      const savedRecipe = localStorage.getItem('selectedRecipe');
+      if (savedRecipe) {
+        console.log("Loaded recipe from localStorage:", JSON.parse(savedRecipe));
+      }
+    }, []);
 
     return (
         <div className="container mx-auto px-4 py-8">

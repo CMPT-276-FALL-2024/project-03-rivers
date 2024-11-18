@@ -16,4 +16,3 @@ export function ImageCard({ recipeImage }: { recipeImage: string }) {
       </Card>
   );
 }
-
