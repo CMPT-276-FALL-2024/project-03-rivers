@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import MenuBar from "@/components/menu-bar";
+import { RecipeProvider } from "./context/RecipeContext"; // 追加する部分
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,20 +31,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <RecipeProvider> {/* Add RecipeProvider */}
             <header>
               <MenuBar />
             </header>
 
             <main className="relative flex justify-center min-h-screen">
-            {children}
+              {children}
             </main>
-          </ThemeProvider>
+          </RecipeProvider> {/* close RecipeProvider*/}
+        </ThemeProvider>
       </body>
     </html>
   );

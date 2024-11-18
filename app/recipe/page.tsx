@@ -1,4 +1,3 @@
-
 "use client";
 //test
 import Image from "next/image";
@@ -6,6 +5,7 @@ import RecipeCard from "./components/recipe-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CheckboxIngredients } from "./components/ingredients-selector";
 import { useState } from "react";
+import { useRecipeContext } from "../context/RecipeContext"; // RecipeContextをインポート
 
 interface Recipe {
   id: number;
@@ -15,10 +15,16 @@ interface Recipe {
 
 export default function Recipe() {
     const [recipes, setRecipes] = useState<Recipe[]>([]);
+    const { setSelectedRecipe } = useRecipeContext(); // RecipeContextからsetSelectedRecipeを取得
 
     const handleRecipesFetched = (fetchedRecipes: Recipe[]) => {
       console.log("Recipes received in page component:", fetchedRecipes); 
       setRecipes(fetchedRecipes);
+
+      // 最初のレシピを選択してグローバル状態に設定
+      if (fetchedRecipes.length > 0) {
+        setSelectedRecipe(fetchedRecipes[0]);
+      }
     };
 
     return (

@@ -1,10 +1,10 @@
-
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useRecipeContext } from "../../context/RecipeContext"; // ここでRecipeContextをインポート
 
 interface Recipe {
     id: number;
@@ -14,8 +14,10 @@ interface Recipe {
 
 export default function RecipeCard({ recipe }: { recipe: Recipe }) {
     const router = useRouter();
+    const { setSelectedRecipe } = useRecipeContext(); // RecipeContextからsetSelectedRecipeを取得
 
     const handleViewClick = () => {
+        setSelectedRecipe(recipe); // 選択したレシピをグローバル状態にセット
         router.push(`/recipe/result?id=${recipe.id}`);
     };
 
