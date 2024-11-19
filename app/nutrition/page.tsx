@@ -29,6 +29,7 @@ export default function NutritionPage() {
                   <CheckboxFood />
                 </div>
             </div>
+            
             <Image 
                     src="/recipe/arrow.png"
                     alt="recipe image"
