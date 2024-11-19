@@ -19,8 +19,7 @@ export default function Nutrition() {
             async function fetchNutritionData() {
                 try {
                     const query = encodeURIComponent(selectedRecipe.title);
-                    const response = await fetch(`https://api.nutritionix.com/v1_1/search/${query}?results=0:1&fields=item_name,nf_calories,nf_total_fat,nf_saturated_fat,nf_cholesterol,nf_sodium,nf_total_carbohydrate,nf_dietary_fiber,nf_sugars,nf_protein&appId=2a191a39&appKey=880295eca6b8b0e18e5545f1b9bd057b`);
-    
+                    const response = await fetch()
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}, statusText: ${response.statusText}`);
                     }
