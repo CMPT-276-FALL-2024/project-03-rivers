@@ -1,10 +1,9 @@
+// app/api/search-foods/route.ts
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    // リクエストボディのログ
     const body = await req.json();
-    console.log("Request body:", body);
     const { searchQuery } = body;
 
     if (!searchQuery) {
@@ -14,9 +13,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log("Fetching token...");
-    // トークンを取得
-    const tokenResponse = await fetch("http://localhost:3000/api/fatsecret");
+    // 相対パスを使用するか、req.urlからベースURLを取得
+    const protocol = process.env.VERCEL_URL ? 'https' : 'http';
+    const baseUrl = process.env.VERCEL_URL 
+      ? `${protocol}://${process.env.VERCEL_URL}` 
+      : 'http://localhost:3000';
+
+    // トークン取得のURLを動的に構築
+    const tokenResponse = await fetch(`${baseUrl}/api/fatsecret`);
+    
     if (!tokenResponse.ok) {
       const tokenError = await tokenResponse.text();
       console.error("Token fetch error:", tokenError);
@@ -27,7 +32,6 @@ export async function POST(req: NextRequest) {
     }
 
     const tokenData = await tokenResponse.json();
-    console.log("Token received:", tokenData.access_token ? "Valid token" : "Invalid token");
 
     if (!tokenData.access_token) {
       return NextResponse.json(
@@ -36,7 +40,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // FatSecret APIのURLを構築
     const apiUrl = new URL("https://platform.fatsecret.com/rest/server.api");
     apiUrl.searchParams.append("method", "foods.search.v3");
     apiUrl.searchParams.append("search_expression", searchQuery);
@@ -44,9 +47,6 @@ export async function POST(req: NextRequest) {
     apiUrl.searchParams.append("max_results", "6");
     apiUrl.searchParams.append("include_food_images", "true");
 
-    console.log("Calling FatSecret API with URL:", apiUrl.toString());
-
-    // FatSecret APIを呼び出し
     const foodResponse = await fetch(apiUrl.toString(), {
       method: "GET",
       headers: {
@@ -61,16 +61,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { 
           error: "Failed to fetch foods from FatSecret API",
-          details: errorText,
-          status: foodResponse.status 
+          details: errorText 
         },
         { status: foodResponse.status }
       );
     }
 
     const foodData = await foodResponse.json();
-    console.log("Food data received:", foodData);
-
     return NextResponse.json(foodData);
   } catch (error) {
     console.error("Detailed API Route Error:", error);
