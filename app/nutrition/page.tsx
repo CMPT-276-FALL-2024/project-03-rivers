@@ -34,8 +34,8 @@ export default function Recipe() {
                 </div>
 
                 <Image 
-                    src="/recipe/arrow.png"
-                    alt="recipe image"
+                    src="/images/arrow.png"
+                    alt="arrow image"
                     width={100}
                     height={68}
                     className="hidden md:block"
