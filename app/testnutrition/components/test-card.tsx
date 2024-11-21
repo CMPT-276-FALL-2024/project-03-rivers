@@ -16,7 +16,7 @@ interface FoodItem {
   };
 }
 
-export default function FoodCard({ food }: { food: FoodItem }) {
+export default function RecipeCard({ food }: { food: FoodItem }) {
     const router = useRouter();
 
     const handleViewClick = () => {
