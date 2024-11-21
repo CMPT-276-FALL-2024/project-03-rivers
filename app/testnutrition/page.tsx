@@ -3,9 +3,8 @@
 import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
-import FoodCard from "./components/ingredients-card";
-import { CheckboxIngredients } from "./components/ingredients-checkbox";
-
+import { CheckboxIngredients } from "./components/test-checkbox";
+import RecipeCard from "./components/test-card";
 
 interface FoodItem {
   food_id: string;
@@ -49,7 +48,7 @@ export default function Recipe() {
                             </p>
                         ) : (
                             foods.map((food) => (
-                                <FoodCard key={food.food_id} food={food} />
+                                <RecipeCard key={food.food_id} food={food} />
                             ))
                         )}
                     </div>        
