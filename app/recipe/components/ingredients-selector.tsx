@@ -73,7 +73,7 @@ export function CheckboxIngredients({ onRecipesFetched }: { onRecipesFetched: (r
       if (!ingredientsQuery) throw new Error("No valid ingredients selected");
 
       const response = await fetch(
-        `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${encodeURIComponent(ingredientsQuery)}&number=5&ranking=1&apiKey=${apiKey}`
+        `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${encodeURIComponent(ingredientsQuery)}&number=6&ranking=1&apiKey=${apiKey}`
       );
       
       if (!response.ok) {
