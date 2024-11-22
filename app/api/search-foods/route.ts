@@ -1,22 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Helper function to get search query
-function getSearchQuery(req: NextRequest) {
-  // For POST requests, get from body
+async function getSearchQuery(req: NextRequest) {
   if (req.method === 'POST') {
-    return req.json().then(body => body.searchQuery);
+    try {
+      const body = await req.json();
+      return body.searchQuery || '';
+    } catch {
+      return '';
+    }
   }
-  // For GET requests, get from URL params
   const url = new URL(req.url);
-  return Promise.resolve(url.searchParams.get('q') || '');
-}
-
-export async function GET(req: NextRequest) {
-  return handleRequest(req);
-}
-
-export async function POST(req: NextRequest) {
-  return handleRequest(req);
+  return url.searchParams.get('q') || '';
 }
 
 async function handleRequest(req: NextRequest) {
@@ -25,18 +19,22 @@ async function handleRequest(req: NextRequest) {
 
     if (!searchQuery) {
       return NextResponse.json(
-        { error: "Search query is required. Use 'q' parameter for GET or 'searchQuery' in POST body" },
+        { 
+          error: "Search query is required",
+          message: "Please provide a search query using the 'q' parameter for GET requests or 'searchQuery' in the JSON body for POST requests."
+        },
         { status: 400 }
       );
     }
 
-    // Get base URL for API calls
-    const protocol = process.env.VERCEL_URL ? 'https' : 'http';
+    // Get the correct base URL for the environment
     const baseUrl = process.env.VERCEL_URL 
-      ? `${protocol}://${process.env.VERCEL_URL}` 
+      ? `https://${process.env.VERCEL_URL}`
       : 'http://localhost:3000';
 
-    // Get token with better error handling
+    console.log("Using base URL:", baseUrl);
+
+    // Fetch token with absolute URL
     const tokenResponse = await fetch(`${baseUrl}/api/fatsecret`, {
       headers: {
         'Accept': 'application/json',
@@ -45,7 +43,7 @@ async function handleRequest(req: NextRequest) {
     
     if (!tokenResponse.ok) {
       const tokenError = await tokenResponse.text();
-      console.error("Token fetch error:", {
+      console.error("Token fetch failed:", {
         status: tokenResponse.status,
         error: tokenError
       });
@@ -64,8 +62,8 @@ async function handleRequest(req: NextRequest) {
       console.error("Invalid token response:", tokenData);
       return NextResponse.json(
         { 
-          error: "Invalid access token received",
-          details: "Token response did not contain access_token"
+          error: "Invalid token response",
+          details: "No access token in response"
         },
         { status: 500 }
       );
@@ -95,7 +93,7 @@ async function handleRequest(req: NextRequest) {
       });
       return NextResponse.json(
         { 
-          error: "Failed to fetch foods from FatSecret API",
+          error: "Failed to fetch foods",
           details: errorText 
         },
         { status: foodResponse.status }
@@ -114,5 +112,13 @@ async function handleRequest(req: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+export async function GET(req: NextRequest) {
+  return handleRequest(req);
+}
+
+export async function POST(req: NextRequest) {
+  return handleRequest(req);
 }
 
