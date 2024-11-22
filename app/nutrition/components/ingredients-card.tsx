@@ -20,7 +20,7 @@ export default function FoodCard({ food }: { food: FoodItem }) {
     const router = useRouter();
 
     const handleViewClick = () => {
-        router.push(`/recipe/result?id=${food.food_id}`);
+        router.push(`/nutrition/result?id=${food.food_id}`);
     };
 
     // 最も高画質な画像を取得（type="0"の画像を優先）
