@@ -1,32 +1,59 @@
-// app/api/search-foods/route.ts
 import { NextRequest, NextResponse } from "next/server";
 
+// Helper function to get search query
+function getSearchQuery(req: NextRequest) {
+  // For POST requests, get from body
+  if (req.method === 'POST') {
+    return req.json().then(body => body.searchQuery);
+  }
+  // For GET requests, get from URL params
+  const url = new URL(req.url);
+  return Promise.resolve(url.searchParams.get('q') || '');
+}
+
+export async function GET(req: NextRequest) {
+  return handleRequest(req);
+}
+
 export async function POST(req: NextRequest) {
+  return handleRequest(req);
+}
+
+async function handleRequest(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { searchQuery } = body;
+    const searchQuery = await getSearchQuery(req);
 
     if (!searchQuery) {
       return NextResponse.json(
-        { error: "Search query is required" },
+        { error: "Search query is required. Use 'q' parameter for GET or 'searchQuery' in POST body" },
         { status: 400 }
       );
     }
 
-    // 相対パスを使用するか、req.urlからベースURLを取得
+    // Get base URL for API calls
     const protocol = process.env.VERCEL_URL ? 'https' : 'http';
     const baseUrl = process.env.VERCEL_URL 
       ? `${protocol}://${process.env.VERCEL_URL}` 
       : 'http://localhost:3000';
 
-    // トークン取得のURLを動的に構築
-    const tokenResponse = await fetch(`${baseUrl}/api/fatsecret`);
+    // Get token with better error handling
+    const tokenResponse = await fetch(`${baseUrl}/api/fatsecret`, {
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
     
     if (!tokenResponse.ok) {
       const tokenError = await tokenResponse.text();
-      console.error("Token fetch error:", tokenError);
+      console.error("Token fetch error:", {
+        status: tokenResponse.status,
+        error: tokenError
+      });
       return NextResponse.json(
-        { error: "Failed to obtain access token" },
+        { 
+          error: "Failed to obtain access token",
+          details: tokenError
+        },
         { status: tokenResponse.status }
       );
     }
@@ -34,12 +61,17 @@ export async function POST(req: NextRequest) {
     const tokenData = await tokenResponse.json();
 
     if (!tokenData.access_token) {
+      console.error("Invalid token response:", tokenData);
       return NextResponse.json(
-        { error: "Invalid access token received" },
+        { 
+          error: "Invalid access token received",
+          details: "Token response did not contain access_token"
+        },
         { status: 500 }
       );
     }
 
+    // Call FatSecret API
     const apiUrl = new URL("https://platform.fatsecret.com/rest/server.api");
     apiUrl.searchParams.append("method", "foods.search.v3");
     apiUrl.searchParams.append("search_expression", searchQuery);
@@ -57,7 +89,10 @@ export async function POST(req: NextRequest) {
 
     if (!foodResponse.ok) {
       const errorText = await foodResponse.text();
-      console.error("FatSecret API error:", errorText);
+      console.error("FatSecret API error:", {
+        status: foodResponse.status,
+        error: errorText
+      });
       return NextResponse.json(
         { 
           error: "Failed to fetch foods from FatSecret API",
@@ -70,7 +105,7 @@ export async function POST(req: NextRequest) {
     const foodData = await foodResponse.json();
     return NextResponse.json(foodData);
   } catch (error) {
-    console.error("Detailed API Route Error:", error);
+    console.error("API Route Error:", error);
     return NextResponse.json(
       { 
         error: "Internal Server Error",
@@ -80,3 +115,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
