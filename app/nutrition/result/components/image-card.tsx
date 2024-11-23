@@ -26,10 +26,10 @@ export function ImageCard({ imageUrl }: ImageCardProps) {
   };
 
   return (
-    <Card className="border border-gray-200 shadow-lg h-[380px] p-0 m-0">
+    <Card className="border border-gray-200 dark:border-gray-700 shadow-lg h-[380px] p-0 m-0 bg-white dark:bg-gray-800">
       <div className="relative w-full h-full">
         {isLoading && !hasError && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
             Loading...
           </div>
         )}
@@ -46,7 +46,7 @@ export function ImageCard({ imageUrl }: ImageCardProps) {
           />
         )}
         {hasError && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-500">
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
             No Image Available
           </div>
         )}

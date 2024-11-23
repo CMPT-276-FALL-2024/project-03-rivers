@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { CaloreisCard } from "./components/calories-card";
+import { CaloreisCard} from "./components/calories-card";
 import { ImageCard } from "./components/image-card";
 import { NutritionFactsCard } from "./components/nutrition-card";
 
@@ -64,7 +64,7 @@ function NutritionContent() {
   return (
     <div className="container">
       <div className="min-h-screen p-4">
-        <h1 className="text-center text-5xl font-bold mb-8 text-orange-600">
+        <h1 className="text-center text-4xl font-bold mb-8 text-orange-600">
           {nutritionData.foodName} Nutrition Facts
         </h1>
 
@@ -78,7 +78,7 @@ function NutritionContent() {
           </div>
 
           <div className="row-span-1 col-span-1">
-            <CaloreisCard 
+            <CaloreisCard
               foodName={nutritionData.foodName}
               servingSize={nutritionData.servingSize}
               calories={nutritionData.calories}

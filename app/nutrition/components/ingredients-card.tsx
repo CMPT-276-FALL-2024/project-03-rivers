@@ -38,23 +38,24 @@ export default function FoodCard({ food }: { food: FoodItem }) {
   };
 
   return (
-    <Card className="w-full shadow-md">
-      <CardHeader className="p-0">
+    <Card className="w-full h-full shadow-md hover:shadow-lg transition-shadow">
+      <CardHeader className="p-0 relative aspect-[4/3]">
         <Image 
           src={getHighestQualityImage()}
           alt={food.food_name}
-          width={300}
-          height={200}
-          className="w-full h-48 object-cover rounded-t-lg"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover rounded-t-lg"
+          priority
         />
       </CardHeader>
-      <CardContent className="p-4">
-        <CardTitle className="text-lg mb-2">{food.food_name}</CardTitle>
-        <div className="flex justify-between items-center">
-          <Button onClick={handleViewClick} size="sm">View</Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
+            <CardContent className="p-4">
+                <CardTitle className="text-lg mb-2">{food.food_name}</CardTitle>
+                <div className="flex justify-between items-center">
+                    <Button onClick={handleViewClick} size="sm">View</Button>
+                </div>
+            </CardContent>
+        </Card>
+    );
 }
 
