@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { CaloreisCard } from "./components/calories-card";
 import { ImageCard } from "./components/image-card";
@@ -28,17 +28,11 @@ interface NutritionData {
   imageUrl: string;
 }
 
-export default function Nutrition() {
+function NutritionContent() {
   const [nutritionData, setNutritionData] = useState<NutritionData | null>(null);
   const searchParams = useSearchParams();
   const foodId = searchParams.get('id');
   const imageUrl = searchParams.get('image');
-
-  useEffect(() => {
-    if (foodId) {
-      fetchNutritionData(foodId);
-    }
-  }, [foodId]);
 
   const fetchNutritionData = async (id: string) => {
     try {
@@ -56,6 +50,12 @@ export default function Nutrition() {
       // エラー処理（例：トースト通知の表示）
     }
   };
+
+  useEffect(() => {
+    if (foodId) {
+      fetchNutritionData(foodId);
+    }
+  }, [foodId, fetchNutritionData]);
 
   if (!nutritionData) {
     return <div>Loading...</div>;
@@ -87,6 +87,14 @@ export default function Nutrition() {
         </div>
       </div>        
     </div>
+  );
+}
+
+export default function Nutrition() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <NutritionContent />
+    </Suspense>
   );
 }
 
