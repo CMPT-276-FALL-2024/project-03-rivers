@@ -47,7 +47,7 @@ function NutritionContent() {
       });
     } catch (error) {
       console.error('Error fetching food details:', error);
-      // エラー処理（例：トースト通知の表示）
+      
     }
   }, [imageUrl]);
 
