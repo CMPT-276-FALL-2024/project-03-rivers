@@ -9,7 +9,7 @@ interface CaloriesCardProps {
 
 export function CaloreisCard({ foodName, servingSize, calories }: CaloriesCardProps) {
   return (
-    <Card className="border border-gray-200 shadow-lg h-[205px] p-4 flex flex-col justify-center">
+    <Card className="border border-gray-600 shadow-lg h-[200px] w-[500px] p-4 flex flex-col justify-center">
       <div className="text-lg font-medium mb-2 dark:text-gray-200">{foodName} ({servingSize})</div>
       <div className="flex items-center justify-between mb-2">
         <div>

@@ -10,6 +10,13 @@ export default {
   theme: {
   	extend: {
   		colors: {
+				aspectRatio: {
+					'4/3': '4 / 3',
+					'16/9': '16 / 9',
+					'21/9': '21 / 9',
+					'3/2' : '3 / 2'
+					
+				},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
