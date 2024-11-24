@@ -8,6 +8,7 @@ interface ImageCardProps {
   imageUrl: string;
 }
 
+
 export function ImageCard({ imageUrl }: ImageCardProps) {
   const [imgSrc, setImgSrc] = React.useState(imageUrl);
   const [isLoading, setIsLoading] = React.useState(true);
