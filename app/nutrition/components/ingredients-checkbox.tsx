@@ -86,8 +86,8 @@ export function CheckboxIngredients({ onFoodsFetched }: { onFoodsFetched: (foods
       
       if (!ingredientsQuery) throw new Error("No valid ingredients selected");
   
-      // 内部APIルートを呼び出し
-      const response = await fetch('/api/search-foods', {  // エンドポイントを変更
+      
+      const response = await fetch('/api/search-foods', {  
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export function CheckboxIngredients({ onFoodsFetched }: { onFoodsFetched: (foods
   
       const foods = Array.isArray(data.foods_search.results.food) 
         ? data.foods_search.results.food 
-        : [data.foods_search.results.food]; // 単一の結果の場合も配列に変換
+        : [data.foods_search.results.food];
   
       console.log("Processed Foods:", foods);
       onFoodsFetched(foods);

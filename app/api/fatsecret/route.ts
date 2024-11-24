@@ -1,20 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   const clientId = process.env.FATSECRET_CLIENT_ID;
   const clientSecret = process.env.FATSECRET_CLIENT_SECRET;
-
-  // Enhanced environment debugging
   const envDebug = {
     hasClientId: !!clientId,
     hasClientSecret: !!clientSecret,
     nodeEnv: process.env.NODE_ENV,
-    vercelEnv: process.env.VERCEL_ENV,
-    isVercel: !!process.env.VERCEL
   };
-
   console.log("Environment variables check:", envDebug);
-
+  
   if (!clientId || !clientSecret) {
     console.error("Missing credentials:", envDebug);
     return NextResponse.json(
@@ -25,13 +20,12 @@ export async function GET() {
       { status: 500 }
     );
   }
-
+  
   try {
-    const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
-    
+    const credentials = btoa(`${clientId}:${clientSecret}`);
     const tokenUrl = "https://oauth.fatsecret.com/connect/token";
     console.log("Requesting token from:", tokenUrl);
-
+    
     const response = await fetch(tokenUrl, {
       method: "POST",
       headers: {
@@ -40,16 +34,15 @@ export async function GET() {
       },
       body: "grant_type=client_credentials&scope=premier",
     });
-
+    
     const responseText = await response.text();
     console.log("Token response status:", response.status);
-
+    
     if (!response.ok) {
       console.error("Token fetch failed:", {
         status: response.status,
         response: responseText
       });
-      
       return NextResponse.json(
         { 
           error: "Failed to fetch token",
@@ -62,7 +55,7 @@ export async function GET() {
         { status: response.status }
       );
     }
-
+    
     try {
       const tokenData = JSON.parse(responseText);
       return NextResponse.json(tokenData);
