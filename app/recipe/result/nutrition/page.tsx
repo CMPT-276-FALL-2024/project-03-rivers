@@ -2,9 +2,10 @@
 
 import { Suspense } from 'react';
 import { useSearchParams } from "next/navigation";
-import { CaloriesCard } from "./components/calories-card";
-import { ImageCard } from "./components/image-card";
-import { NutritionFactsCard } from "./components/nutrition-card";
+import { ImageCard } from './components/image-card';
+import { NutritionFactsCard } from './components/nutrition-card';
+import { CaloriesCard } from './components/calories-card';
+
 
 function NutritionContent() {
     const searchParams = useSearchParams();

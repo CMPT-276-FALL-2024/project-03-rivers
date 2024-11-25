@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -35,6 +35,7 @@ export default function RecipeDetail() {
   const [selectedTime, setSelectedTime] = useState<string | undefined>(undefined);
   const searchParams = useSearchParams();
   const recipeId = searchParams.get("id");
+  const router = useRouter();
 
   useEffect(() => {
     if (recipeId) {
@@ -81,6 +82,12 @@ export default function RecipeDetail() {
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
+  };
+
+  const handleNutritionClick = () => {
+    if (recipeId) {
+      router.push(`/recipe/result/nutrition?id=${recipeId}`);
+    }
   };
 
   if (!recipe) return <p>Loading...</p>;
@@ -140,6 +147,14 @@ export default function RecipeDetail() {
                   />
                   <Button onClick={calculateIngredients}>Calculate</Button>
                 </div>
+              </CardContent>
+            </Card>
+            <Card className="h-[110px]">
+              <CardContent className="p-2">
+                <CardHeader className="px-0 pt-0 pb-2">
+                  <CardTitle className="text-lg ml-1 mb-1 mt-1">Nutrition Facts</CardTitle>
+                </CardHeader>
+                <Button className="w-full" onClick={handleNutritionClick}>Go to Nutrition Page</Button>
               </CardContent>
             </Card>
           </div>
