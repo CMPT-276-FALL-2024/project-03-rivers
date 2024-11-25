@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 interface RecipeDetail {
   id: number;
@@ -21,6 +22,7 @@ export default function RecipeDetailPage() {
   const [recipe, setRecipe] = useState<RecipeDetail | null>(null);
   const [servings, setServings] = useState(1);
   const [calculatedIngredients, setCalculatedIngredients] = useState<{ name: string; amount: string }[]>([]);
+  const [notes, setNotes] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
   const recipeId = searchParams.get("id");
@@ -85,26 +87,45 @@ export default function RecipeDetailPage() {
               />
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-4">
-              <CardHeader className="px-0 pt-0 pb-2">
-                <CardTitle className="text-lg mb-2">Ingredients</CardTitle>
-              </CardHeader>
-              <ScrollArea className="h-[200px] pr-4">
-                {calculatedIngredients.map((ingredient, index) => (
-                  <div key={index} className="flex items-center space-x-2 mb-2">
-                    <Checkbox id={`ingredient-${index}`} />
-                    <label
-                      htmlFor={`ingredient-${index}`}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {ingredient.name}: {ingredient.amount}
-                    </label>
-                  </div>
-                ))}
-              </ScrollArea>
-            </CardContent>
-          </Card>
+          <div className="grid grid-cols-2 gap-4">
+            <Card>
+              <CardContent className="p-4">
+                <CardHeader className="px-0 pt-0 pb-2">
+                  <CardTitle className="text-lg mb-2">Ingredients</CardTitle>
+                </CardHeader>
+                <ScrollArea className="h-[200px] pr-4">
+                  {calculatedIngredients.map((ingredient, index) => (
+                    <div key={index} className="flex items-center space-x-2 mb-2">
+                      <Checkbox id={`ingredient-${index}`} />
+                      <label
+                        htmlFor={`ingredient-${index}`}
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {ingredient.name}: {ingredient.amount}
+                      </label>
+                    </div>
+                  ))}
+                </ScrollArea>
+              </CardContent>
+            </Card>
+            <Card className="h-[110px]">
+              <CardContent className="p-2">
+                <CardHeader className="px-0 pt-0 pb-2">
+                  <CardTitle className="text-lg ml-1 mb-1 mt-1">Adjust Servings</CardTitle>
+                </CardHeader>
+                <div className="flex items-center space-x-2">
+                  <Input
+                    type="number"
+                    value={servings}
+                    onChange={(e) => setServings(Number(e.target.value))}
+                    min={1}
+                    className="w-20"
+                  />
+                  <Button onClick={calculateIngredients}>Calculate</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
         <div className="space-y-4">
           <Card>
@@ -124,18 +145,14 @@ export default function RecipeDetailPage() {
           <Card>
             <CardContent className="p-4">
               <CardHeader className="px-0 pt-0 pb-2">
-                <CardTitle className="text-lg mb-2">Adjust Servings</CardTitle>
+                <CardTitle className="text-lg mb-2">Notes</CardTitle>
               </CardHeader>
-              <div className="flex items-center space-x-2">
-                <Input
-                  type="number"
-                  value={servings}
-                  onChange={(e) => setServings(Number(e.target.value))}
-                  min={1}
-                  className="w-20"
-                />
-                <Button onClick={calculateIngredients}>Calculate</Button>
-              </div>
+              <Textarea
+                placeholder="Add your notes here..."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                className="w-full h-[150px]"
+              />
             </CardContent>
           </Card>
         </div>
