@@ -109,7 +109,7 @@ export default function RecipeDetailPage() {
             <Card>
               <CardContent className="p-4">
                 <CardHeader className="px-0 pt-0 pb-2">
-                  <CardTitle className="text-lg mb-2">Ingredients</CardTitle>
+                  <CardTitle className="text-lg mb-2">材料</CardTitle>
                 </CardHeader>
                 <ScrollArea className="h-[200px] pr-4">
                   {calculatedIngredients.map((ingredient, index) => (
@@ -129,7 +129,7 @@ export default function RecipeDetailPage() {
             <Card className="h-[110px]">
               <CardContent className="p-2">
                 <CardHeader className="px-0 pt-0 pb-2">
-                  <CardTitle className="text-lg ml-1 mb-1 mt-1">Adjust Servings</CardTitle>
+                  <CardTitle className="text-lg ml-1 mb-1 mt-1">人数調整</CardTitle>
                 </CardHeader>
                 <div className="flex items-center space-x-2">
                   <Input
@@ -139,7 +139,7 @@ export default function RecipeDetailPage() {
                     min={1}
                     className="w-20"
                   />
-                  <Button onClick={calculateIngredients}>Calculate</Button>
+                  <Button onClick={calculateIngredients}>計算</Button>
                 </div>
               </CardContent>
             </Card>
@@ -149,9 +149,9 @@ export default function RecipeDetailPage() {
           <Card>
             <CardContent className="p-4">
               <CardHeader className="px-0 pt-0 pb-2">
-                <CardTitle className="text-lg mb-2">Instructions</CardTitle>
+                <CardTitle className="text-lg mb-2">手順</CardTitle>
               </CardHeader>
-              <ScrollArea className="h-[400px] pr-4">
+              <ScrollArea className="h-[310px] pr-4">
                 <ol className="list-decimal list-inside space-y-4">
                   {instructionSteps.map((step, index) => (
                     <li key={index} className="text-sm">{step.trim()}</li>
@@ -163,12 +163,12 @@ export default function RecipeDetailPage() {
           <Card>
             <CardContent className="p-4">
               <CardHeader className="px-0 pt-0 pb-2">
-                <CardTitle className="text-lg mb-2">Notes & Schedule</CardTitle>
+                <CardTitle className="text-lg mb-2">メモ & スケジュール</CardTitle>
               </CardHeader>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Textarea
-                    placeholder="Add your notes here..."
+                    placeholder="メモを追加..."
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     className="w-full h-[150px]"
@@ -215,7 +215,8 @@ export default function RecipeDetailPage() {
                         <SelectItem key={hour} value={`${hour.toString().padStart(2, '0')}:00`}>
                           {`${hour.toString().padStart(2, '0')}:00`}
                         </SelectItem>
-                      ))}
+                
+))}
                     </SelectContent>
                   </Select>
                   <GoogleCalendarIntegration

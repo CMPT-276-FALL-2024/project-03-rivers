@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from "jwt-decode";
 import { useToast } from '@/hooks/use-toast';
 
 interface GoogleCalendarIntegrationProps {
@@ -20,10 +18,12 @@ export function GoogleCalendarIntegration({
   ingredients 
 }: GoogleCalendarIntegrationProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
   const { toast } = useToast();
 
   const addToCalendar = async () => {
+    const accessToken = localStorage.getItem('googleAccessToken');
+    console.log('Using access token:', accessToken);
+
     if (!selectedDate || !selectedTime || !accessToken) {
       toast({
         title: "エラー",
@@ -61,6 +61,8 @@ ${notes}
         }
       };
 
+      console.log('Sending event data:', event);
+
       const response = await fetch('/api/calendar/add-event', {
         method: 'POST',
         headers: {
@@ -97,27 +99,13 @@ ${notes}
   };
 
   return (
-    <div className="space-y-4">
-      {!accessToken ? (
-        <GoogleLogin
-          onSuccess={(credentialResponse) => {
-            const decoded: { access_token: string } = jwtDecode(credentialResponse.credential ?? "");
-            setAccessToken(decoded.access_token);
-          }}
-          onError={() => {
-            console.log('Login Failed');
-          }}
-        />
-      ) : (
-        <Button 
-          onClick={addToCalendar} 
-          disabled={isLoading || !selectedDate || !selectedTime}
-          className="w-full"
-        >
-          {isLoading ? "追加中..." : "カレンダーに追加"}
-        </Button>
-      )}
-    </div>
+    <Button 
+      onClick={addToCalendar} 
+      disabled={isLoading || !selectedDate || !selectedTime}
+      className="w-full"
+    >
+      {isLoading ? "追加中..." : "カレンダーに追加"}
+    </Button>
   );
 }
 

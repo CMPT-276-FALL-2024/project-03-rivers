@@ -4,37 +4,47 @@ import { google } from 'googleapis';
 export async function POST(request: Request) {
   try {
     const event = await request.json();
+    const accessToken = request.headers.get('Authorization')?.split('Bearer ')[1];
 
-    console.log('Received event:', event);  // デバッグ用ログ
-
-    if (!process.env.GOOGLE_CALENDAR_API_KEY) {
-      throw new Error('GOOGLE_CALENDAR_API_KEY is not set');
+    if (!accessToken) {
+      return NextResponse.json(
+        { success: false, error: 'アクセストークンが見つかりません' },
+        { status: 401 }
+      );
     }
 
-    // Google Calendar APIの設定
-    const calendar = google.calendar({
-      version: 'v3',
-      auth: process.env.GOOGLE_CALENDAR_API_KEY
+    // OAuth2クライアントの設定
+    const oauth2Client = new google.auth.OAuth2();
+    oauth2Client.setCredentials({ access_token: accessToken });
+
+    const calendar = google.calendar({ 
+      version: 'v3', 
+      auth: oauth2Client 
     });
 
-    console.log('Attempting to add event to calendar');  // デバッグ用ログ
+    console.log('Attempting to add event to calendar with token:', accessToken);
 
-    // イベントの追加
     const response = await calendar.events.insert({
       calendarId: 'primary',
       requestBody: event,
     });
 
-    console.log('Event added successfully:', response.data.id);  // デバッグ用ログ
+    console.log('Event added successfully:', response.data);
 
     return NextResponse.json({ 
       success: true, 
       eventId: response.data.id 
     });
   } catch (error) {
-    console.error('Error adding event to calendar:', error);
+    console.error('Error in calendar API route:', error);
+    
+    let errorMessage = 'Unknown error occurred';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
     return NextResponse.json(
-      { success: false, error: error instanceof Error ? error.message : 'Unknown error' },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }
