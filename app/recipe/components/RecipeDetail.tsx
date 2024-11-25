@@ -17,6 +17,7 @@ import { CalendarIcon, Clock } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { GoogleCalendarIntegration } from "@/components/GoogleCalendarIntegration";
+import { useFavorites } from '@/hooks/useFavorites';
 
 interface RecipeDetail {
   id: number;
@@ -33,15 +34,23 @@ export default function RecipeDetail() {
   const [notes, setNotes] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<string | undefined>(undefined);
+  const [isFavorited, setIsFavorited] = useState(false);
   const searchParams = useSearchParams();
   const recipeId = searchParams.get("id");
   const router = useRouter();
+  const { addFavorite, removeFavorite, isFavorite } = useFavorites();
 
   useEffect(() => {
     if (recipeId) {
       fetchRecipeDetail(recipeId);
     }
   }, [recipeId]);
+
+  useEffect(() => {
+    if (recipe) {
+      setIsFavorited(isFavorite(recipe.id));
+    }
+  }, [recipe, isFavorite]);
 
   const fetchRecipeDetail = async (id: string) => {
     try {
@@ -90,6 +99,21 @@ export default function RecipeDetail() {
     }
   };
 
+  const toggleFavorite = () => {
+    if (recipe) {
+      if (isFavorited) {
+        removeFavorite(recipe.id);
+      } else {
+        addFavorite({
+          id: recipe.id,
+          title: recipe.title,
+          image: recipe.image
+        });
+      }
+      setIsFavorited(!isFavorited);
+    }
+  };
+
   if (!recipe) return <p>Loading...</p>;
 
   const instructionSteps = recipe.instructions.split(/\d+\./).filter(step => step.trim() !== '');
@@ -97,6 +121,28 @@ export default function RecipeDetail() {
   return (
     <div className="container mx-auto px-4 py-4">
       <h1 className="text-2xl font-bold mb-4 text-center">{recipe.title}</h1>
+      <div className="flex justify-center mb-4">
+        <Button
+          onClick={toggleFavorite}
+          variant={isFavorited ? "default" : "outline"}
+          className="flex items-center gap-2"
+        >
+          {isFavorited ? "Remove from Favorites" : "Add to Favorites"}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill={isFavorited ? "currentColor" : "none"}
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+          </svg>
+        </Button>
+      </div>
       <div className="grid md:grid-cols-2 gap-4">
         <div className="space-y-4">
           <Card>
