@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from 'react';
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -10,15 +11,28 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
+interface Ingredient {
+  name: string;
+  amount: string;
+  baseAmount: number;
+  unit: string;
+}
+
 interface RecipeDetail {
   id: number;
   title: string;
   image: string;
   instructions: string;
-  ingredients: { name: string; amount: string; baseAmount: number; unit: string }[];
+  ingredients: Ingredient[];
 }
 
-export default function RecipeDetailPage() {
+interface ExtendedIngredient {
+  name: string;
+  amount: number;
+  unit: string;
+}
+
+function RecipeDetailContent() {
   const [recipe, setRecipe] = useState<RecipeDetail | null>(null);
   const [servings, setServings] = useState(1);
   const [calculatedIngredients, setCalculatedIngredients] = useState<{ name: string; amount: string }[]>([]);
@@ -37,7 +51,7 @@ export default function RecipeDetailPage() {
     try {
       const response = await fetch(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_API_KEY}`);
       const data = await response.json();
-      const ingredients = data.extendedIngredients.map((ingredient: any) => ({
+      const ingredients = data.extendedIngredients.map((ingredient: ExtendedIngredient) => ({
         name: ingredient.name,
         amount: `${ingredient.amount} ${ingredient.unit}`,
         baseAmount: ingredient.amount,
@@ -64,6 +78,10 @@ export default function RecipeDetailPage() {
       }));
       setCalculatedIngredients(newIngredients);
     }
+  };
+
+  const handleNutritionClick = () => {
+    router.push(`/recipe/result/nutrition?id=${recipeId}`);
   };
 
   if (!recipe) return <p>Loading...</p>;
@@ -108,23 +126,35 @@ export default function RecipeDetailPage() {
                 </ScrollArea>
               </CardContent>
             </Card>
-            <Card className="h-[110px]">
-              <CardContent className="p-2">
-                <CardHeader className="px-0 pt-0 pb-2">
-                  <CardTitle className="text-lg ml-1 mb-1 mt-1">Adjust Servings</CardTitle>
-                </CardHeader>
-                <div className="flex items-center space-x-2">
-                  <Input
-                    type="number"
-                    value={servings}
-                    onChange={(e) => setServings(Number(e.target.value))}
-                    min={1}
-                    className="w-20"
-                  />
-                  <Button onClick={calculateIngredients}>Calculate</Button>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="space-y-4">
+              <Card className="h-[110px]">
+                <CardContent className="p-2">
+                  <CardHeader className="px-0 pt-0 pb-2">
+                    <CardTitle className="text-lg ml-1 mb-1 mt-1">Adjust Servings</CardTitle>
+                  </CardHeader>
+                  <div className="flex items-center space-x-2">
+                    <Input
+                      type="number"
+                      value={servings}
+                      onChange={(e) => setServings(Number(e.target.value))}
+                      min={1}
+                      className="w-20"
+                    />
+                    <Button onClick={calculateIngredients}>Calculate</Button>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="h-[110px]">
+                <CardContent className="p-2">
+                  <CardHeader className="px-0 pt-0 pb-2">
+                    <CardTitle className="text-lg ml-1 mb-1 mt-1">Nutrition Information</CardTitle>
+                  </CardHeader>
+                  <div className="flex items-center space-x-2">
+                    <Button className="w-full" onClick={handleNutritionClick}>Go to Nutrition Page</Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
         <div className="space-y-4">
@@ -158,6 +188,14 @@ export default function RecipeDetailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RecipeDetailPage() {
+  return (
+    <Suspense fallback={<p>Loading recipe details...</p>}>
+      <RecipeDetailContent />
+    </Suspense>
   );
 }
 
