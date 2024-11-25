@@ -1,11 +1,12 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSearchParams } from "next/navigation";
 import { CaloriesCard } from "./components/caloreis-card";
 import { ImageCard } from "./components/image-card";
 import { NutritionFactsCard } from "./components/nutrition-card";
 
-export default function Nutrition() {
+function NutritionContent() {
     const searchParams = useSearchParams();
     const recipeId = searchParams.get("id");
 
@@ -33,6 +34,14 @@ export default function Nutrition() {
                 </div>
             </div>        
         </div>
+    );
+}
+
+export default function Nutrition() {
+    return (
+        <Suspense fallback={<p>Loading...</p>}>
+            <NutritionContent />
+        </Suspense>
     );
 }
 

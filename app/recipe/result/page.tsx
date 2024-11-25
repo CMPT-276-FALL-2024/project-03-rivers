@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from 'react';
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -10,15 +11,28 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
+interface Ingredient {
+  name: string;
+  amount: string;
+  baseAmount: number;
+  unit: string;
+}
+
 interface RecipeDetail {
   id: number;
   title: string;
   image: string;
   instructions: string;
-  ingredients: { name: string; amount: string; baseAmount: number; unit: string }[];
+  ingredients: Ingredient[];
 }
 
-export default function RecipeDetailPage() {
+interface ExtendedIngredient {
+  name: string;
+  amount: number;
+  unit: string;
+}
+
+function RecipeDetailContent() {
   const [recipe, setRecipe] = useState<RecipeDetail | null>(null);
   const [servings, setServings] = useState(1);
   const [calculatedIngredients, setCalculatedIngredients] = useState<{ name: string; amount: string }[]>([]);
@@ -37,7 +51,7 @@ export default function RecipeDetailPage() {
     try {
       const response = await fetch(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_API_KEY}`);
       const data = await response.json();
-      const ingredients = data.extendedIngredients.map((ingredient: any) => ({
+      const ingredients = data.extendedIngredients.map((ingredient: ExtendedIngredient) => ({
         name: ingredient.name,
         amount: `${ingredient.amount} ${ingredient.unit}`,
         baseAmount: ingredient.amount,
@@ -174,6 +188,14 @@ export default function RecipeDetailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RecipeDetailPage() {
+  return (
+    <Suspense fallback={<p>Loading recipe details...</p>}>
+      <RecipeDetailContent />
+    </Suspense>
   );
 }
 

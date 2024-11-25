@@ -15,26 +15,31 @@ interface NutritionInfo {
 
 export function NutritionFactsCard() {
   const [nutritionInfo, setNutritionInfo] = useState<NutritionInfo | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const recipeId = searchParams.get("id");
 
   useEffect(() => {
     const fetchNutritionInfo = async () => {
+      if (!recipeId) return;
       try {
         const response = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/nutritionWidget.json?apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_API_KEY}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch nutrition information');
+        }
         const data = await response.json();
         setNutritionInfo(data);
       } catch (error) {
         console.error("Failed to fetch nutrition information:", error);
+        setError('Failed to load nutrition information. Please try again later.');
       }
     };
 
-    if (recipeId) {
-      fetchNutritionInfo();
-    }
+    fetchNutritionInfo();
   }, [recipeId]);
 
-  if (!nutritionInfo) return <p>Loading...</p>;
+  if (error) return <Card className="p-4"><p className="text-red-500">{error}</p></Card>;
+  if (!nutritionInfo) return <Card className="p-4"><p>Loading nutrition information...</p></Card>;
 
   return (
     <Card className="border border-gray-200 shadow-lg p-4 h-[610px] overflow-y-auto">
