@@ -26,8 +26,8 @@ export function GoogleCalendarIntegration({
 
     if (!selectedDate || !selectedTime || !accessToken) {
       toast({
-        title: "エラー",
-        description: "日付と時間を選択し、Googleアカウントでログインしてください。",
+        title: "Error",
+        description: "Please select a date and time to add the recipe to your calendar",
         variant: "destructive",
       });
       return;
@@ -41,10 +41,10 @@ export function GoogleCalendarIntegration({
       eventDateTime.setHours(parseInt(hours), parseInt(minutes));
 
       const description = `
-材料:
+Ingredients:
 ${ingredients.map(i => `- ${i.name}: ${i.amount}`).join('\n')}
 
-メモ:
+Note:
 ${notes}
       `.trim();
 
@@ -75,21 +75,21 @@ ${notes}
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'カレンダーへの追加に失敗しました');
+        throw new Error(data.error || 'Failed to add event to calendar');
       }
 
       toast({
-        title: "成功",
-        description: "レシピがカレンダーに追加されました！",
+        title: "Success",
+        description: "Recipe added to your calendar!",
       });
     } catch (error) {
       console.error('Error adding event to calendar:', error);
-      let errorMessage = "カレンダーへの追加中にエラーが発生しました";
+      let errorMessage = "Error adding event to calendar";
       if (error instanceof Error) {
         errorMessage += `: ${error.message}`;
       }
       toast({
-        title: "エラー",
+        title: "Error",
         description: errorMessage,
         variant: "destructive",
       });
@@ -104,7 +104,7 @@ ${notes}
       disabled={isLoading || !selectedDate || !selectedTime}
       className="w-full"
     >
-      {isLoading ? "追加中..." : "カレンダーに追加"}
+      {isLoading ? "Adding..." : "Add to Calendar"}
     </Button>
   );
 }
