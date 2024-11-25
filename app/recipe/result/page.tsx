@@ -66,6 +66,10 @@ export default function RecipeDetailPage() {
     }
   };
 
+  const handleNutritionClick = () => {
+    router.push(`/recipe/result/nutrition?id=${recipeId}`);
+  };
+
   if (!recipe) return <p>Loading...</p>;
 
   const instructionSteps = recipe.instructions.split(/\d+\./).filter(step => step.trim() !== '');
@@ -108,23 +112,35 @@ export default function RecipeDetailPage() {
                 </ScrollArea>
               </CardContent>
             </Card>
-            <Card className="h-[110px]">
-              <CardContent className="p-2">
-                <CardHeader className="px-0 pt-0 pb-2">
-                  <CardTitle className="text-lg ml-1 mb-1 mt-1">Adjust Servings</CardTitle>
-                </CardHeader>
-                <div className="flex items-center space-x-2">
-                  <Input
-                    type="number"
-                    value={servings}
-                    onChange={(e) => setServings(Number(e.target.value))}
-                    min={1}
-                    className="w-20"
-                  />
-                  <Button onClick={calculateIngredients}>Calculate</Button>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="space-y-4">
+              <Card className="h-[110px]">
+                <CardContent className="p-2">
+                  <CardHeader className="px-0 pt-0 pb-2">
+                    <CardTitle className="text-lg ml-1 mb-1 mt-1">Adjust Servings</CardTitle>
+                  </CardHeader>
+                  <div className="flex items-center space-x-2">
+                    <Input
+                      type="number"
+                      value={servings}
+                      onChange={(e) => setServings(Number(e.target.value))}
+                      min={1}
+                      className="w-20"
+                    />
+                    <Button onClick={calculateIngredients}>Calculate</Button>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="h-[110px]">
+                <CardContent className="p-2">
+                  <CardHeader className="px-0 pt-0 pb-2">
+                    <CardTitle className="text-lg ml-1 mb-1 mt-1">Nutrition Information</CardTitle>
+                  </CardHeader>
+                  <div className="flex items-center space-x-2">
+                    <Button className="w-full" onClick={handleNutritionClick}>Go to Nutrition Page</Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
         <div className="space-y-4">
