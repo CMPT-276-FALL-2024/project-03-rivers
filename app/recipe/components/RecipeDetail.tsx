@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { us } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { CalendarIcon, Clock } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -245,7 +245,7 @@ export default function RecipeDetail() {
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {selectedDate ? format(selectedDate, "PPP", { locale: us }) : <span>Pick Date</span>}
+                        {selectedDate ? format(selectedDate, "PPP", { locale: enUS }) : <span>Pick Date</span>}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
