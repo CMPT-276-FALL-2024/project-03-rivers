@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import MenuBar from "@/components/menu-bar";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,6 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ""}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -41,10 +43,12 @@ export default function RootLayout({
             </header>
 
             <main className="relative flex justify-center min-h-screen">
-            {children}
+              {children}
             </main>
           </ThemeProvider>
+        </GoogleOAuthProvider>
       </body>
     </html>
   );
 }
+

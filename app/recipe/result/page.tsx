@@ -9,6 +9,14 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { ja } from "date-fns/locale";
+import { cn } from "@/lib/utils";
+import { CalendarIcon, Clock } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { GoogleCalendarIntegration } from "@/components/GoogleCalendarIntegration";
 
 interface RecipeDetail {
   id: number;
@@ -23,6 +31,8 @@ export default function RecipeDetailPage() {
   const [servings, setServings] = useState(1);
   const [calculatedIngredients, setCalculatedIngredients] = useState<{ name: string; amount: string }[]>([]);
   const [notes, setNotes] = useState("");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [selectedTime, setSelectedTime] = useState<string | undefined>(undefined);
   const router = useRouter();
   const searchParams = useSearchParams();
   const recipeId = searchParams.get("id");
@@ -64,6 +74,14 @@ export default function RecipeDetailPage() {
       }));
       setCalculatedIngredients(newIngredients);
     }
+  };
+
+  const handleDateSelect = (date: Date | undefined) => {
+    setSelectedDate(date);
+  };
+
+  const handleTimeSelect = (time: string) => {
+    setSelectedTime(time);
   };
 
   if (!recipe) return <p>Loading...</p>;
@@ -145,14 +163,70 @@ export default function RecipeDetailPage() {
           <Card>
             <CardContent className="p-4">
               <CardHeader className="px-0 pt-0 pb-2">
-                <CardTitle className="text-lg mb-2">Notes</CardTitle>
+                <CardTitle className="text-lg mb-2">Notes & Schedule</CardTitle>
               </CardHeader>
-              <Textarea
-                placeholder="Add your notes here..."
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                className="w-full h-[150px]"
-              />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Textarea
+                    placeholder="Add your notes here..."
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    className="w-full h-[150px]"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !selectedDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {selectedDate ? format(selectedDate, "PPP", { locale: ja }) : <span>日付を選択</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={handleDateSelect}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <Select onValueChange={handleTimeSelect}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="時間を選択">
+                        {selectedTime ? (
+                          <div className="flex items-center">
+                            <Clock className="mr-2 h-4 w-4" />
+                            {selectedTime}
+                          </div>
+                        ) : (
+                          <span>時間を選択</span>
+                        )}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: 24 }, (_, i) => i).map((hour) => (
+                        <SelectItem key={hour} value={`${hour.toString().padStart(2, '0')}:00`}>
+                          {`${hour.toString().padStart(2, '0')}:00`}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <GoogleCalendarIntegration
+                    recipeTitle={recipe.title}
+                    selectedDate={selectedDate}
+                    selectedTime={selectedTime}
+                    notes={notes}
+                    ingredients={calculatedIngredients}
+                  />
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
