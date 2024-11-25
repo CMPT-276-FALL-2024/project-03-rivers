@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { Globe } from 'lucide-react';
 import { ModeToggle } from "./mode-toggle";
-import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import { useToast } from '@/hooks/use-toast';
 
 export default function MenuBar() {
