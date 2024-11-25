@@ -109,7 +109,7 @@ export default function RecipeDetailPage() {
             <Card>
               <CardContent className="p-4">
                 <CardHeader className="px-0 pt-0 pb-2">
-                  <CardTitle className="text-lg mb-2">材料</CardTitle>
+                  <CardTitle className="text-lg mb-2">Ingredients</CardTitle>
                 </CardHeader>
                 <ScrollArea className="h-[200px] pr-4">
                   {calculatedIngredients.map((ingredient, index) => (
@@ -129,7 +129,7 @@ export default function RecipeDetailPage() {
             <Card className="h-[110px]">
               <CardContent className="p-2">
                 <CardHeader className="px-0 pt-0 pb-2">
-                  <CardTitle className="text-lg ml-1 mb-1 mt-1">人数調整</CardTitle>
+                  <CardTitle className="text-lg ml-1 mb-1 mt-1">Number of People</CardTitle>
                 </CardHeader>
                 <div className="flex items-center space-x-2">
                   <Input
@@ -139,7 +139,7 @@ export default function RecipeDetailPage() {
                     min={1}
                     className="w-20"
                   />
-                  <Button onClick={calculateIngredients}>計算</Button>
+                  <Button onClick={calculateIngredients}>Calculate</Button>
                 </div>
               </CardContent>
             </Card>
@@ -149,7 +149,7 @@ export default function RecipeDetailPage() {
           <Card>
             <CardContent className="p-4">
               <CardHeader className="px-0 pt-0 pb-2">
-                <CardTitle className="text-lg mb-2">手順</CardTitle>
+                <CardTitle className="text-lg mb-2">Instruction</CardTitle>
               </CardHeader>
               <ScrollArea className="h-[310px] pr-4">
                 <ol className="list-decimal list-inside space-y-4">
@@ -163,12 +163,12 @@ export default function RecipeDetailPage() {
           <Card>
             <CardContent className="p-4">
               <CardHeader className="px-0 pt-0 pb-2">
-                <CardTitle className="text-lg mb-2">メモ & スケジュール</CardTitle>
+                <CardTitle className="text-lg mb-2">Note & Schedule</CardTitle>
               </CardHeader>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Textarea
-                    placeholder="メモを追加..."
+                    placeholder="Add note..."
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     className="w-full h-[150px]"
@@ -185,7 +185,7 @@ export default function RecipeDetailPage() {
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {selectedDate ? format(selectedDate, "PPP", { locale: ja }) : <span>日付を選択</span>}
+                        {selectedDate ? format(selectedDate, "PPP", { locale: ja }) : <span>Pick Date</span>}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -199,14 +199,14 @@ export default function RecipeDetailPage() {
                   </Popover>
                   <Select onValueChange={handleTimeSelect}>
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="時間を選択">
+                      <SelectValue placeholder="Pick Time">
                         {selectedTime ? (
                           <div className="flex items-center">
                             <Clock className="mr-2 h-4 w-4" />
                             {selectedTime}
                           </div>
                         ) : (
-                          <span>時間を選択</span>
+                          <span>Pick Time</span>
                         )}
                       </SelectValue>
                     </SelectTrigger>

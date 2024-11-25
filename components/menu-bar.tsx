@@ -56,7 +56,7 @@ export default function MenuBar() {
                     variant="outline"
                     onClick={() => login()}
                 >
-                    Googleでログイン
+                    Login with Google
                 </Button>
                 <ModeToggle />
             </div>
