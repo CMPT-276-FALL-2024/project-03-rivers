@@ -10,14 +10,14 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizeCss: true,
   },
-  async rewrites() {
-    return [
-      {
-        source: '/google7c335c90a115b1f8.html',
-        destination: '/google7c335c90a115b1f8.html',
-      },
-    ]
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/google7c335c90a115b1f8.html',
+  //       destination: '/google7c335c90a115b1f8.html',
+  //     },
+  //   ]
+  // },
 };
 
 export default nextConfig;
