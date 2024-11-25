@@ -84,6 +84,10 @@ export default function RecipeDetailPage() {
     setSelectedTime(time);
   };
 
+  const handleNutritionClick = () => {
+    router.push(`/recipe/result/nutrition?id=${recipeId}`);
+  };
+
   if (!recipe) return <p>Loading...</p>;
 
   const instructionSteps = recipe.instructions.split(/\d+\./).filter(step => step.trim() !== '');
@@ -143,6 +147,16 @@ export default function RecipeDetailPage() {
                 </div>
               </CardContent>
             </Card>
+            <Card className="h-[110px]">
+                <CardContent className="p-2">
+                  <CardHeader className="px-0 pt-0 pb-2">
+                    <CardTitle className="text-lg ml-1 mb-1 mt-1">Nutrition Information</CardTitle>
+                  </CardHeader>
+                  <div className="flex items-center space-x-2">
+                    <Button className="w-full" onClick={handleNutritionClick}>Go to Nutrition Page</Button>
+                  </div>
+                </CardContent>
+              </Card>
           </div>
         </div>
         <div className="space-y-4">
@@ -215,8 +229,7 @@ export default function RecipeDetailPage() {
                         <SelectItem key={hour} value={`${hour.toString().padStart(2, '0')}:00`}>
                           {`${hour.toString().padStart(2, '0')}:00`}
                         </SelectItem>
-                
-))}
+                      ))}
                     </SelectContent>
                   </Select>
                   <GoogleCalendarIntegration
