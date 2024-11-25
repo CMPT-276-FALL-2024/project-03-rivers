@@ -1,39 +1,83 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { Globe } from 'lucide-react';
+import { Globe, User } from 'lucide-react';
 import { ModeToggle } from "./mode-toggle";
 import { useGoogleLogin } from '@react-oauth/google';
 import { useToast } from '@/hooks/use-toast';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Image from "next/image";
 
 export default function MenuBar() {
     const { toast } = useToast();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userInfo, setUserInfo] = useState<{ name: string; picture: string } | null>(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem('googleAccessToken');
+        if (token) {
+            setIsLoggedIn(true);
+            fetchUserInfo(token);
+        }
+    }, []);
+
+    const fetchUserInfo = async (token: string) => {
+        try {
+            const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const data = await response.json();
+            setUserInfo({ name: data.name, picture: data.picture });
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+        }
+    };
 
     const login = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             console.log('Token Response:', tokenResponse);
             
-            // アクセストークンを保存
             localStorage.setItem('googleAccessToken', tokenResponse.access_token);
             console.log('Access token saved to localStorage');
             
+            setIsLoggedIn(true);
+            fetchUserInfo(tokenResponse.access_token);
+            
             toast({
-                title: "ログイン成功",
-                description: "Googleアカウントでログインしました。",
+                title: "Success",
+                description: "Logged in successfully with Google Account.",
             });
         },
         onError: () => {
             console.error('Login failed');
             toast({
-                title: "ログイン失敗",
-                description: "Googleアカウントでのログインに失敗しました。",
+                title: "Failed",
+                description: "Failed to login with Google Account.",
                 variant: "destructive",
             });
         },
-        scope: 'https://www.googleapis.com/auth/calendar.events',
+        scope: 'https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/userinfo.profile',
     });
+
+    const logout = () => {
+        localStorage.removeItem('googleAccessToken');
+        setIsLoggedIn(false);
+        setUserInfo(null);
+        toast({
+            title: "Success to logout",
+            description: "Logged out successfully with Google Account.",
+        });
+    };
 
     return (
         <div className="flex items-center justify-between m-5 h-16 rounded-full border shadow-lg">
@@ -52,12 +96,39 @@ export default function MenuBar() {
                 <Link href="/developers">
                     <Button variant="ghost" className="text-md">Developers</Button>
                 </Link>
-                <Button 
-                    variant="outline"
-                    onClick={() => login()}
-                >
-                    Login with Google
-                </Button>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Avatar className="cursor-pointer">
+                            <AvatarImage src={userInfo?.picture || "/placeholder-avatar.png"} />
+                            <AvatarFallback>{userInfo?.name?.[0] || <User />}</AvatarFallback>
+                        </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        {isLoggedIn ? (
+                            <>
+                                <DropdownMenuItem>
+                                    <div className="flex items-center">
+                                        <Image
+                                            src={userInfo?.picture || "/placeholder-avatar.png"}
+                                            alt="User Avatar"
+                                            width={24}
+                                            height={24}
+                                            className="rounded-full mr-2"
+                                        />
+                                        <span>{userInfo?.name || "User"}</span>
+                                    </div>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={logout}>
+                                    Logout
+                                </DropdownMenuItem>
+                            </>
+                        ) : (
+                            <DropdownMenuItem onClick={() => login()}>
+                                Login with Google
+                            </DropdownMenuItem>
+                        )}
+                    </DropdownMenuContent>
+                </DropdownMenu>
                 <ModeToggle />
             </div>
         </div>       
