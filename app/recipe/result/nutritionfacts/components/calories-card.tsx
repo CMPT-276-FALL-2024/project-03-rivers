@@ -21,7 +21,7 @@ export function CaloriesCard() {
       try {
         const response = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/nutritionWidget.json?apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_API_KEY}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch calorie information');
+          throw new Error('カロリー情報の取得に失敗しました');
         }
         const data = await response.json();
         setCalorieInfo({
@@ -29,8 +29,8 @@ export function CaloriesCard() {
           servings: data.numberOfServings
         });
       } catch (error) {
-        console.error("Failed to fetch calorie information:", error);
-        setError('Failed to load calorie information. Please try again later.');
+        console.error("カロリー情報の取得に失敗しました:", error);
+        setError('カロリー情報の読み込みに失敗しました。後でもう一度お試しください。');
       }
     };
 
@@ -38,19 +38,19 @@ export function CaloriesCard() {
   }, [recipeId]);
 
   if (error) return <Card className="p-4"><p className="text-red-500">{error}</p></Card>;
-  if (!calorieInfo) return <Card className="p-4"><p>Loading calorie information...</p></Card>;
+  if (!calorieInfo) return <Card className="p-4"><p>カロリー情報を読み込み中...</p></Card>;
 
   return (
     <Card className="border border-gray-200 shadow-lg h-[205px] p-4 flex flex-col justify-center">
-      <div className="text-lg font-medium mb-2">Recipe Calorie Information</div>
+      <div className="text-lg font-medium mb-2">レシピのカロリー情報</div>
       <div className="flex items-center justify-between mb-2">
         <div>
-          <div className="text-3xl font-bold">Calories</div>
-          <div className="text-sm text-gray-500">Amount per serving</div>
+          <div className="text-3xl font-bold">カロリー</div>
+          <div className="text-sm text-gray-500">1人分あたり</div>
         </div>
-        <div className="text-5xl font-semibold text-gray-600">{calorieInfo.calories}cal</div>
+        <div className="text-5xl font-semibold text-gray-600">{calorieInfo.calories}kcal</div>
       </div>
-      <div className="text-sm text-gray-500">Servings: {calorieInfo.servings}</div>
+      <div className="text-sm text-gray-500">サービング数: {calorieInfo.servings}</div>
       <hr className="my-2 border-gray-400" />
     </Card>
   );
