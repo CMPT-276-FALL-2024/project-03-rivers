@@ -44,7 +44,7 @@ export function EventDetails({ event, onClose }: EventDetailsProps) {
 
       <DrawerFooter>
         <Button variant="outline" onClick={onClose}>
-          閉じる
+          Close
         </Button>
       </DrawerFooter>
     </DrawerContent>
