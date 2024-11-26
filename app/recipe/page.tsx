@@ -1,10 +1,11 @@
 "use client";
-//test
+
 import Image from "next/image";
 import RecipeCard from "./components/recipe-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CheckboxIngredients } from "./components/ingredients-selector";
 import { useState } from "react";
+import { RecipeSearch } from "./components/searchbox";
 
 interface Recipe {
   id: number;
@@ -21,10 +22,17 @@ export default function Recipe() {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="flex flex-col md:flex-row items-center justify-center mt-20 gap-6">
-                <div className="w-full md:w-1/3">
-                    <CheckboxIngredients onRecipesFetched={handleRecipesFetched} />
+        <div className="container mx-auto px-4 py-8 pt-8">
+            <h1 className="text-3xl font-bold text-center mb-2 text-orange-500">Recipe Search</h1>
+            <div className="flex flex-col md:flex-row items-center justify-center mt-10 gap-6">
+                <div className="w-full md:w-1/3 space-y-4">
+                    <div className="mb-1">
+                        <RecipeSearch onRecipesFetched={handleRecipesFetched} />
+                        <h1 className="text-center font-extrabold text-3xl text-gray-500 p-32">OR</h1>                  
+                    </div>
+                    <div>
+                        <CheckboxIngredients onRecipesFetched={handleRecipesFetched} />
+                    </div>                
                 </div>
 
                 <Image 
@@ -38,7 +46,7 @@ export default function Recipe() {
                 <ScrollArea className="w-full md:w-2/3 h-[700px] rounded-md border p-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {recipes.length === 0 ? (
-                            <p className="col-span-full text-center items-center justify-center text-gray-400">Select ingredients to search for recipes...</p>
+                            <p className="col-span-full text-center items-center justify-center text-gray-400">Search for recipes or select ingredients...</p>
                         ) : (
                             recipes.map((recipe) => (
                                 <RecipeCard key={recipe.id} recipe={recipe} />
