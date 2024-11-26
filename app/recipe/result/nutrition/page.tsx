@@ -1,23 +1,41 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from "next/navigation";
 import { ImageCard } from './components/image-card';
 import { NutritionFactsCard } from './components/nutrition-card';
 import { CaloriesCard } from './components/calories-card';
 
-
 function NutritionContent() {
     const searchParams = useSearchParams();
     const recipeId = searchParams.get("id");
+    const [recipeName, setRecipeName] = useState<string>("");
 
-    if (!recipeId) return <p>レシピIDが提供されていません</p>;
+    useEffect(() => {
+        const fetchRecipeName = async () => {
+            if (!recipeId) return;
+            try {
+                const response = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_API_KEY}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch recipe information');
+                }
+                const data = await response.json();
+                setRecipeName(data.title);
+            } catch (error) {
+                console.error("Failed to fetch recipe information:", error);
+            }
+        };
+
+        fetchRecipeName();
+    }, [recipeId]);
+
+    if (!recipeId) return <p>No recipe ID provided</p>;
 
     return (
         <div className="container">
             <div className="min-h-screen p-4">
-                <h1 className="text-center text-5xl font-bold mb-8 text-orange-600">
-                レシピの栄養成分
+                <h1 className="text-center text-3xl font-bold mb-12 text-orange-600">
+                    {recipeName ? `${recipeName} Nutrition` : 'Recipe Nutrition'}
                 </h1>
             
                 <div className="grid grid-rows-2 grid-cols-2 gap-2 h-[800px]">
@@ -40,7 +58,7 @@ function NutritionContent() {
 
 export default function Nutrition() {
     return (
-        <Suspense fallback={<p>栄養情報を読み込み中...</p>}>
+        <Suspense fallback={<p>Loading nutrition information...</p>}>
             <NutritionContent />
         </Suspense>
     );
