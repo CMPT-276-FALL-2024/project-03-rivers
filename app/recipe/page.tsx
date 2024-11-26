@@ -22,8 +22,9 @@ export default function Recipe() {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="flex flex-col md:flex-row items-center justify-center mt-20 gap-6">
+        <div className="container mx-auto px-4 py-8 pt-8">
+            <h1 className="text-3xl font-bold text-center mb-2 text-orange-500">Recipe Search</h1>
+            <div className="flex flex-col md:flex-row items-center justify-center mt-10 gap-6">
                 <div className="w-full md:w-1/3 space-y-4">
                     <div className="mb-1">
                         <RecipeSearch onRecipesFetched={handleRecipesFetched} />

@@ -28,6 +28,7 @@ export function RecipeSearch({ onRecipesFetched }: RecipeSearchProps) {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestion, setSelectedSuggestion] = useState<Suggestion | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState(-1); // Added state for selected index
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -45,6 +46,7 @@ export function RecipeSearch({ onRecipesFetched }: RecipeSearchProps) {
     const fetchSuggestions = async () => {
       if (query.length < 2) {
         setSuggestions([]);
+        setSelectedIndex(-1); // Reset selected index when query is too short
         return;
       }
 
@@ -78,7 +80,9 @@ export function RecipeSearch({ onRecipesFetched }: RecipeSearchProps) {
   };
 
   const handleSearch = async () => {
-    if (selectedSuggestion) {
+    if (selectedIndex !== -1 && suggestions[selectedIndex]) {
+      await handleSuggestionClick(suggestions[selectedIndex]);
+    } else if (selectedSuggestion) {
       await fetchRecipeById(selectedSuggestion.id);
     } else if (query) {
       await searchRecipes(query);
@@ -128,7 +132,24 @@ export function RecipeSearch({ onRecipesFetched }: RecipeSearchProps) {
           type="text"
           placeholder="Search recipes..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setSelectedIndex(-1);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleSearch();
+            } else if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              setSelectedIndex((prevIndex) =>
+                Math.min(prevIndex + 1, suggestions.length - 1)
+              );
+            } else if (e.key === 'ArrowUp') {
+              e.preventDefault();
+              setSelectedIndex((prevIndex) => Math.max(prevIndex - 1, -1));
+            }
+          }}
           className="flex-1"
         />
         <Button onClick={handleSearch}>
@@ -140,11 +161,14 @@ export function RecipeSearch({ onRecipesFetched }: RecipeSearchProps) {
         <Card className="absolute w-full mt-1 z-50">
           <ScrollArea className="max-h-[200px]">
             <div className="p-2">
-              {suggestions.map((suggestion) => (
+              {suggestions.map((suggestion, index) => (
                 <button
                   key={suggestion.id}
-                  className="w-full text-left px-3 py-2 hover:bg-accent rounded-md transition-colors"
+                  className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
+                    index === selectedIndex ? 'bg-accent' : 'hover:bg-accent'
+                  }`}
                   onClick={() => handleSuggestionClick(suggestion)}
+                  onMouseEnter={() => setSelectedIndex(index)}
                 >
                   {suggestion.title}
                 </button>
