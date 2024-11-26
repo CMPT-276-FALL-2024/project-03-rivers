@@ -54,14 +54,14 @@ export default function MenuBar() {
             fetchUserInfo(tokenResponse.access_token);
             
             toast({
-                title: "Login successful",
-                description: "You have been logged in with Google account.",
+                title: "Success to login",
+                description: "Successfully logged in with Google account.",
             });
         },
         onError: () => {
             console.error('Login failed');
             toast({
-                title: "Login failed",
+                title: "Failed to login",
                 description: "Failed to login with Google account.",
                 variant: "destructive",
             });
@@ -74,8 +74,8 @@ export default function MenuBar() {
         setIsLoggedIn(false);
         setUserInfo(null);
         toast({
-            title: "Successful logout",
-            description: "You have been logged out.",
+            title: "ログアウト成功",
+            description: "ログアウトしました。",
         });
     };
 
@@ -96,39 +96,37 @@ export default function MenuBar() {
                 <Link href="/developers">
                     <Button variant="ghost" className="text-md">Developers</Button>
                 </Link>
-                <DropdownMenu>
+                {isLoggedIn ? (
+                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Avatar className="cursor-pointer">
-                            <AvatarImage src={userInfo?.picture || "/placeholder-avatar.png"} />
-                            <AvatarFallback>{userInfo?.name?.[0] || <User />}</AvatarFallback>
-                        </Avatar>
+                      <Avatar className="cursor-pointer">
+                        <AvatarImage src={userInfo?.picture || "/placeholder-avatar.png"} />
+                        <AvatarFallback>{userInfo?.name?.[0] || <User />}</AvatarFallback>
+                      </Avatar>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        {isLoggedIn ? (
-                            <>
-                                <DropdownMenuItem>
-                                    <div className="flex items-center">
-                                        <Image
-                                            src={userInfo?.picture || "/placeholder-avatar.png"}
-                                            alt="User Avatar"
-                                            width={24}
-                                            height={24}
-                                            className="rounded-full mr-2"
-                                        />
-                                        <span>{userInfo?.name || "User"}</span>
-                                    </div>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={logout}>
-                                    Logout
-                                </DropdownMenuItem>
-                            </>
-                        ) : (
-                            <DropdownMenuItem onClick={() => login()}>
-                                Login with Google
-                            </DropdownMenuItem>
-                        )}
+                      <DropdownMenuItem>
+                        <div className="flex items-center">
+                          <Image
+                            src={userInfo?.picture || "/placeholder-avatar.png"}
+                            alt="User Avatar"
+                            width={24}
+                            height={24}
+                            className="rounded-full mr-2"
+                          />
+                          <span>{userInfo?.name || "User"}</span>
+                        </div>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={logout}>
+                        Logout
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
-                </DropdownMenu>
+                  </DropdownMenu>
+                ) : (
+                  <Button onClick={() => login()} variant="ghost" className="text-md">
+                    Login
+                  </Button>
+                )}
                 <ModeToggle />
             </div>
         </div>       
