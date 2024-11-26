@@ -8,7 +8,7 @@ export async function POST(request: Request) {
 
     if (!accessToken) {
       return NextResponse.json(
-        { success: false, error: 'アクセストークンが見つかりません' },
+        { success: false, error: 'Access token not found' },
         { status: 401 }
       );
     }
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       console.error('RNA calendar not found');
       return NextResponse.json({ 
         success: false, 
-        error: 'RNAカレンダーが見つかりません' 
+        error: 'RNA calendar not found' 
       });
     }
 
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error in get events API route:', error);
     
-    let errorMessage = '不明なエラーが発生しました';
+    let errorMessage = 'An error occurred';
     if (error instanceof Error) {
       errorMessage = error.message;
     }

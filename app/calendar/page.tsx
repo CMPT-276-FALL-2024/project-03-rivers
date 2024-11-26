@@ -27,7 +27,7 @@ export default function CalendarPage() {
     const accessToken = localStorage.getItem("googleAccessToken");
 
     if (!accessToken) {
-      setError("ログインが必要です。");
+      setError("Need to sign in to fetch events");
       setIsLoading(false);
       return;
     }
@@ -55,14 +55,14 @@ export default function CalendarPage() {
       const data = await response.json();
 
       if (!data.success) {
-        throw new Error(data.error || "イベントの取得に失敗しました");
+        throw new Error(data.error || "Failed to fetch events");
       }
 
       setEvents(data.events || []);
     } catch (error) {
       console.error("Error fetching events:", error);
       setError(
-        error instanceof Error ? error.message : "予定の取得中にエラーが発生しました"
+        error instanceof Error ? error.message : "An error occurred while fetching events"
       );
     } finally {
       setIsLoading(false);
@@ -81,7 +81,7 @@ export default function CalendarPage() {
           className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
           role="alert"
         >
-          <strong className="font-bold">エラー: </strong>
+          <strong className="font-bold">Error: </strong>
           <span className="block sm:inline">{error}</span>
         </div>
       )}
