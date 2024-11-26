@@ -122,28 +122,28 @@ export default function RecipeDetail() {
   return (
     <div className="container mx-auto px-4 py-4">
       <div className="flex items-center justify-center gap-3 mb-2">
-      <h1 className="text-2xl font-bold mb-4 text-center">{recipe.title}</h1>
-      <div className="flex justify-center mb-4">
-        <Button
-          onClick={toggleFavorite}
-          variant={isFavorited ? "default" : "outline"}
-          className="flex items-center gap-2"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill={isFavorited ? "currentColor" : "none"}
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        <h1 className="text-2xl font-bold mb-4 text-center">{recipe.title}</h1>
+        <div className="flex justify-center mb-4">
+          <Button
+            onClick={toggleFavorite}
+            variant={isFavorited ? "default" : "outline"}
+            className="flex items-center gap-2"
           >
-            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-          </svg>
-        </Button>
-      </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill={isFavorited ? "currentColor" : "none"}
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+            </svg>
+          </Button>
+        </div>
       </div>
       <div className="grid gap-4">
         <div className="grid grid-cols-2 gap-4">
@@ -161,7 +161,7 @@ export default function RecipeDetail() {
               </CardContent>
             </Card>
             <div className="grid grid-cols-2 gap-4">
-              <Card>
+              <Card className="h-[280px]">
                 <CardContent className="p-4">
                   <CardHeader className="px-0 pt-0 pb-2">
                     <CardTitle className="text-lg mb-2">Ingredients</CardTitle>
@@ -181,33 +181,32 @@ export default function RecipeDetail() {
                   </ScrollArea>
                 </CardContent>
               </Card>
-              <Card className="h-auto">
-                <CardContent className="p-4 space-y-4">
-                  <div className="items-center">
-                      <div>
-                      <CardHeader className="px-0 pt-0 pb-2">
-                        <CardTitle className="text-lg mb-1">Number of People</CardTitle>
-                      </CardHeader>
-                      <div className="flex items-center space-x-2">
-                        <Input
-                          type="number"
-                          value={servings}
-                          onChange={(e) => setServings(Number(e.target.value))}
-                          min={1}
-                          className="w-20"
-                        />
-                        <Button onClick={calculateIngredients}>Calculate</Button>
-                      </div>
+              <Card className="h-[280px]">
+                <CardContent className="p-4 flex flex-col justify-between">
+                  <div>
+                    <CardHeader className="px-0 pt-0 pb-2">
+                      <CardTitle className="text-lg mb-1">Number of People</CardTitle>
+                    </CardHeader>
+                    <div className="flex items-center space-x-2">
+                      <Input
+                        type="number"
+                        value={servings}
+                        onChange={(e) => setServings(Number(e.target.value))}
+                        min={1}
+                        className="w-20"
+                      />
+                      <Button onClick={calculateIngredients}>Calculate</Button>
                     </div>
-                    <Separator className="my-8" />
-                    <div>
-                      <CardHeader className="px-0 pt-0 pb-2">
-                        <CardTitle className="text-lg mb-1">Nutrition Facts</CardTitle>
-                      </CardHeader>
-                      <Button className="w-full" onClick={handleNutritionClick}>Go to Nutrition Page</Button>
-                    </div>                  
                   </div>
-
+                  <Separator className="my-4" />
+                  <div>
+                    <CardHeader className="px-0 pt-0 pb-2">
+                      <CardTitle className="text-lg mb-1">Nutrition Facts</CardTitle>
+                    </CardHeader>
+                    <Button className="w-full" onClick={handleNutritionClick}>
+                      Go to Nutrition Page
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -227,18 +226,18 @@ export default function RecipeDetail() {
                 </ScrollArea>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="h-[314px]">
               <CardContent className="p-4">
                 <CardHeader className="px-0 pt-0 pb-2">
                   <CardTitle className="text-lg mb-2">Note & Schedule</CardTitle>
                 </CardHeader>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
+                <div className="grid grid-cols-2 gap-4 h-[230px]">
+                  <div className="h-full">
                     <Textarea
                       placeholder="Add note..."
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
-                      className="w-full h-[150px]"
+                      className="w-full h-full resize-none"
                     />
                   </div>
                   <div className="space-y-2">
