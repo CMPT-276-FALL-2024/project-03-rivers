@@ -3,18 +3,21 @@ import { google } from 'googleapis';
 
 export async function POST(request: Request) {
   try {
-    const event = await request.json();
+    const { event, calendarId } = await request.json();
     const accessToken = request.headers.get('Authorization')?.split('Bearer ')[1];
 
     if (!accessToken) {
       return NextResponse.json(
-        { success: false, error: 'アクセストークンが見つかりません' },
+        { success: false, error: 'Access token not found' },
         { status: 401 }
       );
     }
 
-    // OAuth2クライアントの設定
-    const oauth2Client = new google.auth.OAuth2();
+    // OAuth2 Client configuration
+    const oauth2Client = new google.auth.OAuth2(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET
+    );
     oauth2Client.setCredentials({ access_token: accessToken });
 
     const calendar = google.calendar({ 
@@ -22,11 +25,30 @@ export async function POST(request: Request) {
       auth: oauth2Client 
     });
 
-    console.log('Attempting to add event to calendar with token:', accessToken);
+    console.log('Adding event to calendar:', {
+      calendarId,
+      event: {
+        summary: event.summary,
+        description: event.description,
+        start: event.start,
+        end: event.end
+      }
+    });
 
     const response = await calendar.events.insert({
-      calendarId: 'primary',
-      requestBody: event,
+      calendarId: calendarId,
+      requestBody: {
+        summary: event.summary,
+        description: event.description,
+        start: {
+          dateTime: event.start.dateTime,
+          timeZone: 'Asia/Tokyo'
+        },
+        end: {
+          dateTime: event.end.dateTime,
+          timeZone: 'Asia/Tokyo'
+        }
+      },
     });
 
     console.log('Event added successfully:', response.data);
@@ -38,7 +60,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error in calendar API route:', error);
     
-    let errorMessage = 'Unknown error occurred';
+    let errorMessage = 'An error occurred';
     if (error instanceof Error) {
       errorMessage = error.message;
     }

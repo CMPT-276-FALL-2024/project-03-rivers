@@ -27,7 +27,7 @@ export function GoogleCalendarIntegration({
     if (!selectedDate || !selectedTime || !accessToken) {
       toast({
         title: "Error",
-        description: "Please select a date and time to add the recipe to your calendar",
+        description: "Selected date, time, and login with Google Account",
         variant: "destructive",
       });
       return;
@@ -40,13 +40,19 @@ export function GoogleCalendarIntegration({
       const [hours, minutes] = selectedTime.split(':');
       eventDateTime.setHours(parseInt(hours), parseInt(minutes));
 
+      // Set end time to 1 hour after start time
+      const endDateTime = new Date(eventDateTime.getTime() + 60 * 60 * 1000);
+
       const description = `
 Ingredients:
 ${ingredients.map(i => `- ${i.name}: ${i.amount}`).join('\n')}
 
-Note:
+Notes:
 ${notes}
       `.trim();
+
+      // Check if "rna" calendar exists or create it
+      const calendarId = await getOrCreateRnaCalendar(accessToken);
 
       const event = {
         summary: `🍳 ${recipeTitle}`,
@@ -56,7 +62,7 @@ ${notes}
           timeZone: 'Asia/Tokyo'
         },
         end: {
-          dateTime: new Date(eventDateTime.getTime() + 60 * 60 * 1000).toISOString(),
+          dateTime: endDateTime.toISOString(),
           timeZone: 'Asia/Tokyo'
         }
       };
@@ -69,7 +75,7 @@ ${notes}
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${accessToken}`
         },
-        body: JSON.stringify(event),
+        body: JSON.stringify({ event, calendarId }),
       });
 
       const data = await response.json();
@@ -80,7 +86,7 @@ ${notes}
 
       toast({
         title: "Success",
-        description: "Recipe added to your calendar!",
+        description: "Recipe added to calendar",
       });
     } catch (error) {
       console.error('Error adding event to calendar:', error);
@@ -95,6 +101,33 @@ ${notes}
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const getOrCreateRnaCalendar = async (accessToken: string): Promise<string> => {
+    try {
+      const response = await fetch('/api/calendar/get-or-create-rna', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error('API response error:', data);
+        throw new Error(`Failed to get or create RNA calendar: ${data.error || 'Unknown error'}`);
+      }
+
+      if (!data.calendarId) {
+        throw new Error('Calendar ID not returned from API');
+      }
+
+      return data.calendarId;
+    } catch (error) {
+      console.error('Error getting or creating RNA calendar:', error);
+      throw error;
     }
   };
 
