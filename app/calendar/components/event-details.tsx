@@ -1,5 +1,5 @@
 import { format, parseISO } from "date-fns";
-import { ja } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import { CalendarEvent } from "../types";
 import {
   DrawerContent,
@@ -21,7 +21,7 @@ export function EventDetails({ event, onClose }: EventDetailsProps) {
 
   const formatDateTime = (dateTimeStr: string) => {
     const date = parseISO(dateTimeStr);
-    return format(date, "M月d日(E) HH:mm", { locale: ja });
+    return format(date, "yyyy-MM-dd HH:mm", { locale: enUS });
   };
 
   return (
