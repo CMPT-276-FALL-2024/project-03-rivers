@@ -54,19 +54,19 @@ export default function MenuBar() {
             fetchUserInfo(tokenResponse.access_token);
             
             toast({
-                title: "Success",
-                description: "Logged in successfully with Google Account.",
+                title: "Login successful",
+                description: "You have been logged in with Google account.",
             });
         },
         onError: () => {
             console.error('Login failed');
             toast({
-                title: "Failed",
-                description: "Failed to login with Google Account.",
+                title: "Login failed",
+                description: "Failed to login with Google account.",
                 variant: "destructive",
             });
         },
-        scope: 'https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/userinfo.profile',
+        scope: 'https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/userinfo.profile',
     });
 
     const logout = () => {
@@ -74,8 +74,8 @@ export default function MenuBar() {
         setIsLoggedIn(false);
         setUserInfo(null);
         toast({
-            title: "Success to logout",
-            description: "Logged out successfully with Google Account.",
+            title: "Successful logout",
+            description: "You have been logged out.",
         });
     };
 
