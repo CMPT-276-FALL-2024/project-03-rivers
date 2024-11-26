@@ -10,13 +10,12 @@ export default {
   theme: {
   	extend: {
   		colors: {
-				aspectRatio: {
-					'4/3': '4 / 3',
-					'16/9': '16 / 9',
-					'21/9': '21 / 9',
-					'3/2' : '3 / 2'
-					
-				},
+  			aspectRatio: {
+  				'4/3': '4 / 3',
+  				'16/9': '16 / 9',
+  				'21/9': '21 / 9',
+  				'3/2': '3 / 2'
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -62,6 +61,16 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		animation: {
+  			gradient: 'gradient 8s linear infinite'
+  		},
+  		keyframes: {
+  			gradient: {
+  				to: {
+  					backgroundPosition: 'var(--bg-size) 0'
+  				}
+  			}
   		}
   	}
   },
