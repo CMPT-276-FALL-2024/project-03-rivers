@@ -113,7 +113,7 @@ export function RecipeSearch({ onRecipesFetched }: RecipeSearchProps) {
       const response = await fetch(
         `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(
           searchQuery
-        )}&number=6&apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_API_KEY}`
+        )}&number=3&apiKey=${process.env.NEXT_PUBLIC_SPOONACULAR_API_KEY}`
       );
 
       if (!response.ok) throw new Error("Failed to fetch recipes");

@@ -5,8 +5,8 @@ import DeveloperCard from "./components/dev-card";
 
 export default function Developer() {
     return (
-        <div className="">
-            <div className="flex">
+        <div className="container">
+            <div className="flex items-center justify-center">
 
                 <Image
                     className="col-start-1 col-span-2 mb-8 mt-8  rounded-md"

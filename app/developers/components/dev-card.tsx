@@ -17,7 +17,7 @@ export default function DeveloperCard() {
                 <CardContent>
                     Github:
                     <a className="text-black underline underline-offset-1"
-                        href=""
+                        href="https://github.com/ryotakc"
                         >
                          Ryota
                     </a>
