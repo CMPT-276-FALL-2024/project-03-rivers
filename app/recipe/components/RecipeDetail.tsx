@@ -18,6 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { GoogleCalendarIntegration } from "@/components/GoogleCalendarIntegration";
 import { useFavorites } from '@/hooks/useFavorites';
+import { Separator } from "@/components/ui/separator";
 
 interface RecipeDetail {
   id: number;
@@ -143,152 +144,158 @@ export default function RecipeDetail() {
           </svg>
         </Button>
       </div>
-      <div className="grid md:grid-cols-2 gap-4">
-        <div className="space-y-4">
-          <Card>
-            <CardContent className="p-4">
-              <Image 
-                src={recipe.image} 
-                alt={recipe.title} 
-                width={600} 
-                height={400} 
-                className="w-full h-full object-cover rounded-md" 
-                layout="responsive"
-              />
-            </CardContent>
-          </Card>
-          <div className="grid grid-cols-2 gap-4">
+      <div className="grid gap-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-4">
+            <Card>
+              <CardContent className="p-4">
+                <Image 
+                  src={recipe.image} 
+                  alt={recipe.title} 
+                  width={600} 
+                  height={400} 
+                  className="w-full h-full object-cover rounded-md" 
+                  layout="responsive"
+                />
+              </CardContent>
+            </Card>
+            <div className="grid grid-cols-2 gap-4">
+              <Card>
+                <CardContent className="p-4">
+                  <CardHeader className="px-0 pt-0 pb-2">
+                    <CardTitle className="text-lg mb-2">Ingredients</CardTitle>
+                  </CardHeader>
+                  <ScrollArea className="h-[200px] pr-4">
+                    {calculatedIngredients.map((ingredient, index) => (
+                      <div key={index} className="flex items-center space-x-2 mb-2">
+                        <Checkbox id={`ingredient-${index}`} />
+                        <label
+                          htmlFor={`ingredient-${index}`}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {ingredient.name}: {ingredient.amount}
+                        </label>
+                      </div>
+                    ))}
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+              <Card className="h-auto">
+                <CardContent className="p-4 space-y-4">
+                  <div className="items-center">
+                      <div>
+                      <CardHeader className="px-0 pt-0 pb-2">
+                        <CardTitle className="text-lg mb-1">Number of People</CardTitle>
+                      </CardHeader>
+                      <div className="flex items-center space-x-2">
+                        <Input
+                          type="number"
+                          value={servings}
+                          onChange={(e) => setServings(Number(e.target.value))}
+                          min={1}
+                          className="w-20"
+                        />
+                        <Button onClick={calculateIngredients}>Calculate</Button>
+                      </div>
+                    </div>
+                    <Separator className="my-8" />
+                    <div>
+                      <CardHeader className="px-0 pt-0 pb-2">
+                        <CardTitle className="text-lg mb-1">Nutrition Facts</CardTitle>
+                      </CardHeader>
+                      <Button className="w-full" onClick={handleNutritionClick}>Go to Nutrition Page</Button>
+                    </div>                  
+                  </div>
+
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+          <div className="space-y-4">
             <Card>
               <CardContent className="p-4">
                 <CardHeader className="px-0 pt-0 pb-2">
-                  <CardTitle className="text-lg mb-2">Ingredients</CardTitle>
+                  <CardTitle className="text-lg mb-2">Instruction</CardTitle>
                 </CardHeader>
-                <ScrollArea className="h-[200px] pr-4">
-                  {calculatedIngredients.map((ingredient, index) => (
-                    <div key={index} className="flex items-center space-x-2 mb-2">
-                      <Checkbox id={`ingredient-${index}`} />
-                      <label
-                        htmlFor={`ingredient-${index}`}
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        {ingredient.name}: {ingredient.amount}
-                      </label>
-                    </div>
-                  ))}
+                <ScrollArea className="h-[310px] pr-4">
+                  <ol className="list-decimal list-inside space-y-4">
+                    {instructionSteps.map((step, index) => (
+                      <li key={index} className="text-sm">{step.trim()}</li>
+                    ))}
+                  </ol>
                 </ScrollArea>
               </CardContent>
             </Card>
-            <Card className="h-[110px]">
-              <CardContent className="p-2">
+            <Card>
+              <CardContent className="p-4">
                 <CardHeader className="px-0 pt-0 pb-2">
-                  <CardTitle className="text-lg ml-1 mb-1 mt-1">Number of People</CardTitle>
+                  <CardTitle className="text-lg mb-2">Note & Schedule</CardTitle>
                 </CardHeader>
-                <div className="flex items-center space-x-2">
-                  <Input
-                    type="number"
-                    value={servings}
-                    onChange={(e) => setServings(Number(e.target.value))}
-                    min={1}
-                    className="w-20"
-                  />
-                  <Button onClick={calculateIngredients}>Calculate</Button>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Textarea
+                      placeholder="Add note..."
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      className="w-full h-[150px]"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !selectedDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {selectedDate ? format(selectedDate, "PPP", { locale: enUS }) : <span>Pick Date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={selectedDate}
+                          onSelect={handleDateSelect}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <Select onValueChange={handleTimeSelect}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Pick Time">
+                          {selectedTime ? (
+                            <div className="flex items-center">
+                              <Clock className="mr-2 h-4 w-4" />
+                              {selectedTime}
+                            </div>
+                          ) : (
+                            <span>Pick Time</span>
+                          )}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Array.from({ length: 24 }, (_, i) => i).map((hour) => (
+                          <SelectItem key={hour} value={`${hour.toString().padStart(2, '0')}:00`}>
+                            {`${hour.toString().padStart(2, '0')}:00`}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <GoogleCalendarIntegration
+                      recipeTitle={recipe.title}
+                      selectedDate={selectedDate}
+                      selectedTime={selectedTime}
+                      notes={notes}
+                      ingredients={calculatedIngredients}
+                    />
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-            <Card className="h-[110px]">
-              <CardContent className="p-2">
-                <CardHeader className="px-0 pt-0 pb-2">
-                  <CardTitle className="text-lg ml-1 mb-1 mt-1">Nutrition Facts</CardTitle>
-                </CardHeader>
-                <Button className="w-full" onClick={handleNutritionClick}>Go to Nutrition Page</Button>
               </CardContent>
             </Card>
           </div>
-        </div>
-        <div className="space-y-4">
-          <Card>
-            <CardContent className="p-4">
-              <CardHeader className="px-0 pt-0 pb-2">
-                <CardTitle className="text-lg mb-2">Instruction</CardTitle>
-              </CardHeader>
-              <ScrollArea className="h-[310px] pr-4">
-                <ol className="list-decimal list-inside space-y-4">
-                  {instructionSteps.map((step, index) => (
-                    <li key={index} className="text-sm">{step.trim()}</li>
-                  ))}
-                </ol>
-              </ScrollArea>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <CardHeader className="px-0 pt-0 pb-2">
-                <CardTitle className="text-lg mb-2">Note & Schedule</CardTitle>
-              </CardHeader>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Textarea
-                    placeholder="Add note..."
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    className="w-full h-[150px]"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !selectedDate && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {selectedDate ? format(selectedDate, "PPP", { locale: enUS }) : <span>Pick Date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={handleDateSelect}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <Select onValueChange={handleTimeSelect}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Pick Time">
-                        {selectedTime ? (
-                          <div className="flex items-center">
-                            <Clock className="mr-2 h-4 w-4" />
-                            {selectedTime}
-                          </div>
-                        ) : (
-                          <span>Pick Time</span>
-                        )}
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 24 }, (_, i) => i).map((hour) => (
-                        <SelectItem key={hour} value={`${hour.toString().padStart(2, '0')}:00`}>
-                          {`${hour.toString().padStart(2, '0')}:00`}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <GoogleCalendarIntegration
-                    recipeTitle={recipe.title}
-                    selectedDate={selectedDate}
-                    selectedTime={selectedTime}
-                    notes={notes}
-                    ingredients={calculatedIngredients}
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>
