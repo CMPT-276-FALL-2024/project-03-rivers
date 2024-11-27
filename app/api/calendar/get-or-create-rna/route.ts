@@ -12,7 +12,7 @@ export async function GET(request: Request) {
       );
     }
 
-    // OAuth2 Client configuration
+    // OAuth2クライアントの設定
     const oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET
@@ -26,9 +26,9 @@ export async function GET(request: Request) {
 
     try {
       // RNAカレンダーを検索
-      console.log('Calendar list will be fetched...');
+      console.log('カレンダーリストを取得中...');
       const calendarList = await calendar.calendarList.list();
-      console.log('Calendar list fetched:', calendarList.data);
+      console.log('カレンダーリスト取得完了:', calendarList.data);
       
       const rnaCalendar = calendarList.data.items?.find(cal => cal.summary === 'RNA');
 
@@ -37,12 +37,13 @@ export async function GET(request: Request) {
         console.log('RNA calendar found:', rnaCalendar.id);
         return NextResponse.json({ 
           success: true, 
-          calendarId: rnaCalendar.id 
+          calendarId: rnaCalendar.id,
+          isNew: false
         });
       }
 
       // RNAカレンダーが存在しない場合、新規作成
-      console.log('New calendar will be created...');
+      console.log('Creating new calendar...');
       const newCalendar = await calendar.calendars.insert({
         requestBody: {
           summary: 'RNA',
@@ -52,25 +53,26 @@ export async function GET(request: Request) {
       });
       console.log('New calendar created:', newCalendar.data);
 
-      
       await calendar.calendarList.insert({
         requestBody: {
           id: newCalendar.data.id
         }
       });
-      console.log('New calendar added to user\'s calendar list');
+      console.log('Calendar added to calendar list');
 
       return NextResponse.json({ 
         success: true, 
-        calendarId: newCalendar.data.id 
+        calendarId: newCalendar.data.id,
+        isNew: true
       });
 
     } catch (calendarError) {
-      console.error('Error getting or creating RNA calendar:', calendarError);
+      console.error('Error getting or creating calendar:', calendarError);
+      const errorMessage = calendarError instanceof Error ? calendarError.message : 'Error getting or creating calendar';
       return NextResponse.json(
         { 
           success: false, 
-          error: `Failed to get or create RNA calendar: ${calendarError instanceof Error ? calendarError.message : 'Unknown error'}`,
+          error: `Failed to get or create calendar: ${errorMessage}`,
           details: calendarError
         },
         { status: 500 }
@@ -78,9 +80,9 @@ export async function GET(request: Request) {
     }
 
   } catch (error) {
-    console.error('Top level error of get-or-create-rna:', error);
+    console.error('Top level error in get-or-create-rna:', error);
     
-    let errorMessage = 'Unknown error occurred';
+    let errorMessage = 'An error occurred';
     if (error instanceof Error) {
       errorMessage = error.message;
     }
