@@ -45,7 +45,7 @@ function NutritionContent() {
     return (
         <div className="container">
             <div className="min-h-screen p-4">
-                <h1 className="text-center text-3xl font-bold mb-12 text-orange-600">
+                <h1 className="text-center text-3xl font-bold mb-4 text-orange-600">
                     {recipeName ? `${recipeName} Nutrition` : 'Recipe Nutrition'}
                 </h1>
                
