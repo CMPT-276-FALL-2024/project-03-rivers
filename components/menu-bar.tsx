@@ -74,8 +74,8 @@ export default function MenuBar() {
         setIsLoggedIn(false);
         setUserInfo(null);
         toast({
-            title: "ログアウト成功",
-            description: "ログアウトしました。",
+            title: "Success to logout",
+            description: "Successfully logged out.",
         });
     };
 
@@ -88,10 +88,10 @@ export default function MenuBar() {
 
             <div className="mr-3 gap-2 flex items-center">
                 <Link href="/recipe">
-                    <Button variant="ghost" className="text-md">Recipe</Button>
+                    <Button variant="ghost" className="text-md">Search Recipe</Button>
                 </Link>
                 <Link href="/calendar">
-                    <Button variant="ghost" className="text-md">Calendar</Button>
+                    <Button variant="ghost" className="text-md">View Plan</Button>
                 </Link>
                 <Link href="/developers">
                     <Button variant="ghost" className="text-md">Developers</Button>

@@ -48,7 +48,7 @@ export async function BoxIntro() {
 
       <BoxReveal boxColor={"#5046e6"} duration={0.5}>
         <Link href="/recipe">
-          <Button className="mt-[1.6rem] bg-[#5046e6]">Get Started</Button>
+          <Button className="mt-[1.6rem] bg-[#5046e6]">Search Recipe</Button>
         </Link>
         </BoxReveal>
     </div>
