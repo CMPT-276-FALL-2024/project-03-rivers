@@ -19,6 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { GoogleCalendarIntegration } from "@/components/GoogleCalendarIntegration";
 import { useFavorites } from '@/hooks/useFavorites';
 import { Separator } from "@/components/ui/separator";
+// import Cardio from "@/components/icons/cardio";
 
 interface RecipeDetail {
   id: number;
@@ -115,9 +116,23 @@ export default function RecipeDetail() {
     }
   };
 
-  if (!recipe) return <p>Loading...</p>;
+  const parseInstructions = (instructions: string): string[] => {
+    // HTMLタグを削除
+    const cleanInstructions = instructions.replace(/<\/?[^>]+(>|$)/g, "");
+    
+    // 番号付きリストの場合
+    if (cleanInstructions.match(/^\d+\./)) {
+      return cleanInstructions.split(/(?=\d+\.)/).map(step => step.trim());
+    }
+    
+    // ピリオドで区切られた文の場合
+    return cleanInstructions.split('.').filter(step => step.trim() !== '').map(step => step.trim() + '.');
+  };
 
-  const instructionSteps = recipe.instructions.split(/\d+\./).filter(step => step.trim() !== '');
+  if (!recipe) return <div className="items-center justify-center">Loading</div> ;
+  // if (!recipe) return <div className="items-center justify-center"><Cardio /></div> ;
+
+  const instructionSteps = parseInstructions(recipe.instructions);
 
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl">
@@ -214,12 +229,12 @@ export default function RecipeDetail() {
           <Card>
             <CardContent className="p-4">
               <CardHeader className="px-0 pt-0 pb-2">
-                <CardTitle className="text-lg mb-2">Instruction</CardTitle>
+                <CardTitle className="text-lg mb-2">Instructions</CardTitle>
               </CardHeader>
               <ScrollArea className="h-[310px] pr-4">
                 <ol className="list-decimal list-inside space-y-4">
                   {instructionSteps.map((step, index) => (
-                    <li key={index} className="text-sm">{step.trim()}</li>
+                    <li key={index} className="text-sm">{step}</li>
                   ))}
                 </ol>
               </ScrollArea>
@@ -300,4 +315,3 @@ export default function RecipeDetail() {
   );
 }
 
-//test

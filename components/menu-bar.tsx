@@ -15,6 +15,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+// import 'ldrs/quantum'
+// import Icon from "./icons/helix";
+// import Helix from "./icons/helix";
+
 
 export default function MenuBar() {
     const { toast } = useToast();
@@ -74,24 +78,25 @@ export default function MenuBar() {
         setIsLoggedIn(false);
         setUserInfo(null);
         toast({
-            title: "ログアウト成功",
-            description: "ログアウトしました。",
+            title: "Success to logout",
+            description: "Successfully logged out.",
         });
     };
 
     return (
         <div className="flex items-center justify-between m-5 h-16 rounded-full border shadow-lg">
-            <Link href="/" className="flex ml-6 gap-2">
+            <Link href="/" className="flex ml-6 gap-2"> 
                 <Globe />
+                {/* <Helix /> */}
                 <h1 className="text-orange-500 font-extrabold text-xl">RNA</h1>
             </Link>
 
             <div className="mr-3 gap-2 flex items-center">
                 <Link href="/recipe">
-                    <Button variant="ghost" className="text-md">Recipe</Button>
+                    <Button variant="ghost" className="text-md">Search Recipe</Button>
                 </Link>
                 <Link href="/calendar">
-                    <Button variant="ghost" className="text-md">Calendar</Button>
+                    <Button variant="ghost" className="text-md">View Plan</Button>
                 </Link>
                 <Link href="/developers">
                     <Button variant="ghost" className="text-md">Developers</Button>
