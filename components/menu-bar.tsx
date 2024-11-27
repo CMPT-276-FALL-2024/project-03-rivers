@@ -15,6 +15,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+import 'ldrs/quantum'
+import Icon from "./icons/helix";
+
 
 export default function MenuBar() {
     const { toast } = useToast();
@@ -81,8 +84,8 @@ export default function MenuBar() {
 
     return (
         <div className="flex items-center justify-between m-5 h-16 rounded-full border shadow-lg">
-            <Link href="/" className="flex ml-6 gap-2">
-                <Globe />
+            <Link href="/" className="flex ml-6 gap-2"> 
+                <Icon />
                 <h1 className="text-orange-500 font-extrabold text-xl">RNA</h1>
             </Link>
 
