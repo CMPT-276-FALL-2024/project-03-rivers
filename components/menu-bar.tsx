@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
-import 'ldrs/quantum'
+// import 'ldrs/quantum'
 // import Icon from "./icons/helix";
 // import Helix from "./icons/helix";
 
