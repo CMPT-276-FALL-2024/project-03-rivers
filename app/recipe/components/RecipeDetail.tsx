@@ -19,7 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { GoogleCalendarIntegration } from "@/components/GoogleCalendarIntegration";
 import { useFavorites } from '@/hooks/useFavorites';
 import { Separator } from "@/components/ui/separator";
-import Cardio from "@/components/icons/cardio";
+// import Cardio from "@/components/icons/cardio";
 
 interface RecipeDetail {
   id: number;
@@ -129,7 +129,8 @@ export default function RecipeDetail() {
     return cleanInstructions.split('.').filter(step => step.trim() !== '').map(step => step.trim() + '.');
   };
 
-  if (!recipe) return <div className="items-center justify-center"> <Cardio /> </div> ;
+  if (!recipe) return <div className="items-center justify-center">Loading</div> ;
+  // if (!recipe) return <div className="items-center justify-center"><Cardio /></div> ;
 
   const instructionSteps = parseInstructions(recipe.instructions);
 
