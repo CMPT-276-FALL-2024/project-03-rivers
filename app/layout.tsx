@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import MenuBar from "@/components/menu-bar";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Footer } from "@/components/footer";
+import { PageTransition } from "@/components/page-transition";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -45,7 +46,11 @@ export default function RootLayout({
 
             <main className="relative flex justify-center min-h-screen">
               {children}
-            </main>
+            </main>   
+            {/* <PageTransition>
+                {children}
+            </PageTransition> */}
+
 
             <footer>
               <Footer />
