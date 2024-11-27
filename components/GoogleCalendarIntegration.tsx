@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { useToast } from '@/hooks/use-toast';
 import { CalendarDialog } from '@/app/recipe/components/calendar-dialog';
+import { Loader2 } from 'lucide-react';
 
 interface GoogleCalendarIntegrationProps {
   recipeTitle: string;
@@ -35,8 +36,8 @@ export function GoogleCalendarIntegration({
 
     if (!selectedDate || !selectedTime) {
       toast({
-        title: "Error",
-        description: "Please select date and time",
+        title: "エラー",
+        description: "日付と時間を選択してください",
         variant: "destructive",
       });
       return;
@@ -112,7 +113,7 @@ ${notes}
         errorMessage += `: ${error.message}`;
       }
       toast({
-        title: "Error",
+        title: "エラー",
         description: errorMessage,
         variant: "destructive",
       });
@@ -133,7 +134,14 @@ ${notes}
         disabled={isLoading || !selectedDate || !selectedTime}
         className="w-full"
       >
-        {isLoading ? "Adding..." : "Add to Calendar"}
+        {isLoading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </>
+        ) : (
+          "Add to Calendar"
+        )}
       </Button>
       <CalendarDialog
         isOpen={dialogOpen}

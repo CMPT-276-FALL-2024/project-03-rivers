@@ -26,9 +26,9 @@ export async function GET(request: Request) {
 
     try {
       // RNAカレンダーを検索
-      console.log('カレンダーリストを取得中...');
+      console.log('Fetching calendar list...');
       const calendarList = await calendar.calendarList.list();
-      console.log('カレンダーリスト取得完了:', calendarList.data);
+      console.log('Calendar list fetched:', calendarList.data);
       
       const rnaCalendar = calendarList.data.items?.find(cal => cal.summary === 'RNA');
 
