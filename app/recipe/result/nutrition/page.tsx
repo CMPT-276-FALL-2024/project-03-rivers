@@ -5,6 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { ImageCard } from './components/image-card';
 import { NutritionFactsCard } from './components/nutrition-card';
 import { CaloriesCard } from './components/calories-card';
+import { Button } from '@/components/ui/button';
+import { ArrowLeftToLine, ArrowRightFromLine, ArrowUpRight } from 'lucide-react';
 
 function NutritionContent() {
     const searchParams = useSearchParams();
@@ -37,6 +39,22 @@ function NutritionContent() {
                 <h1 className="text-center text-3xl font-bold mb-12 text-orange-600">
                     {recipeName ? `${recipeName} Nutrition` : 'Recipe Nutrition'}
                 </h1>
+               
+                <div className="relative w-full h-14 px-4">
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2">
+                        <Button variant="secondary" className='rounded-lg'>
+                            <ArrowLeftToLine />
+                         Back to previous page
+                        </Button>
+                    </div>
+                    <div className="absolute right-0 top-1/2 -translate-y-1/2">
+                        <Button variant="secondary" className='rounded-lg'>
+                         Go to calendar
+                         <ArrowRightFromLine />
+                        </Button>
+                    </div>
+                </div>
+                
             
                 <div className="grid grid-rows-2 grid-cols-2 gap-2 h-[800px]">
                     <div className="row-span-1 col-span-1">
