@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { useToast } from '@/hooks/use-toast';
+import { CalendarDialog } from '@/app/recipe/components/calendar-dialog';
+import { Loader2 } from 'lucide-react';
 
 interface GoogleCalendarIntegrationProps {
   recipeTitle: string;
@@ -18,16 +20,24 @@ export function GoogleCalendarIntegration({
   ingredients 
 }: GoogleCalendarIntegrationProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState('');
+  const [showConfetti, setShowConfetti] = useState(false);
   const { toast } = useToast();
 
   const addToCalendar = async () => {
     const accessToken = localStorage.getItem('googleAccessToken');
-    console.log('Using access token:', accessToken);
 
-    if (!selectedDate || !selectedTime || !accessToken) {
+    if (!accessToken) {
+      setDialogMessage("Please login with Google Account at the first");
+      setDialogOpen(true);
+      return;
+    }
+
+    if (!selectedDate || !selectedTime) {
       toast({
-        title: "Error",
-        description: "Selected date, time, and login with Google Account",
+        title: "エラー",
+        description: "日付と時間を選択してください",
         variant: "destructive",
       });
       return;
@@ -40,7 +50,6 @@ export function GoogleCalendarIntegration({
       const [hours, minutes] = selectedTime.split(':');
       eventDateTime.setHours(parseInt(hours), parseInt(minutes));
 
-      // Set end time to 1 hour after start time
       const endDateTime = new Date(eventDateTime.getTime() + 60 * 60 * 1000);
 
       const description = `
@@ -51,8 +60,18 @@ Notes:
 ${notes}
       `.trim();
 
-      // Check if "rna" calendar exists or create it
-      const calendarId = await getOrCreateRnaCalendar(accessToken);
+      const calendarResponse = await fetch('/api/calendar/get-or-create-rna', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+      });
+
+      const calendarData = await calendarResponse.json();
+
+      if (!calendarResponse.ok) {
+        throw new Error(calendarData.error || 'Failed to get or create RNA calendar');
+      }
 
       const event = {
         summary: `🍳 ${recipeTitle}`,
@@ -67,35 +86,34 @@ ${notes}
         }
       };
 
-      console.log('Sending event data:', event);
-
-      const response = await fetch('/api/calendar/add-event', {
+      const eventResponse = await fetch('/api/calendar/add-event', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${accessToken}`
         },
-        body: JSON.stringify({ event, calendarId }),
+        body: JSON.stringify({ event, calendarId: calendarData.calendarId }),
       });
 
-      const data = await response.json();
+      const eventData = await eventResponse.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to add event to calendar');
+      if (!eventResponse.ok) {
+        throw new Error(eventData.error || 'Failed to add event to calendar');
       }
 
-      toast({
-        title: "Success",
-        description: "Recipe added to calendar",
-      });
+      setDialogMessage(calendarData.isNew 
+        ? "New calendar RNA created and added recipe into RNA calendar" 
+        : "RNA calendar exists and recipe added to RNA calendar");
+      setDialogOpen(true);
+      setShowConfetti(true);
     } catch (error) {
       console.error('Error adding event to calendar:', error);
-      let errorMessage = "Error adding event to calendar";
+      let errorMessage = "Failed to add event to calendar";
       if (error instanceof Error) {
         errorMessage += `: ${error.message}`;
       }
       toast({
-        title: "Error",
+        title: "エラー",
         description: errorMessage,
         variant: "destructive",
       });
@@ -104,41 +122,34 @@ ${notes}
     }
   };
 
-  const getOrCreateRnaCalendar = async (accessToken: string): Promise<string> => {
-    try {
-      const response = await fetch('/api/calendar/get-or-create-rna', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        },
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error('API response error:', data);
-        throw new Error(`Failed to get or create RNA calendar: ${data.error || 'Unknown error'}`);
-      }
-
-      if (!data.calendarId) {
-        throw new Error('Calendar ID not returned from API');
-      }
-
-      return data.calendarId;
-    } catch (error) {
-      console.error('Error getting or creating RNA calendar:', error);
-      throw error;
-    }
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+    setShowConfetti(false);
   };
 
   return (
-    <Button 
-      onClick={addToCalendar} 
-      disabled={isLoading || !selectedDate || !selectedTime}
-      className="w-full"
-    >
-      {isLoading ? "Adding..." : "Add to Calendar"}
-    </Button>
+    <>
+      <Button 
+        onClick={addToCalendar} 
+        disabled={isLoading || !selectedDate || !selectedTime}
+        className="w-full"
+      >
+        {isLoading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </>
+        ) : (
+          "Add to Calendar"
+        )}
+      </Button>
+      <CalendarDialog
+        isOpen={dialogOpen}
+        onClose={handleCloseDialog}
+        message={dialogMessage}
+        showConfetti={showConfetti}
+      />
+    </>
   );
 }
 
