@@ -19,7 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { GoogleCalendarIntegration } from "@/components/GoogleCalendarIntegration";
 import { useFavorites } from '@/hooks/useFavorites';
 import { Separator } from "@/components/ui/separator";
-// import Cardio from "@/components/icons/cardio";
+import Cardio from "@/components/icons/cardio";
 
 interface RecipeDetail {
   id: number;

@@ -15,9 +15,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
-// import 'ldrs/quantum'
-// import Icon from "./icons/helix";
-// import Helix from "./icons/helix";
+import Helix from "./icons/helix";
+
 
 
 export default function MenuBar() {
@@ -86,8 +85,14 @@ export default function MenuBar() {
     return (
         <div className="flex items-center justify-between m-5 h-16 rounded-full border shadow-lg">
             <Link href="/" className="flex ml-6 gap-2"> 
-                <Globe />
+                {/* <Globe /> */}
                 {/* <Helix /> */}
+                <Helix 
+                  color="orange" 
+                  size={30} 
+                  speed={1}
+                  className="my-2" 
+                />
                 <h1 className="text-orange-500 font-extrabold text-xl">RNA</h1>
             </Link>
 
