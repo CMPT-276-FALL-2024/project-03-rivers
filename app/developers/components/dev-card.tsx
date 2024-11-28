@@ -15,9 +15,9 @@ export default function DeveloperCard() {
                         <CardDescription>03 Rivers</CardDescription>
                     </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex justify-center items-center">
                     
-                <div className="flex items-center gap-2">
+                <div className="flex text-center items-center gap-2">
                         <div className="flex items-center">
                             <Github className="w-5 h-5" />
                             <span className="ml-1">Github:</span>
@@ -38,27 +38,27 @@ export default function DeveloperCard() {
                     <div>
                         <DeveloperAvatar imageSrc="/images/avatar1.png" />
                     </div>
+                    
                     <div>
                         <CardTitle>Eito Nishikawa</CardTitle>
                         <CardDescription>03 Rivers</CardDescription>
                     </div>
                 </CardHeader>
-                <CardContent>
-
-                <div className="flex items-center gap-2">
-                        <div className="flex items-center">
-                            <Github className="w-5 h-5" />
-                            <span className="ml-1">Github:</span>
-                        </div>
-                        <a
-                            className="text-black dark:text-white underline underline-offset-1 decoration-black dark:decoration-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-                            href="https://github.com/eito8210"
-                        >
-                        Eito 
-                        </a>
-
-                </div>
-
+                <CardContent className="flex justify-center items-center">
+                    <div className="flex items-center gap-2">
+                            <div className="flex items-center">
+                                <Github className="w-5 h-5" />
+                                <span className="ml-1">Github:</span>
+                            </div>
+                            <a
+                                className="text-black dark:text-white underline underline-offset-1 decoration-black dark:decoration-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                                href="https://github.com/eito8210"
+                            >
+                            Eito 
+                            </a>
+                        <div/>
+                    </div>
+               
                 </CardContent>
             </Card>
 
@@ -72,7 +72,7 @@ export default function DeveloperCard() {
                         <CardDescription>03 Rivers</CardDescription>
                     </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex justify-center items-center">
                 <div className="flex items-center gap-2">
                         <div className="flex items-center">
                             <Github className="w-5 h-5" />
@@ -98,7 +98,7 @@ export default function DeveloperCard() {
                         <CardDescription>03 Rivers</CardDescription>
                     </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex justify-center items-center">
                 <div className="flex items-center gap-2">
                         <div className="flex items-center">
                             <Github className="w-5 h-5" />
