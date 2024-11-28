@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import DeveloperAvatar from "./dev-avatar";
+import { Github } from "lucide-react";
 
 export default function DeveloperCard() {
     return (
@@ -15,12 +16,20 @@ export default function DeveloperCard() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    Github:
-                    <a className="text-black underline underline-offset-1"
-                        href="https://github.com/ryotakc"
+                    
+                <div className="flex items-center gap-2">
+                        <div className="flex items-center">
+                            <Github className="w-5 h-5" />
+                            <span className="ml-1">Github:</span>
+                        </div>
+                        <a
+                            className="text-black dark:text-white underline underline-offset-1 decoration-black dark:decoration-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                            href="https://github.com/ryotakc"
                         >
-                         Ryota
-                    </a>
+                            Ryota
+                        </a>
+                </div>
+
                 </CardContent>
             </Card>
 
@@ -35,12 +44,21 @@ export default function DeveloperCard() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    Github:
-                    <a className="text-black underline underline-offset-1"
-                        href=""
+
+                <div className="flex items-center gap-2">
+                        <div className="flex items-center">
+                            <Github className="w-5 h-5" />
+                            <span className="ml-1">Github:</span>
+                        </div>
+                        <a
+                            className="text-black dark:text-white underline underline-offset-1 decoration-black dark:decoration-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                            href="https://github.com/eito8210"
                         >
-                         Eito
-                    </a>
+                        Eito 
+                        </a>
+
+                </div>
+
                 </CardContent>
             </Card>
 
@@ -55,12 +73,18 @@ export default function DeveloperCard() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    Github:
-                    <a className="text-black underline underline-offset-1"
-                        href="https://github.com/TulikaVarma?tab=repositories"
+                <div className="flex items-center gap-2">
+                        <div className="flex items-center">
+                            <Github className="w-5 h-5" />
+                            <span className="ml-1">Github:</span>
+                        </div>
+                        <a
+                            className="text-black dark:text-white underline underline-offset-1 decoration-black dark:decoration-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                            href="https://github.com/TulikaVarma"
                         >
-                         Tulika 
-                    </a>
+                        Tulika 
+                        </a>
+                </div>
                 </CardContent>
             </Card>
 
@@ -75,12 +99,18 @@ export default function DeveloperCard() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    Github: 
-                    <a className="text-black underline underline-offset-1"
-                        href=""
+                <div className="flex items-center gap-2">
+                        <div className="flex items-center">
+                            <Github className="w-5 h-5" />
+                            <span className="ml-1">Github:</span>
+                        </div>
+                        <a
+                            className="text-black dark:text-white underline underline-offset-1 decoration-black dark:decoration-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                            href="https://github.com/zorojuro12"
                         >
-                         Ansh
-                    </a>
+                            Ansh
+                        </a>
+                </div>
                 </CardContent>
             </Card>
         </div>
