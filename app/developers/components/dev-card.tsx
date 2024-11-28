@@ -16,10 +16,13 @@ export default function DeveloperCard() {
                 </CardHeader>
                 <CardContent>
                     Github:
-                    <a className="text-black underline underline-offset-1"
-                        href="https://github.com/ryotakc"
-                        >
-                         Ryota
+
+
+                    <a
+                    className="text-black dark:text-white underline underline-offset-1 decoration-black dark:decoration-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    href="https://github.com/ryotakc"
+                    >
+                     Ryota
                     </a>
                 </CardContent>
             </Card>
@@ -36,11 +39,14 @@ export default function DeveloperCard() {
                 </CardHeader>
                 <CardContent>
                     Github:
-                    <a className="text-black underline underline-offset-1"
-                        href=""
-                        >
-                         Eito
+
+                    <a
+                    className="text-black dark:text-white underline underline-offset-1 decoration-black dark:decoration-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    href="https://github.com/eito8210"
+                    >
+                    Eito
                     </a>
+
                 </CardContent>
             </Card>
 
@@ -56,9 +62,10 @@ export default function DeveloperCard() {
                 </CardHeader>
                 <CardContent>
                     Github:
-                    <a className="text-black underline underline-offset-1"
-                        href="https://github.com/TulikaVarma?tab=repositories"
-                        >
+                    <a
+                    className="text-black dark:text-white underline underline-offset-1 decoration-black dark:decoration-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    href="https://github.com/TulikaVarma?tab=repositories"
+                    >
                          Tulika 
                     </a>
                 </CardContent>
@@ -76,9 +83,10 @@ export default function DeveloperCard() {
                 </CardHeader>
                 <CardContent>
                     Github: 
-                    <a className="text-black underline underline-offset-1"
-                        href=""
-                        >
+                    <a
+                    className="text-black dark:text-white underline underline-offset-1 decoration-black dark:decoration-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    href=""
+                    >
                          Ansh
                     </a>
                 </CardContent>
