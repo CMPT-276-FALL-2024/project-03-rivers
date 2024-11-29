@@ -12,7 +12,7 @@ interface LoaderProps {
 export default function Cardio({ 
   color = "orange", 
   size = 30, 
-  speed = 1,
+  speed = 2.5,
   className 
 }: LoaderProps) {
   useEffect(() => {
