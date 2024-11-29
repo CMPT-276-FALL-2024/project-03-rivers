@@ -1,25 +1,38 @@
+"use client"
 
-import Image from "next/image";
+import { useEffect, useRef } from "react";
 import DeveloperCard from "./components/dev-card";
 
-
 export default function Developer() {
+    const videoRef = useRef<HTMLIFrameElement>(null);
+
+    useEffect(() => {
+        
+        const script = document.createElement("script");
+        script.src = "https://www.youtube.com/iframe_api";
+        document.head.appendChild(script);
+    }, []);
+
     return (
-        <div className="container">
-            <div className="flex items-center justify-center">
-
-                <Image
-                    className="col-start-1 col-span-2 mb-8 mt-8  rounded-md"
-                    src="/images/developer-test.jpg"
-                    alt="Test-Image"
-                    width={700}
-                    height={300}
-                />
-                <div>
-                    <DeveloperCard/>
+        <div className="container mx-auto px-4 py-8">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+                <div className="w-full md:w-2/3 max-w-3xl relative">
+                    <div className="aspect-video">
+                        <iframe
+                            ref={videoRef}
+                            className="w-full h-full rounded-lg shadow-lg"
+                            src="https://www.youtube.com/embed/l4jLHlV2KVU" 
+                            title="YouTube video player"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        />
+                    </div>
                 </div>
-            </div>        
+                <div className="w-full md:w-1/3">
+                    <DeveloperCard />
+                </div>
+            </div>
         </div>
-
     );
 }
+
