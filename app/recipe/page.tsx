@@ -27,10 +27,15 @@ export default function Recipe() {
   const [showNotice, setShowNotice] = useState(false);
 
   useEffect(() => {
-    const hasVisited = localStorage.getItem('hasVisitedRecipePage');
-    if (!hasVisited) {
+    const hasVisitedThisSession = sessionStorage.getItem('hasVisitedRecipePage');
+    const lastVisitTimestamp = localStorage.getItem('lastVisitRecipePage');
+    const currentTime = new Date().getTime();
+    const oneMinute = 30 * 1000; // 30 seconds
+
+    if (!hasVisitedThisSession || (lastVisitTimestamp && currentTime - parseInt(lastVisitTimestamp) > oneMinute)) {
       setShowNotice(true);
-      localStorage.setItem('hasVisitedRecipePage', 'true');
+      sessionStorage.setItem('hasVisitedRecipePage', 'true');
+      localStorage.setItem('lastVisitRecipePage', currentTime.toString());
     }
   }, []);
 
@@ -41,6 +46,8 @@ export default function Recipe() {
 
   const dismissNotice = () => {
     setShowNotice(false);
+    sessionStorage.setItem('hasVisitedRecipePage', 'true');
+    localStorage.setItem('lastVisitRecipePage', new Date().getTime().toString());
   };
 
   return (

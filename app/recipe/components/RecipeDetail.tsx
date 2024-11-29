@@ -20,6 +20,14 @@ import { GoogleCalendarIntegration } from "@/components/GoogleCalendarIntegratio
 import { useFavorites } from '@/hooks/useFavorites';
 import { Separator } from "@/components/ui/separator";
 import Cardio from "@/components/icons/cardio";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 interface RecipeDetail {
   id: number;
@@ -37,6 +45,7 @@ export default function RecipeDetail() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<string | undefined>(undefined);
   const [isFavorited, setIsFavorited] = useState(false);
+  const [showNotice, setShowNotice] = useState(false);
   const searchParams = useSearchParams();
   const recipeId = searchParams.get("id");
   const router = useRouter();
@@ -53,6 +62,19 @@ export default function RecipeDetail() {
       setIsFavorited(isFavorite(recipe.id));
     }
   }, [recipe, isFavorite]);
+
+  useEffect(() => {
+    const hasVisitedThisSession = sessionStorage.getItem('hasVisitedRecipeDetail');
+    const lastVisitTimestamp = localStorage.getItem('lastVisitRecipeDetail');
+    const currentTime = new Date().getTime();
+    const oneMinute = 30 * 1000; // 30秒をミリ秒で表現
+
+    if (!hasVisitedThisSession || (lastVisitTimestamp && currentTime - parseInt(lastVisitTimestamp) > oneMinute)) {
+      setShowNotice(true);
+      sessionStorage.setItem('hasVisitedRecipeDetail', 'true');
+      localStorage.setItem('lastVisitRecipeDetail', currentTime.toString());
+    }
+  }, []);
 
   const fetchRecipeDetail = async (id: string) => {
     try {
@@ -117,25 +139,58 @@ export default function RecipeDetail() {
   };
 
   const parseInstructions = (instructions: string): string[] => {
-    // HTMLタグを削除
     const cleanInstructions = instructions.replace(/<\/?[^>]+(>|$)/g, "");
     
-    // 番号付きリストの場合
     if (cleanInstructions.match(/^\d+\./)) {
       return cleanInstructions.split(/(?=\d+\.)/).map(step => step.trim());
     }
     
-    // ピリオドで区切られた文の場合
     return cleanInstructions.split('.').filter(step => step.trim() !== '').map(step => step.trim() + '.');
   };
 
+  const dismissNotice = () => {
+    setShowNotice(false);
+    sessionStorage.setItem('hasVisitedRecipeDetail', 'true');
+    localStorage.setItem('lastVisitRecipeDetail', new Date().getTime().toString());
+  };
+
   if (!recipe) return <div className="items-center justify-center">Loading</div> ;
-  // if (!recipe) return <div className="items-center justify-center"><Cardio /></div> ;
 
   const instructionSteps = parseInstructions(recipe.instructions);
 
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl">
+      <Dialog open={showNotice} onOpenChange={setShowNotice}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Welcome to the Recipe Details Page!</DialogTitle>
+            <DialogDescription>
+              On this page, you can view detailed recipe information and plan your cooking schedule.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <h3 className="font-semibold mb-2">Main Features:</h3>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Adjust ingredient quantities</li>
+              <li>View cooking instructions</li>
+              <li>Check nutritional information</li>
+              <li>Add to favorites</li>
+              <li>Set cooking schedule</li>
+            </ul>
+          </div>
+          <div className="py-4">
+            <h3 className="font-semibold text-red-600 dark:text-red-400 mb-2">Important Notice</h3>
+            <p className="text-sm  text-red-600 dark:text-red-400 text-muted-foreground">
+              To add recipe events to your schedule, you need to log in to your Google account.
+              By logging in, you can easily manage your cooking plans by integrating with your Google Calendar.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button onClick={dismissNotice}>Got it!</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4">
         <h1 className="text-2xl font-bold text-center">{recipe.title}</h1>
         <div className="flex justify-center">
