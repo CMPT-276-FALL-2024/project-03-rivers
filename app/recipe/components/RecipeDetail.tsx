@@ -137,6 +137,8 @@ const toggleFavorite = () => {
       });
     }
     setIsFavorited(!isFavorited);
+    // ページをリフレッシュ
+    window.location.reload();
   }
 };
 

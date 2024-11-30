@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { Globe, User } from 'lucide-react';
+import { User } from 'lucide-react';
 import { ModeToggle } from "./mode-toggle";
 import { useGoogleLogin } from '@react-oauth/google';
 import { useToast } from '@/hooks/use-toast';
@@ -16,8 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import Helix from "./icons/helix";
-
-
+import FavoriteButton from "./ui/FavoriteButton";
 
 export default function MenuBar() {
     const { toast } = useToast();
@@ -85,8 +84,6 @@ export default function MenuBar() {
     return (
         <div className="flex items-center justify-between m-5 h-16 rounded-full border shadow-lg">
             <Link href="/" className="flex ml-6 gap-2"> 
-                {/* <Globe /> */}
-                {/* <Helix /> */}
                 <Helix 
                   color="orange" 
                   size={30} 
@@ -106,6 +103,7 @@ export default function MenuBar() {
                 <Link href="/developers">
                     <Button variant="ghost" className="text-md">Developers</Button>
                 </Link>
+                <FavoriteButton />
                 {isLoggedIn ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

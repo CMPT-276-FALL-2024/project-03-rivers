@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export interface FavoriteRecipe {
+interface FavoriteRecipe {
   id: number;
   title: string;
   image: string;
