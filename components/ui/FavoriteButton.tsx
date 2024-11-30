@@ -13,7 +13,8 @@ const FavoriteButton: React.FC = () => {
 
   const handleRemoveFavorite = (id: number) => {
     removeFavorite(id);
-    window.dispatchEvent(new Event('favoriteRemoved'));
+    // カスタムイベントをディスパッチ
+    window.dispatchEvent(new CustomEvent('favoriteRemoved'));
   };
 
   return (
