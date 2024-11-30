@@ -27,6 +27,7 @@ interface Recipe {
 export default function Recipe() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [showNotice, setShowNotice] = useState(false);
+  const [showHelpDialog, setShowHelpDialog] = useState(false);
 
   useEffect(() => {
     const hasVisitedThisSession = sessionStorage.getItem('hasVisitedRecipePage');
@@ -84,7 +85,7 @@ export default function Recipe() {
 
       <div className="flex justify-center items-center mb-4 relative">
         <h1 className="text-3xl font-bold text-center text-orange-500">Recipe Search</h1>
-        <Dialog>
+        <Dialog open={showHelpDialog} onOpenChange={setShowHelpDialog}>
           <DialogTrigger asChild>
             <Button variant="ghost" size="icon" className="absolute right-0">
               <HelpCircle className="h-4 w-4" />
@@ -93,6 +94,9 @@ export default function Recipe() {
           </DialogTrigger>
           <DialogContent>
             <HelpContent />
+            <DialogFooter>
+              <Button onClick={() => setShowHelpDialog(false)}>Got it!</Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
