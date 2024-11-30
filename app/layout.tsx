@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import MenuBar from "@/components/menu-bar";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Footer } from "@/components/footer";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/sidebar";
 // import { PageTransition } from "@/components/page-transition";
 
 const geistSans = localFont({
@@ -33,6 +35,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+
       <script
         type="module"
         defer
@@ -45,21 +48,27 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <header>
+            <SidebarProvider>
+            <AppSidebar />           
+            {/* <header>
               <MenuBar />
-            </header>
+            </header> */}
 
-            <main className="relative flex justify-center min-h-screen">
-              {children}
+            <main >
+              <SidebarTrigger />
+              <div>
+                {children}
+              </div>
             </main>   
             {/* <PageTransition>
                 {children}
             </PageTransition> */}
 
-
+            </SidebarProvider>
             <footer>
               <Footer />
             </footer>
+
           </ThemeProvider>
         </GoogleOAuthProvider>
       </body>
