@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import MenuBar from "@/components/menu-bar";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Footer } from "@/components/footer";
+import { BlurProvider, useBlur } from '@/app/contexts/BlurContext'
 import "./globals.css";
 
 const geistSans = localFont({
@@ -19,11 +20,9 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+function MainContent({ children }: { children: React.ReactNode }) {
+  const { isBlurred } = useBlur();
+
   useEffect(() => {
     const handleFavoriteRemoved = () => {
       window.location.reload();
@@ -36,6 +35,28 @@ export default function RootLayout({
     };
   }, []);
 
+  return (
+    <>
+      <header>
+        <MenuBar />
+      </header>
+
+      <main className={`relative flex justify-center min-h-screen transition-all duration-300 ${isBlurred ? 'blur-sm' : ''}`}>
+        {children}
+      </main>   
+
+      <footer>
+        <Footer />
+      </footer>
+    </>
+  );
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
@@ -51,17 +72,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <header>
-              <MenuBar />
-            </header>
-
-            <main className="relative flex justify-center min-h-screen">
-              {children}
-            </main>   
-
-            <footer>
-              <Footer />
-            </footer>
+            <BlurProvider>
+              <MainContent>{children}</MainContent>
+            </BlurProvider>
           </ThemeProvider>
         </GoogleOAuthProvider>
       </body>

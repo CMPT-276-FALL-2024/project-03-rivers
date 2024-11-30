@@ -82,7 +82,7 @@ export default function MenuBar() {
     };
 
     return (
-        <div className="flex items-center justify-between m-5 h-16 rounded-full border shadow-lg">
+        <div className="flex items-center justify-between m-5 h-16 rounded-full border shadow-lg z-50">
             <Link href="/" className="flex ml-6 gap-2"> 
                 <Helix 
                   color="orange" 

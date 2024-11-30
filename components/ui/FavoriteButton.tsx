@@ -6,19 +6,24 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Heart, X } from 'lucide-react';
 import { motion } from "framer-motion";
 import { useFavorites } from '@/hooks/useFavorites';
+import { useBlur } from '@/app/contexts/BlurContext'; // Updated import path
 import Image from 'next/image';
 
 const FavoriteButton: React.FC = () => {
   const { favorites, removeFavorite } = useFavorites();
+  const { setIsBlurred } = useBlur();
 
   const handleRemoveFavorite = (id: number) => {
     removeFavorite(id);
-    // カスタムイベントをディスパッチ
     window.dispatchEvent(new CustomEvent('favoriteRemoved'));
   };
 
+  const handlePopoverOpen = (open: boolean) => {
+    setIsBlurred(open);
+  };
+
   return (
-    <Popover>
+    <Popover onOpenChange={handlePopoverOpen}>
       <PopoverTrigger asChild>
         <Button variant="ghost" className="text-md">
           <motion.div
