@@ -13,8 +13,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { HelpCircle } from 'lucide-react';
 
 interface Recipe {
   id: number;
@@ -50,31 +52,51 @@ export default function Recipe() {
     localStorage.setItem('lastVisitRecipePage', new Date().getTime().toString());
   };
 
+  const HelpContent = () => (
+    <>
+      <DialogHeader>
+        <DialogTitle>Welcome to Recipe Search!</DialogTitle>
+        <DialogDescription>
+          With this app, you can search for recipes or find recipes based on ingredients you have on hand.
+        </DialogDescription>
+      </DialogHeader>
+      <div className="py-4">
+        <h3 className="font-semibold mb-2">How to use:</h3>
+        <ul className="list-disc list-inside space-y-1">
+          <li>Search by recipe name</li>
+          <li>Or select ingredients to find recipes</li>
+          <li>Click on a recipe you like to see details</li>
+        </ul>
+      </div>
+    </>
+  );
+
   return (
-    <div className="container mx-auto px-4 py-8 pt-8">
+    <div className="container relative mx-auto px-4 py-8 pt-8">
       <Dialog open={showNotice} onOpenChange={setShowNotice}>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Welcome to Recipe Search!</DialogTitle>
-            <DialogDescription>
-              With this app, you can search for recipes or find recipes based on ingredients you have on hand.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4">
-            <h3 className="font-semibold mb-2">How to use:</h3>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Search by recipe name</li>
-              <li>Or select ingredients to find recipes</li>
-              <li>Click on a recipe you like to see details</li>
-            </ul>
-          </div>
+          <HelpContent />
           <DialogFooter>
             <Button onClick={dismissNotice}>Got it!</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      <h1 className="text-3xl font-bold text-center mb-2 text-orange-500">Recipe Search</h1>
+      <div className="flex justify-center items-center mb-4 relative">
+        <h1 className="text-3xl font-bold text-center text-orange-500">Recipe Search</h1>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="ghost" size="icon" className="absolute right-0">
+              <HelpCircle className="h-4 w-4" />
+              <span className="sr-only">Help</span>
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <HelpContent />
+          </DialogContent>
+        </Dialog>
+      </div>
+
       <div className="flex flex-col md:flex-row items-center justify-center mt-10 gap-6">
         <div className="w-full md:w-1/3 space-y-4">
           <div className="mb-1">

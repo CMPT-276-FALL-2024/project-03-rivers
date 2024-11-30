@@ -13,7 +13,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, Clock } from 'lucide-react';
+import { CalendarIcon, Clock, HelpCircle } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { GoogleCalendarIntegration } from "@/components/GoogleCalendarIntegration";
@@ -27,6 +27,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 
 interface RecipeDetail {
@@ -67,7 +68,7 @@ export default function RecipeDetail() {
     const hasVisitedThisSession = sessionStorage.getItem('hasVisitedRecipeDetail');
     const lastVisitTimestamp = localStorage.getItem('lastVisitRecipeDetail');
     const currentTime = new Date().getTime();
-    const oneMinute = 30 * 1000; // 30秒をミリ秒で表現
+    const oneMinute = 30 * 1000; // 30 seconds 
 
     if (!hasVisitedThisSession || (lastVisitTimestamp && currentTime - parseInt(lastVisitTimestamp) > oneMinute)) {
       setShowNotice(true);
@@ -158,42 +159,49 @@ export default function RecipeDetail() {
 
   const instructionSteps = parseInstructions(recipe.instructions);
 
+  const HelpContent = () => (
+    <>
+      <DialogHeader>
+        <DialogTitle>Welcome to the Recipe Details Page!</DialogTitle>
+        <DialogDescription>
+          On this page, you can view detailed recipe information and plan your cooking schedule.
+        </DialogDescription>
+      </DialogHeader>
+      <div className="py-4">
+        <h3 className="font-semibold mb-2">Main Features:</h3>
+        <ul className="list-disc list-inside space-y-1">
+          <li>Adjust ingredient quantities</li>
+          <li>View cooking instructions</li>
+          <li>Check nutritional information</li>
+          <li>Add to favorites</li>
+          <li>Set cooking schedule</li>
+        </ul>
+      </div>
+      <div className="py-4">
+        <h3 className="font-semibold text-red-600 dark:text-red-400 mb-2">Important Notice</h3>
+        <p className="text-sm  text-red-600 dark:text-red-400 text-muted-foreground">
+          To add recipe events to your schedule, you need to log in to your Google account.
+          By logging in, you can easily manage your cooking plans by integrating with your Google Calendar.
+        </p>
+      </div>
+    </>
+  );
+
   return (
     <div className="container mx-auto px-4 py-4 max-w-7xl">
       <Dialog open={showNotice} onOpenChange={setShowNotice}>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Welcome to the Recipe Details Page!</DialogTitle>
-            <DialogDescription>
-              On this page, you can view detailed recipe information and plan your cooking schedule.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4">
-            <h3 className="font-semibold mb-2">Main Features:</h3>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Adjust ingredient quantities</li>
-              <li>View cooking instructions</li>
-              <li>Check nutritional information</li>
-              <li>Add to favorites</li>
-              <li>Set cooking schedule</li>
-            </ul>
-          </div>
-          <div className="py-4">
-            <h3 className="font-semibold text-red-600 dark:text-red-400 mb-2">Important Notice</h3>
-            <p className="text-sm  text-red-600 dark:text-red-400 text-muted-foreground">
-              To add recipe events to your schedule, you need to log in to your Google account.
-              By logging in, you can easily manage your cooking plans by integrating with your Google Calendar.
-            </p>
-          </div>
+          <HelpContent />
           <DialogFooter>
             <Button onClick={dismissNotice}>Got it!</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4">
-        <h1 className="text-2xl font-bold text-center">{recipe.title}</h1>
-        <div className="flex justify-center">
+      <div className="flex items-center justify-between mb-4">
+        <div className="w-10"></div> {/* Spacer */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <h1 className="text-2xl font-bold text-center">{recipe.title}</h1>
           <Button
             onClick={toggleFavorite}
             variant={isFavorited ? "default" : "outline"}
@@ -214,6 +222,17 @@ export default function RecipeDetail() {
             </svg>
           </Button>
         </div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <HelpCircle className="h-4 w-4" />
+              <span className="sr-only">Help</span>
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <HelpContent />
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-4">
@@ -369,4 +388,3 @@ export default function RecipeDetail() {
     </div>
   );
 }
-
