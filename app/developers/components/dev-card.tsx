@@ -26,7 +26,7 @@ export default function DeveloperCard() {
                             className="text-black dark:text-white underline underline-offset-1 decoration-black dark:decoration-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                             href="https://github.com/ryotakc"
                         >
-                            Ryota
+                        Ryota
                         </a>
                 </div>
 
