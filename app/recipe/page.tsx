@@ -33,7 +33,7 @@ export default function Recipe() {
     const hasVisitedThisSession = sessionStorage.getItem('hasVisitedRecipePage');
     const lastVisitTimestamp = localStorage.getItem('lastVisitRecipePage');
     const currentTime = new Date().getTime();
-    const oneMinute = 30 * 1000; // 30 seconds
+    const oneMinute = 60 * 60 * 1000; 
 
     if (!hasVisitedThisSession || (lastVisitTimestamp && currentTime - parseInt(lastVisitTimestamp) > oneMinute)) {
       setShowNotice(true);

@@ -69,7 +69,7 @@ useEffect(() => {
   const hasVisitedThisSession = sessionStorage.getItem('hasVisitedRecipeDetail');
   const lastVisitTimestamp = localStorage.getItem('lastVisitRecipeDetail');
   const currentTime = new Date().getTime();
-  const oneMinute = 30 * 1000; // 30秒
+  const oneMinute = 60 * 60 * 1000; 
 
   if (!hasVisitedThisSession || (lastVisitTimestamp && currentTime - parseInt(lastVisitTimestamp) > oneMinute)) {
     setShowNotice(true);
