@@ -5,6 +5,10 @@ import { ThemeProvider } from "@/components/theme-provider";
 import MenuBar from "@/components/menu-bar";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Footer } from "@/components/footer";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/sidebar";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
 // import { PageTransition } from "@/components/page-transition";
 
 const geistSans = localFont({
@@ -33,6 +37,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+
       <script
         type="module"
         defer
@@ -44,22 +49,31 @@ export default function RootLayout({
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-          >
-            <header>
-              <MenuBar />
-            </header>
-
-            <main className="relative flex justify-center min-h-screen">
-              {children}
-            </main>   
-            {/* <PageTransition>
+          >     
+          
+          <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset>
+              <header className="sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4">
+                <SidebarTrigger className="-ml-1" />
+                <Separator orientation="vertical" className="mr-2 h-4" />
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>Home</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </header>
+              <main>
                 {children}
-            </PageTransition> */}
+              </main>
+              {/* <footer >
+                <Footer />
+              </footer> */}
+            </SidebarInset>
+          </SidebarProvider>    
 
-
-            <footer>
-              <Footer />
-            </footer>
           </ThemeProvider>
         </GoogleOAuthProvider>
       </body>
