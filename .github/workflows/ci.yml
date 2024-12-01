@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - ansh_testing_pipeline
   pull_request:
     branches:
       - main
+      - ansh_testing_pipeline
 
 jobs:
   install:
