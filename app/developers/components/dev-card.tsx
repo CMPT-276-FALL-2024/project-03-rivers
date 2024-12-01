@@ -6,7 +6,7 @@ export default function DeveloperCard() {
     return (
         <div className="grid grid-cols-2 gap-5 mb-5 ml-5 mr-5">
             <Card>
-                <CardHeader className="flex items-center space-x-2">
+                <CardHeader className="flex items-center space-x-4">
                     <div>
                         <DeveloperAvatar imageSrc="/images/avatar1.png" />
                     </div>
@@ -26,7 +26,7 @@ export default function DeveloperCard() {
                             className="text-black dark:text-white underline underline-offset-1 decoration-black dark:decoration-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                             href="https://github.com/ryotakc"
                         >
-                            Ryota
+                        Ryota
                         </a>
                 </div>
 
@@ -34,7 +34,7 @@ export default function DeveloperCard() {
             </Card>
 
             <Card>
-                <CardHeader className="flex items-center space-x-2">
+                <CardHeader className="flex items-center space-x-4">
                     <div>
                         <DeveloperAvatar imageSrc="/images/avatar1.png" />
                     </div>
@@ -63,7 +63,7 @@ export default function DeveloperCard() {
             </Card>
 
             <Card> 
-                <CardHeader className="flex items-center space-x-2">
+                <CardHeader className="flex items-center space-x-4">
                     <div>
                         <DeveloperAvatar imageSrc="/images/avatar2.png" />
                     </div>
@@ -89,7 +89,7 @@ export default function DeveloperCard() {
             </Card>
 
             <Card>
-                <CardHeader className="flex items-center space-x-2">
+                <CardHeader className="flex items-center space-x-4">
                     <div>
                         <DeveloperAvatar imageSrc="/images/avatar1.png" />
                     </div>

@@ -90,7 +90,7 @@ export default function MenuBar() {
                 <Helix 
                   color="orange" 
                   size={30} 
-                  speed={1}
+                  speed={2.5}
                   className="my-2" 
                 />
                 <h1 className="text-orange-500 font-extrabold text-xl">RNA</h1>
