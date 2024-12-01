@@ -49,7 +49,7 @@ export function NavUser({
 }) {
     const { toast } = useToast();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userInfo, setUserInfo] = useState<{ name: string; picture: string } | null>(null);
+    const [userInfo, setUserInfo] = useState<{ name: string; picture: string; email: string } | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem('googleAccessToken');
@@ -67,7 +67,7 @@ export function NavUser({
                 },
             });
             const data = await response.json();
-            setUserInfo({ name: data.name, picture: data.picture });
+            setUserInfo({ name: data.name, picture: data.picture, email: data.email });
         } catch (error) {
             console.error('Error fetching user info:', error);
         }
@@ -115,50 +115,90 @@ export function NavUser({
         <SidebarMenu>
         <SidebarMenuItem>
         {isLoggedIn ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Avatar className="cursor-pointer">
-                        <AvatarImage src={userInfo?.picture || "/placeholder-avatar.png"} />
-                        <AvatarFallback>{userInfo?.name?.[0] || <User />}</AvatarFallback>
-                      </Avatar>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem>
-                        <div className="flex items-center">
-                          <Image
-                            src={userInfo?.picture || "/placeholder-avatar.png"}
-                            alt="User Avatar"
-                            width={24}
-                            height={24}
-                            className="rounded-md mr-2"
-                          />
-                          <span>{userInfo?.name || "User"}</span>
-                        </div>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={logout}>
-                        Logout
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : (
-                    <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <SidebarMenuButton onClick={() => login()} 
-                        size="lg"
-                        className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                        >
-                        <Avatar className="h-8 w-8 rounded-lg">
-                            <AvatarImage src={user.avatar} alt={user.name} />
-                            <AvatarFallback className="rounded-lg">RNA</AvatarFallback>
-                        </Avatar>
-                        <div className="grid flex-1 text-left l-4 text-sm leading-tight">
-                            <span className="truncate font-semibold items-center">Login with Google</span>
-                        </div>
-                        <ChevronsUpDown className="ml-auto size-4" />
-                        </SidebarMenuButton>
-                    </DropdownMenuTrigger>
-                    </DropdownMenu>
-                )}
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+            <SidebarMenuButton
+                size="lg"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+                <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarImage src={userInfo?.picture || "/placeholder-avatar.png"} alt={userInfo?.name || "User"} />
+                <AvatarFallback className="rounded-lg">{userInfo?.name?.[0] || "U"}</AvatarFallback>
+                </Avatar>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">{userInfo?.name || "User"}</span>
+                {/* <span className="truncate text-xs">{userInfo?.email || "user@example.com"}</span> */}
+                </div>
+                <ChevronsUpDown className="ml-auto size-4" />
+            </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+            side={isMobile ? "bottom" : "right"}
+            align="end"
+            sideOffset={4}
+            >
+            <DropdownMenuLabel className="p-0 font-normal">
+                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                <Avatar className="h-8 w-8 rounded-lg">
+                    <AvatarImage src={userInfo?.picture || "/placeholder-avatar.png"} alt={userInfo?.name || "User"} />
+                    <AvatarFallback className="rounded-lg">{userInfo?.name?.[0] || "U"}</AvatarFallback>
+                </Avatar>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">{userInfo?.name || "User"}</span>
+                    <span className="truncate text-xs">{userInfo?.email || "user@example.com"}</span>
+                </div>
+                </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+                <DropdownMenuItem>
+                <Sparkles className="mr-2 h-4 w-4" />
+                Favorite
+                </DropdownMenuItem>
+            </DropdownMenuGroup>
+            {/* <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+                <DropdownMenuItem>
+                <BadgeCheck className="mr-2 h-4 w-4" />
+                Account
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                <CreditCard className="mr-2 h-4 w-4" />
+                Billing
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                <Bell className="mr-2 h-4 w-4" />
+                Notifications
+                </DropdownMenuItem>
+            </DropdownMenuGroup> */}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={logout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Log out
+            </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+        ) : (
+            <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+            <SidebarMenuButton 
+                onClick={() => login()} 
+                size="lg"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+                <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarFallback className="rounded-lg"><User /></AvatarFallback>
+                </Avatar>
+                <div className="grid flex-1 text-left l-4 text-sm leading-tight">
+                <span className="truncate font-semibold items-center">Login with Google</span>
+                </div>
+                <ChevronsUpDown className="ml-auto size-4" />
+            </SidebarMenuButton>
+            </DropdownMenuTrigger>
+        </DropdownMenu>
+        )}
             {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <SidebarMenuButton

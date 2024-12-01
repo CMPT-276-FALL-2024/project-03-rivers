@@ -3,6 +3,8 @@ import {
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
+    SidebarGroupContent,
+    SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
@@ -15,6 +17,30 @@ import Link from "next/link"
 import Helix from "./icons/helix"
 import { DatePicker } from "./date-picker"
 import { Calendars } from "./calendars"
+import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+
+const items = [
+    {
+      title: "Home",
+      url: "/",
+      icon: Home,
+    },
+    {
+      title: "Search Recipes",
+      url: "/recipe",
+      icon: Search,
+    },
+    {
+      title: "View Plan",
+      url: "/calendar",
+      icon: Calendar,
+    },
+    {
+      title: "Favorites",
+      url: "#",
+      icon: Inbox,
+    },
+]
   
 export function AppSidebar() {
 return (
@@ -30,8 +56,39 @@ return (
             <h1 className="text-orange-500 font-extrabold text-2xl">RNA</h1>
         </Link>
     </SidebarHeader>
-    <SidebarContent>
-        <SidebarGroup />
+    <SidebarContent className="l-6">
+        <SidebarGroup>
+          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {items.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup className="border-t border-sidebar-border">
+          <SidebarGroupLabel>Settings</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/settings">
+                    <Settings />    
+                    <span>Settings</span>
+                  </Link>
+                </SidebarMenuButton>
+                </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
         {/* <DatePicker />
         <SidebarSeparator className="mx-0" />
         <Calendars calendars={[]} /> */}
@@ -39,13 +96,13 @@ return (
     <SidebarFooter className="h-24 justify-center border-t border-sidebar-border">
         <SidebarMenu>
             <SidebarMenuItem>
-                    <NavUser
-                        user={{
-                            name: "John Doe",
-                            email: "Vb9bM@example.com",
-                            avatar: "/placeholder-avatar.png",
-                        }}
-                    />
+                <NavUser
+                    user={{
+                        name: "John Doe",
+                        email: "user@example.com",
+                        avatar: "/placeholder-avatar.png",
+                    }}
+                />
             </SidebarMenuItem>
         </SidebarMenu>
     </SidebarFooter>

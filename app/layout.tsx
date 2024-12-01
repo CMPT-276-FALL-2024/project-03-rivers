@@ -60,7 +60,7 @@ export default function RootLayout({
                 <Breadcrumb>
                   <BreadcrumbList>
                     <BreadcrumbItem>
-                      <BreadcrumbPage>October 2024</BreadcrumbPage>
+                      <BreadcrumbPage>Home</BreadcrumbPage>
                     </BreadcrumbItem>
                   </BreadcrumbList>
                 </Breadcrumb>
