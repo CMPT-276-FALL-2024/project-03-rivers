@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: write
+
 env:
   SPOONACULAR_API_KEY: ${{ secrets.SPOONACULAR_API_KEY }}
   GOOGLE_CALENDAR_API_KEY: ${{ secrets.GOOGLE_CALENDAR_API_KEY }}
@@ -16,6 +19,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Clean up Git configurations
+      run: |
+        git config --local --unset-all http.https://github.com/.extraheader || true
+        git submodule foreach --recursive 'git config --local --unset-all http.https://github.com/.extraheader || true'
 
     - name: Use Bun
       uses: oven-sh/setup-bun@v1
@@ -41,6 +51,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Clean up Git configurations
+      run: |
+        git config --local --unset-all http.https://github.com/.extraheader || true
+        git submodule foreach --recursive 'git config --local --unset-all http.https://github.com/.extraheader || true'
 
     - name: Use Bun
       uses: oven-sh/setup-bun@v1
