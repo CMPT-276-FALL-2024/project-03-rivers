@@ -35,7 +35,7 @@ describe("RecipeSearch Component - API Response Test", () => {
   //  global.fetch.mockClear(); // Clear the mock fetch implementation after each test
  // });
 
-  it("fetches and displays autocomplete suggestions", async () => {
+  test("fetches and displays autocomplete suggestions", async () => {
     // Simulate user typing in the search input
     const input = screen.getByPlaceholderText("Search recipes...");
     fireEvent.change(input, { target: { value: "str" } });
