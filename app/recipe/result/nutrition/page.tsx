@@ -37,7 +37,7 @@ function NutritionContent() {
         const hasVisitedThisSession = sessionStorage.getItem('hasVisitedNutritionPage');
         const lastVisitTimestamp = localStorage.getItem('lastVisitNutritionPage');
         const currentTime = new Date().getTime();
-        const oneHour = 10 * 1000; // 1 hour in milliseconds
+        const oneHour = 60 * 60 * 1000; // 1 hour in milliseconds
 
         if (!hasVisitedThisSession || (lastVisitTimestamp && currentTime - parseInt(lastVisitTimestamp) > oneHour)) {
             setShowHelpDialog(true);
