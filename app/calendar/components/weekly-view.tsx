@@ -72,7 +72,7 @@ export function WeeklyView({
         </div>
 
         {/* Scrollable time slots and events */}
-        <ScrollArea className="h-[600px]">
+        <ScrollArea className="h-[500px]">
           <div className="space-y-1">
             {timeSlots.map((timeSlot) => (
               <div key={timeSlot} className="grid grid-cols-8 gap-4 min-h-[60px]">
