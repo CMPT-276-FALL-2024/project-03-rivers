@@ -1,11 +1,12 @@
-// Add any global test setup here
-import '@testing-library/jest-dom'
+import { expect, afterEach } from "bun:test";
+import { cleanup } from '@testing-library/react';
+import * as matchers from '@testing-library/jest-dom/matchers';
 
-// If you're using MSW for API mocking, you might want to set it up here
-// import { server } from './mocks/server'
-// beforeAll(() => server.listen())
-// afterEach(() => server.resetHandlers())
-// afterAll(() => server.close())
+expect.extend(matchers);
+
+afterEach(() => {
+  cleanup();
+});
 
 // Add any other global setup you need for your tests
 
