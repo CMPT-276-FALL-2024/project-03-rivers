@@ -9,6 +9,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { AppSidebar } from "@/components/sidebar";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
+import { DynamicBreadcrumb } from "@/components/dynamic-breadcrumb";
 // import { PageTransition } from "@/components/page-transition";
 
 const geistSans = localFont({
@@ -57,20 +58,14 @@ export default function RootLayout({
               <header className="sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4">
                 <SidebarTrigger className="-ml-1" />
                 <Separator orientation="vertical" className="mr-2 h-4" />
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>Home</BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb>
+                <DynamicBreadcrumb />
               </header>
               <main>
                 {children}
               </main>
-              {/* <footer >
+              <footer >
                 <Footer />
-              </footer> */}
+              </footer>
             </SidebarInset>
           </SidebarProvider>    
 

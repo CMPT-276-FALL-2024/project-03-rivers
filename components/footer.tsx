@@ -3,7 +3,7 @@ import { Separator } from "@/components/ui/separator"
 
 export function Footer() {
   return (
-    <footer className="bg-background">
+    <footer className="bg-background mt-10">
       <div className="container mx-auto px-4 py-8">
         <nav className="flex flex-wrap justify-center gap-6 mb-6">
           <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">
