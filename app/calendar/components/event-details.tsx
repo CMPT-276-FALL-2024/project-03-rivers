@@ -91,38 +91,44 @@ export function EventDetails({ event, onClose, onDelete }: EventDetailsProps) {
         </DrawerDescription>
       </DrawerHeader>
 
-      <ScrollArea className="h-[50vh] px-4">
-        <div className="space-y-4">
-          <h3 className="font-semibold">Ingredients:</h3>
-          <ul className="list-disc list-inside">
-            {ingredients.map((ingredient, index) => (
-              <li key={index}>{ingredient}</li>
-            ))}
-          </ul>
+      <div className="flex flex-col md:flex-row h-[200px] md:h-[400px] px-4">
+        <ScrollArea className="flex-1 pr-2 md:pr-4 h-full">
+          <div>
+            <h3 className="font-semibold mb-2">Ingredients:</h3>
+            <ul className="list-disc list-inside">
+              {ingredients.map((ingredient, index) => (
+                <li key={index} className="mb-1">{ingredient}</li>
+              ))}
+            </ul>
+          </div>
+        </ScrollArea>
 
-          <h3 className="font-semibold">Instructions:</h3>
-          <p className="whitespace-pre-wrap">{instructions}</p>
-
+        <ScrollArea className="flex-1 mt-4 md:mt-0 pl-2 md:pl-4 border-t md:border-t-0 md:border-l h-full">
+          <div>
+            <h3 className="font-semibold mb-2">Instructions:</h3>
+            <p className="whitespace-pre-wrap">{instructions}</p>
+          </div>
           {notes && (
-            <>
-              <h3 className="font-semibold">Notes:</h3>
+            <div className="mt-4">
+              <h3 className="font-semibold mb-2">Notes:</h3>
               <p className="whitespace-pre-wrap">{notes}</p>
-            </>
+            </div>
           )}
-        </div>
-      </ScrollArea>
+        </ScrollArea>
+      </div>
 
-      <DrawerFooter className="flex justify-between">
-        <Button variant="outline" onClick={onClose}>
+      <DrawerFooter className="flex flex-col sm:flex-row justify-between gap-2">
+        <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
           Close
         </Button>
-        <Button onClick={handleGoToRecipe}>
+        <Button onClick={handleGoToRecipe} className="w-full sm:w-auto">
           Go to Recipe Result
         </Button>
         <Button
           variant="destructive"
           onClick={handleDelete}
           disabled={isDeleting}
+          className="w-full sm:w-auto"
         >
           {isDeleting ? (
             <>

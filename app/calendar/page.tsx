@@ -105,7 +105,7 @@ export default function CalendarPage() {
         throw new Error(data.error || "Failed to delete event");
       }
 
-      // イベントリストから削除されたイベン���を除外
+     
       setEvents(events.filter(event => event.id !== eventId));
       toast({
         title: "Success",
@@ -113,7 +113,7 @@ export default function CalendarPage() {
       });
     } catch (error) {
       console.error("Error deleting event:", error);
-      throw error; // EventDetailsコンポーネントでエラーハンドリングするために再スロー
+      throw error; 
     }
   };
 
