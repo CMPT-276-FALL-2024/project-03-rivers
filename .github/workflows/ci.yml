@@ -1,0 +1,65 @@
+name: Bun CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  SPOONACULAR_API_KEY: ${{ secrets.SPOONACULAR_API_KEY }}
+  GOOGLE_CALENDAR_API_KEY: ${{ secrets.GOOGLE_CALENDAR_API_KEY }}
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+
+    - name: Install dependencies
+      run: bun install
+
+    - name: Run linter
+      run: bun run lint
+
+    - name: Run tests
+      run: bun test
+
+    - name: Build project
+      run: bun run build
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+
+    - name: Install dependencies
+      run: bun install
+
+    - name: Build project
+      run: bun run build
+
+    - name: Deploy to Vercel
+      run: |
+        npm i -g vercel
+        vercel pull --yes --environment=production --token ${{ secrets.VERCEL_TOKEN }}
+        vercel build --prod --token ${{ secrets.VERCEL_TOKEN }}
+        vercel deploy --prebuilt --prod --token ${{ secrets.VERCEL_TOKEN }}
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
