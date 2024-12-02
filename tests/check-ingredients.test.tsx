@@ -1,11 +1,15 @@
-import { expect, test } from "bun:test";
+[v0-no-op-code-block-prefix]import { expect, test } from "bun:test";
 import { render, screen } from '@testing-library/react';
-import CheckIngredients from '../app/recipe/components/CheckIngredients';
+import { CheckboxIngredients } from '../app/recipe/components/ingredients-selector';
 
-test('CheckIngredients component renders correctly', () => {
-  render(<CheckIngredients ingredients={['Salt', 'Pepper', 'Olive Oil']} />);
-  expect(screen.getByText('Salt')).toBeInTheDocument();
-  expect(screen.getByText('Pepper')).toBeInTheDocument();
-  expect(screen.getByText('Olive Oil')).toBeInTheDocument();
+test('CheckboxIngredients component renders correctly', () => {
+  const ingredients = ['Salt', 'Pepper', 'Olive Oil'];
+  render(<CheckboxIngredients ingredients={ingredients} />);
+  
+  ingredients.forEach(ingredient => {
+    expect(screen.getByText(ingredient)).toBeInTheDocument();
+  });
 });
+
+
 
