@@ -81,6 +81,12 @@ export function EventDetails({ event, onClose, onDelete }: EventDetailsProps) {
     router.push(`/recipe/result?id=${recipeId}`);
   };
 
+  const formatInstructions = (instructions: string) => {
+    return instructions.split(/(?<=\.)/).filter(step => step.trim() !== '');
+  };
+
+  const formattedInstructions = formatInstructions(instructions);
+
   return (
     <DrawerContent>
       <DrawerHeader>
@@ -91,7 +97,7 @@ export function EventDetails({ event, onClose, onDelete }: EventDetailsProps) {
         </DrawerDescription>
       </DrawerHeader>
 
-      <div className="flex flex-col md:flex-row h-[200px] md:h-[400px] px-4">
+      <div className="flex flex-col md:flex-row h-[300px] md:h-[400px] px-4">
         <ScrollArea className="flex-1 pr-2 md:pr-4 h-full">
           <div>
             <h3 className="font-semibold mb-2">Ingredients:</h3>
@@ -106,7 +112,11 @@ export function EventDetails({ event, onClose, onDelete }: EventDetailsProps) {
         <ScrollArea className="flex-1 mt-4 md:mt-0 pl-2 md:pl-4 border-t md:border-t-0 md:border-l h-full">
           <div>
             <h3 className="font-semibold mb-2">Instructions:</h3>
-            <p className="whitespace-pre-wrap">{instructions}</p>
+            <ol className="list-decimal list-inside">
+              {formattedInstructions.map((step, index) => (
+                <li key={index} className="mb-2">{step.trim()}</li>
+              ))}
+            </ol>
           </div>
           {notes && (
             <div className="mt-4">
@@ -128,7 +138,7 @@ export function EventDetails({ event, onClose, onDelete }: EventDetailsProps) {
           variant="destructive"
           onClick={handleDelete}
           disabled={isDeleting}
-          className="w-full sm:w-auto"
+          className="w-full sm:w-[120px]"
         >
           {isDeleting ? (
             <>
