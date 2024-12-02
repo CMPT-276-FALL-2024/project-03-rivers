@@ -2,6 +2,7 @@ import { useState } from "react";
 import { format, parseISO } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { Trash2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import {
   DrawerContent,
   DrawerHeader,
@@ -34,6 +35,7 @@ interface EventDetailsProps {
 export function EventDetails({ event, onClose, onDelete }: EventDetailsProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
   if (!event) return null;
 
@@ -63,6 +65,22 @@ export function EventDetails({ event, onClose, onDelete }: EventDetailsProps) {
     }
   };
 
+  const parseDescription = (description: string) => {
+    const parts = description.split('\n\n');
+    const recipeId = parts[0].split(': ')[1];
+    const ingredients = parts[1].split('\n').slice(1);
+    const instructions = parts[2].split('\n').slice(1).join('\n');
+    const notes = parts[3].split('\n').slice(1).join('\n');
+
+    return { recipeId, ingredients, instructions, notes };
+  };
+
+  const { recipeId, ingredients, instructions, notes } = event.description ? parseDescription(event.description) : { recipeId: '', ingredients: [], instructions: '', notes: '' };
+
+  const handleGoToRecipe = () => {
+    router.push(`/recipe/result?id=${recipeId}`);
+  };
+
   return (
     <DrawerContent>
       <DrawerHeader>
@@ -75,8 +93,21 @@ export function EventDetails({ event, onClose, onDelete }: EventDetailsProps) {
 
       <ScrollArea className="h-[50vh] px-4">
         <div className="space-y-4">
-          {event.description && (
-            <div className="whitespace-pre-wrap">{event.description}</div>
+          <h3 className="font-semibold">Ingredients:</h3>
+          <ul className="list-disc list-inside">
+            {ingredients.map((ingredient, index) => (
+              <li key={index}>{ingredient}</li>
+            ))}
+          </ul>
+
+          <h3 className="font-semibold">Instructions:</h3>
+          <p className="whitespace-pre-wrap">{instructions}</p>
+
+          {notes && (
+            <>
+              <h3 className="font-semibold">Notes:</h3>
+              <p className="whitespace-pre-wrap">{notes}</p>
+            </>
           )}
         </div>
       </ScrollArea>
@@ -84,6 +115,9 @@ export function EventDetails({ event, onClose, onDelete }: EventDetailsProps) {
       <DrawerFooter className="flex justify-between">
         <Button variant="outline" onClick={onClose}>
           Close
+        </Button>
+        <Button onClick={handleGoToRecipe}>
+          Go to Recipe Result
         </Button>
         <Button
           variant="destructive"
