@@ -35,11 +35,11 @@ const items = [
       url: "/calendar",
       icon: Calendar,
     },
-    {
-      title: "Favorites",
-      url: "#",
-      icon: Inbox,
-    },
+    // {
+    //   title: "Favorites",
+    //   url: "#",
+    //   icon: Inbox,
+    // },
 ]
   
 export function AppSidebar() {

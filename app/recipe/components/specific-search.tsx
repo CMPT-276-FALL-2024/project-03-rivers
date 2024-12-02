@@ -62,6 +62,7 @@ interface Recipe {
 export function SpecificSearch({ onRecipesFetched }: { onRecipesFetched: (recipes: Recipe[]) => void }) {
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [currentIngredient, setCurrentIngredient] = useState("");
+  const [ingredientError, setIngredientError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -71,56 +72,63 @@ export function SpecificSearch({ onRecipesFetched }: { onRecipesFetched: (recipe
     if (currentIngredient && !ingredients.includes(currentIngredient)) {
       setIngredients([...ingredients, currentIngredient]);
       setCurrentIngredient("");
+      setIngredientError(null); // エラーメッセージをクリア
     }
   };
 
   const removeIngredient = (ingredient: string) => {
-    setIngredients(ingredients.filter((i) => i !== ingredient));
+    const newIngredients = ingredients.filter((i) => i !== ingredient);
+    setIngredients(newIngredients);
+    if (newIngredients.length === 0) {
+      setIngredientError("Please add at least one ingredient.");
+    }
   };
 
   async function onSubmit(formData: z.infer<typeof FormSchema>) {
-      if (ingredients.length === 0) {
-        toast({
-          title: "Error",
-          description: "Please add at least one ingredient.",
-        });
-        return;
-      }
-  
-      try {
-        const queryParams: URLSearchParams = new URLSearchParams({
-          query: ingredients.join(","),
-          ...(formData.cuisine && { cuisine: formData.cuisine }),
-          ...(formData.diet && { diet: formData.diet.replace(" ", "") }), // Remove space for API compatibility
-          number: "6",
-          apiKey: apiKey || "",
-        });
-  
-        const response = await fetch(
-          `https://api.spoonacular.com/recipes/complexSearch?${queryParams}`
-        );
-  
-        if (!response.ok) {
-          throw new Error("Failed to fetch recipes");
-        }
-  
-        const responseData = await response.json();
-        const recipes: Recipe[] = responseData.results.map((recipe: any) => ({
-          id: recipe.id,
-          title: recipe.title,
-          image: recipe.image,
-        }));
-  
-        onRecipesFetched(recipes);
-      } catch (error) {
-        console.error("Error fetching recipes:", error);
-        toast({
-          title: "Error",
-          description: "Failed to fetch recipes. Please try again later.",
-        });
-        onRecipesFetched([]);
-      }
+    if (ingredients.length === 0) {
+      setIngredientError("Please add at least one ingredient.");
+      toast({
+        title: "Error",
+        description: "Please add at least one ingredient.",
+      });
+      return;
     }
+    setIngredientError(null);
+
+    try {
+      const queryParams: URLSearchParams = new URLSearchParams({
+        query: ingredients.join(","),
+        ...(formData.cuisine && { cuisine: formData.cuisine }),
+        ...(formData.diet && { diet: formData.diet.replace(" ", "") }),
+        number: "6",
+        apiKey: apiKey || "",
+      });
+
+      const response = await fetch(
+        `https://api.spoonacular.com/recipes/complexSearch?${queryParams}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch recipes");
+      }
+
+      const responseData = await response.json();
+      const recipes: Recipe[] = responseData.results.map((recipe: any) => ({
+        id: recipe.id,
+        title: recipe.title,
+        image: recipe.image,
+      }));
+
+      onRecipesFetched(recipes);
+    } catch (error) {
+      console.error("Error fetching recipes:", error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch recipes. Please try again later.",
+      });
+      onRecipesFetched([]);
+    }
+  }
 
   return (
     <Form {...form}>
@@ -130,7 +138,12 @@ export function SpecificSearch({ onRecipesFetched }: { onRecipesFetched: (recipe
           <div className="flex gap-2">
             <Input
               value={currentIngredient}
-              onChange={(e) => setCurrentIngredient(e.target.value)}
+              onChange={(e) => {
+                setCurrentIngredient(e.target.value);
+                if (e.target.value) {
+                  setIngredientError(null); 
+                }
+              }}
               placeholder="Enter an ingredient..."
               className="flex-1"
             />
@@ -143,6 +156,9 @@ export function SpecificSearch({ onRecipesFetched }: { onRecipesFetched: (recipe
               <Plus className="h-4 w-4" />
             </Button>
           </div>
+          {ingredientError && (
+            <p className="text-sm text-red-500 mt-1">{ingredientError}</p>
+          )}
           {ingredients.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {ingredients.map((ingredient) => (
