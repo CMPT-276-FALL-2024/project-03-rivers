@@ -15,9 +15,21 @@ interface NutritionInfo {
 
 const nutrientCategories = {
   "Macronutrients": ["Protein", "Carbohydrates", "Fat", "Fiber"],
-  "Vitamins": ["Vitamin A", "Vitamin C", "Vitamin D", "Vitamin E", "Vitamin K", "Vitamin B6", "Vitamin B12"],
-  "Minerals": ["Calcium", "Iron", "Magnesium", "Phosphorus", "Potassium", "Sodium", "Zinc"],
-  "Others": []
+  "Vitamins": [
+    "Vitamin A", 
+    "Vitamin B1", 
+    "Vitamin B2", 
+    "Vitamin B3", 
+    "Vitamin B5", 
+    "Vitamin B6", 
+    "Vitamin B12", 
+    "Vitamin C", 
+    "Vitamin D", 
+    "Vitamin E", 
+    "Vitamin K"
+  ],
+  "Minerals": ["Calcium", "Iron", "Magnesium", "Phosphorus", "Potassium", "Sodium", "Zinc", "Selenium", "Copper", "Manganese"],
+  "Others": ["Calories", "Saturated Fat", "Net Carbohydrates", "Sugar", "Cholesterol", "Folate"]
 };
 
 export function NutritionFactsCard() {
