@@ -65,10 +65,10 @@ export default function RootLayout({
 
                 <ModeToggle />
               </header>
-              <main>
+              <main className="relative flex justify-center min-h-screen overflow-hidden">
                 {children}
               </main>
-              <footer >
+              <footer className="sticky">
                 <Footer />
               </footer>
             </SidebarInset>
