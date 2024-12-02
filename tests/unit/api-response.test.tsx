@@ -1,38 +1,41 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { RecipeSearch } from "@/app/recipe/components/searchbox";
-import { vi } from "vitest";
+import { RecipeSearch } from "../../app/recipe/components/searchbox";
+import { vi, describe, it, expect, beforeEach } from "vitest";
 
-// Mock `global.fetch`
-global.fetch = vi.fn();
+// Mock the toast module
+vi.mock("@/hooks/use-toast", () => ({
+  toast: vi.fn(),
+}));
 
-// Mock callback function for `onRecipesFetched`
-const mockOnRecipesFetched = vi.fn();
+
+global.fetch = vi.fn(() =>
+  Promise.resolve(
+    new Response(
+      JSON.stringify([
+        { id: 661760, title: "Strawberry Bites", imageType: "jpg" },
+        { id: 661904, title: "Strawberry Syrup", imageType: "jpg" },
+      ]),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    )
+  )
+);
+const mockFetchRecipes = vi.fn();
 
 describe("RecipeSearch Component - API Response Test", () => {
   beforeEach(() => {
     vi.clearAllMocks(); // Clear mocks before each test
-    render(<RecipeSearch onRecipesFetched={mockOnRecipesFetched} />);
+    render(<RecipeSearch onRecipesFetched={mockFetchRecipes} />);
   });
 
-  test("fetches and displays autocomplete suggestions", async () => {
-    // Mock the API response for autocomplete
-    global.fetch = vi.fn().mockImplementation(() =>
-      Promise.resolve(
-        new Response(
-          JSON.stringify([
-            { id: 661760, title: "Strawberry Bites", imageType: "jpg" },
-            { id: 661904, title: "Strawberry Syrup", imageType: "jpg" },
-          ]),
-          {
-            status: 200,
-            headers: { "Content-Type": "application/json" },
-          }
-        )
-      )
-    );
+  //afterEach(() => {
+  //  global.fetch.mockClear(); // Clear the mock fetch implementation after each test
+ // });
 
-
+  it("fetches and displays autocomplete suggestions", async () => {
     // Simulate user typing in the search input
     const input = screen.getByPlaceholderText("Search recipes...");
     fireEvent.change(input, { target: { value: "str" } });
@@ -53,14 +56,9 @@ describe("RecipeSearch Component - API Response Test", () => {
     });
   });
 
-  // Clean up fetch after each test
-  afterEach(() => {
-    global.fetch = vi.fn();
-  });
-
   test("calls `onRecipesFetched` with correct data when a suggestion is clicked", async () => {
-    // Mock the API response for a recipe
-    global.fetch = vi.fn().mockImplementation(() =>
+    // Update the global fetch mock to simulate recipe information fetch
+    global.fetch = vi.fn().mockImplementationOnce(() =>
       Promise.resolve(
         new Response(
           JSON.stringify({
@@ -88,7 +86,7 @@ describe("RecipeSearch Component - API Response Test", () => {
     await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
 
     // Ensure `onRecipesFetched` is called with the correct recipe data
-    expect(mockOnRecipesFetched).toHaveBeenCalledWith([
+    expect(mockFetchRecipes).toHaveBeenCalledWith([
       {
         id: 661760,
         title: "Strawberry Bites",
@@ -98,17 +96,16 @@ describe("RecipeSearch Component - API Response Test", () => {
   });
 
   test("displays an error message if the API call fails", async () => {
-    // Mock a failed API response
-    // Mock a failed fetch call
-    (global.fetch as jest.Mock).mockImplementationOnce(() =>
-    Promise.reject(new Error("Failed to fetch"))
+    // Mock fetch to simulate a failed API call
+    global.fetch = vi.fn().mockImplementationOnce(() =>
+      Promise.reject(new Error("Failed to fetch"))
     );
 
     // Simulate user typing in the search input
     const input = screen.getByPlaceholderText("Search recipes...");
     fireEvent.change(input, { target: { value: "str" } });
 
-    // Wait for the fetch to be triggered
+    // Wait for the fetch call to fail
     await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
 
     // Ensure no suggestions are displayed

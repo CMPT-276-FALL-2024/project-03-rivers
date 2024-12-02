@@ -2,7 +2,7 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { CheckboxIngredients } from "../../app/recipe/components/ingredients-selector";
-import { vi } from "vitest";
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import * as toastModule from "@/hooks/use-toast";
 
 // Mock the toast module
