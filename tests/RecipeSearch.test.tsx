@@ -1,7 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { RecipeSearch } from '../app/recipe/components/searchbox';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/extend-expect';
+import { expect, test, describe, beforeEach, jest } from "bun:test";
 
 // モックの設定
 global.fetch = jest.fn();
