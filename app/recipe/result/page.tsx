@@ -2,6 +2,7 @@
 
 "use client";
 
+import React from "react";
 import { Suspense } from "react";
 import RecipeDetail from "../components/RecipeDetail";
 import { Skeleton } from "@/components/ui/skeleton";
