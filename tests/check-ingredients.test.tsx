@@ -1,9 +1,9 @@
 // check-ingredients.test.tsx
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { CheckboxIngredients } from "../app/recipe/components/ingredients-selector";
 import { vi } from "vitest";
 import * as toastModule from "@/hooks/use-toast";
+import { CheckboxIngredients } from "@/app/recipe/components/ingredients-selector";
 
 // Mock the toast module
 vi.mock("@/hooks/use-toast", () => ({
