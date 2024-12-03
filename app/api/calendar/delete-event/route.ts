@@ -1,10 +1,11 @@
-//@app/api/calendar/debug/route.ts
+//@app/api/calendar/delete-event/route.ts
 
 import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
 
-export async function GET(request: Request) {
+export async function DELETE(request: Request) {
   try {
+    const { eventId } = await request.json();
     const accessToken = request.headers.get('Authorization')?.split('Bearer ')[1];
 
     if (!accessToken) {
@@ -23,47 +24,29 @@ export async function GET(request: Request) {
       auth: oauth2Client 
     });
 
-    // カレンダーリストを取得
-    console.log('Fetching calendar list...');
+    // RNAカレンダーのIDを取得
     const calendarList = await calendar.calendarList.list();
-    console.log('Calendar list fetched');
-
-    // RNAカレンダーを検索
     const rnaCalendar = calendarList.data.items?.find(cal => cal.summary === 'RNA');
 
     if (!rnaCalendar?.id) {
-      console.log('RNA calendar not found');
       return NextResponse.json({ 
         success: false, 
-        error: 'RNA calendar not found',
-        calendars: calendarList.data.items
+        error: 'RNA calendar not found' 
       });
     }
 
-    console.log('RNA calendar found:', rnaCalendar.id);
-
-    // 今日から1週間のイベントを取得
-    const now = new Date();
-    const oneWeekLater = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-
-    console.log('Fetching events...');
-    const response = await calendar.events.list({
+    // イベントを削除
+    await calendar.events.delete({
       calendarId: rnaCalendar.id,
-      timeMin: now.toISOString(),
-      timeMax: oneWeekLater.toISOString(),
-      singleEvents: true,
-      orderBy: 'startTime',
+      eventId: eventId,
     });
-
-    console.log('Events fetched:', response.data.items?.length || 0);
 
     return NextResponse.json({ 
       success: true, 
-      calendarId: rnaCalendar.id,
-      events: response.data.items 
+      message: 'Event deleted successfully' 
     });
   } catch (error) {
-    console.error('Error in debug API route:', error);
+    console.error('Error in delete event API route:', error);
     
     let errorMessage = 'An error occurred';
     if (error instanceof Error) {
@@ -71,7 +54,7 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json(
-      { success: false, error: errorMessage, stack: error instanceof Error ? error.stack : undefined },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }

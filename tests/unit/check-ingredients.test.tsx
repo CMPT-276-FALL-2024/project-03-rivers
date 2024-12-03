@@ -1,9 +1,14 @@
 // check-ingredients.test.tsx
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+<<<<<<< HEAD:tests/unit/check-ingredients.test.tsx
 import { CheckboxIngredients } from "../../app/recipe/components/ingredients-selector";
 import { vi, describe, it, expect, beforeEach } from "vitest";
+=======
+import { vi } from "vitest";
+>>>>>>> c44443251ff99b215a309974030a8d55c4d74fd5:tests/check-ingredients.test.tsx
 import * as toastModule from "@/hooks/use-toast";
+import { CheckboxIngredients } from "@/app/recipe/components/ingredients-selector";
 
 // Mock the toast module
 vi.mock("@/hooks/use-toast", () => ({
@@ -63,3 +68,8 @@ describe("CheckboxIngredients Component", () => {
     });
   });
 });
+<<<<<<< HEAD:tests/unit/check-ingredients.test.tsx
+=======
+
+//test
+>>>>>>> c44443251ff99b215a309974030a8d55c4d74fd5:tests/check-ingredients.test.tsx

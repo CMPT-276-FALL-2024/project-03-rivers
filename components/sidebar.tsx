@@ -17,7 +17,8 @@ import Link from "next/link"
 import Helix from "./icons/helix"
 import { DatePicker } from "./date-picker"
 import { Calendars } from "./calendars"
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import { Calendar, Home, Inbox, Search, Settings, Users } from "lucide-react"
+
 
 const items = [
     {
@@ -36,9 +37,9 @@ const items = [
       icon: Calendar,
     },
     {
-      title: "Favorites",
-      url: "#",
-      icon: Inbox,
+      title: "Developers",
+      url: "/developers",
+      icon: Users,
     },
 ]
   

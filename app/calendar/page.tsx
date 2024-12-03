@@ -1,3 +1,4 @@
+//@app/calendar/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,6 +9,8 @@ import { WeeklyView } from "./components/weekly-view";
 import { EventDetails } from "./components/event-details";
 import { CalendarEvent } from "./types";
 import { addDays, startOfDay } from "date-fns";
+import { useToast } from "@/hooks/use-toast";
+
 
 export default function CalendarPage() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -16,6 +19,7 @@ export default function CalendarPage() {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchEvents(selectedDate);
@@ -74,6 +78,46 @@ export default function CalendarPage() {
     setIsDrawerOpen(true);
   };
 
+  const handleDeleteEvent = async (eventId: string) => {
+    const accessToken = localStorage.getItem("googleAccessToken");
+
+    if (!accessToken) {
+      setError("Need to sign in to delete events");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/calendar/delete-event", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ eventId }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.error || "Failed to delete event");
+      }
+
+     
+      setEvents(events.filter(event => event.id !== eventId));
+      toast({
+        title: "Success",
+        description: "Event deleted successfully",
+      });
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      throw error; 
+    }
+  };
+
   return (
     <div className="container mx-auto p-4">
       {error && (
@@ -106,7 +150,8 @@ export default function CalendarPage() {
       <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
         <EventDetails 
           event={selectedEvent} 
-          onClose={() => setIsDrawerOpen(false)} 
+          onClose={() => setIsDrawerOpen(false)}
+          onDelete={handleDeleteEvent}
         />
       </Drawer>
     </div>

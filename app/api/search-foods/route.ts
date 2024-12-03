@@ -1,3 +1,5 @@
+//@app/api/search-foods/route.ts
+
 import { NextRequest, NextResponse } from "next/server";
 
 async function getSearchQuery(req: NextRequest) {

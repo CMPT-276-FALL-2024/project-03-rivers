@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { HelpCircle } from 'lucide-react';
+import { SpecificSearch } from "./components/specific-search";
 
 interface Recipe {
   id: number;
@@ -105,10 +106,11 @@ export default function Recipe() {
         <div className="w-full md:w-1/3 space-y-4">
           <div className="mb-1">
             <RecipeSearch onRecipesFetched={handleRecipesFetched} />
-            <h1 className="text-center font-extrabold text-3xl text-gray-500 p-32">OR</h1>                  
+            <h1 className="text-center font-extrabold text-3xl text-gray-500 p-20">OR</h1>                  
           </div>
           <div>
-            <CheckboxIngredients onRecipesFetched={handleRecipesFetched} />
+            {/* <CheckboxIngredients onRecipesFetched={handleRecipesFetched} /> */}
+            <SpecificSearch onRecipesFetched={handleRecipesFetched} />
           </div>                
         </div>
 

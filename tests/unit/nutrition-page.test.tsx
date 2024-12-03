@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import Nutrition from "../../app/recipe/result/nutrition/page"; // Adjusted import to match your file structure
+import Nutrition from "@/app/recipe/result/nutrition/page"; // Adjusted import to match your file structure
 
 // Mock `useSearchParams` from Next.js for the recipe ID
 vi.mock("next/navigation", () => ({
@@ -47,6 +47,9 @@ describe("NutritionPage Component", () => {
     expect(screen.getByText("Minerals")).toBeInTheDocument();
     expect(screen.getByText("Vitamins")).toBeInTheDocument();
   });
+
+  global.fetch = vi.fn() as unknown as jest.Mock;
+
 
   it("renders calorie card with fetched data", async () => {
     // Mock the API response for the calorie card

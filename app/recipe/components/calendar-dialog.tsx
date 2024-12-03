@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ConfettiFireworks } from './confetti-fireworks';
+import Link from 'next/link';
 
 
 interface CalendarDialogProps {
@@ -28,6 +29,9 @@ export function CalendarDialog({ isOpen, onClose, message, showConfetti }: Calen
             <DialogDescription>{message}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
+            <Link href="/calendar">
+              <Button>View Calendar</Button>
+            </Link>
             <Button onClick={onClose}>Close</Button>
           </DialogFooter>
         </DialogContent>

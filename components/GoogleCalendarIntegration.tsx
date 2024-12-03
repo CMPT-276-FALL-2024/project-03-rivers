@@ -10,6 +10,8 @@ interface GoogleCalendarIntegrationProps {
   selectedTime: string | undefined;
   notes: string;
   ingredients: { name: string; amount: string }[];
+  instructions: string;
+  recipeId: number;
 }
 
 export function GoogleCalendarIntegration({ 
@@ -17,7 +19,9 @@ export function GoogleCalendarIntegration({
   selectedDate, 
   selectedTime, 
   notes,
-  ingredients 
+  ingredients,
+  instructions,
+  recipeId
 }: GoogleCalendarIntegrationProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -53,8 +57,13 @@ export function GoogleCalendarIntegration({
       const endDateTime = new Date(eventDateTime.getTime() + 60 * 60 * 1000);
 
       const description = `
+Recipe ID: ${recipeId}
+
 Ingredients:
 ${ingredients.map(i => `- ${i.name}: ${i.amount}`).join('\n')}
+
+Instructions:
+${instructions}
 
 Notes:
 ${notes}

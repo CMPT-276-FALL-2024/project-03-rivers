@@ -32,7 +32,7 @@
     "cmdk": "1.0.0",
     "critters": "^0.0.25",
     "date-fns": "^4.1.0",
-    "framer-motion": "^11.11.17",
+    "framer-motion": "^11.12.0",
     "googleapis": "^144.0.0",
     "jwt-decode": "^4.0.0",
     "ldrs": "^1.0.2",

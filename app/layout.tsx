@@ -9,6 +9,8 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { AppSidebar } from "@/components/sidebar";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
+import { DynamicBreadcrumb } from "@/components/dynamic-breadcrumb";
+import { ModeToggle } from "@/components/mode-toggle";
 // import { PageTransition } from "@/components/page-transition";
 
 const geistSans = localFont({
@@ -54,23 +56,21 @@ export default function RootLayout({
           <SidebarProvider>
             <AppSidebar />
             <SidebarInset>
-              <header className="sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4">
-                <SidebarTrigger className="-ml-1" />
-                <Separator orientation="vertical" className="mr-2 h-4" />
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>Home</BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb>
+              <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 justify-between">
+                <div className="flex items-center gap-2">
+                  <SidebarTrigger className="-ml-1" />
+                  <Separator orientation="vertical" className="mr-2 h-4" />
+                  <DynamicBreadcrumb />                
+                </div>
+
+                <ModeToggle />
               </header>
-              <main>
+              <main className="relative flex justify-center min-h-screen overflow-hidden">
                 {children}
               </main>
-              {/* <footer >
+              <footer className="sticky">
                 <Footer />
-              </footer> */}
+              </footer>
             </SidebarInset>
           </SidebarProvider>    
 
