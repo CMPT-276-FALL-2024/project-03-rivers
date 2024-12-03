@@ -1,13 +1,14 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { vi } from 'vitest';
-import { useRouter } from 'next/navigation';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import RecipeDetails from '@/app/recipe/result/page';
 
-// Mock the useRouter hook
+// Mock the next/navigation module
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  useSearchParams: vi.fn(),
 }));
 
 // Mock recipe data
@@ -26,20 +27,14 @@ const mockRecipe = {
 // Mock the fetch function
 global.fetch = vi.fn();
 
-// Mock useRouter to provide searchParams
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: vi.fn(),
-  }),
-  useSearchParams: () => new URLSearchParams({ id: '1' }),
-}));
-
 describe('RecipeDetails', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (global.fetch as jest.Mock).mockResolvedValue({
       json: async () => mockRecipe,
     });
+    (useSearchParams as jest.Mock).mockReturnValue(new URLSearchParams({ id: '1' }));
+    (useRouter as jest.Mock).mockReturnValue({ push: vi.fn() });
   });
 
   it('displays recipe details correctly', async () => {
