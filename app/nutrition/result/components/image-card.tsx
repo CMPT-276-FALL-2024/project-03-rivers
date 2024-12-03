@@ -1,3 +1,5 @@
+//@/app/result/components/image-card.tsx
+
 "use client";
 
 import * as React from "react";

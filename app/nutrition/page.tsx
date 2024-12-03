@@ -1,3 +1,5 @@
+//@/app/nutrition/page.tsx
+
 "use client";
 
 import Image from "next/image";

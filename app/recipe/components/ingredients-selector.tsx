@@ -1,3 +1,5 @@
+//@/app/recipe/components/ingredient-selector.tsx
+
 "use client";
 
 import React from "react";

@@ -1,3 +1,5 @@
+//@/app/result/components/ingredients-card.tsx
+
 "use client";
 
 import { Button } from "@/components/ui/button";
