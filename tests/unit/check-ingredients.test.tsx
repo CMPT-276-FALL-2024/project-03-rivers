@@ -1,4 +1,8 @@
 // check-ingredients.test.tsx
+
+// Rendering ingredient checkboxes dynamically.
+// Fetching recipes based on selected ingredients.
+
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { CheckboxIngredients } from "../../app/recipe/components/ingredients-selector";

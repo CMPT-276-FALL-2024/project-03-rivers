@@ -48,7 +48,7 @@ describe("NutritionPage Component", () => {
     expect(screen.getByText("Vitamins")).toBeInTheDocument();
   });
 
-  global.fetch = vi.fn() as unknown as jest.Mock;
+  global.fetch = vi.fn() as unknown jest.Mock;
 
 
   it("renders calorie card with fetched data", async () => {

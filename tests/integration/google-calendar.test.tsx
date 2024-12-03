@@ -1,5 +1,11 @@
 //@tests/integration/google-calendar.test.tsx
 
+// a) Add to Calendar (Integration Test) : Mocking API calls for "Add to Calendar" and verifying data is sent correctly to Google Calendar.
+//    Checking the notification modal and its actions (View Calendar, Close). Indirectly covered as it verifies successful addition of events and logs success.
+// b) Error Handling (Integration Test) : Simulate API errors for both Google Calendar and Spoonacular, ensuring proper error messages display to the user.
+// c) Recipe Plan in Calendar (Integration Test) : Verify the planned recipe appears in the calendar with correct details.
+
+
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { expect, vi, test, describe, beforeEach } from 'vitest';
