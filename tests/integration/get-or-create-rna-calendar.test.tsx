@@ -1,20 +1,19 @@
-import { createMocks } from 'node-mocks-http';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { google } from 'googleapis';
-import { POST as getOrCreateRNACalendar } from '@/app/api/calendar/get-or-create-rna/route';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { NextRequest } from 'next/server';
+import { GET as getOrCreateRNACalendar } from '@/app/api/calendar/get-or-create-rna/route';
 
-// Mock the googleapis module
-jest.mock('googleapis', () => ({
+// Mock the googleapis
+vi.mock('googleapis', () => ({
   google: {
     auth: {
-      OAuth2: jest.fn(() => ({
-        setCredentials: jest.fn(),
+      OAuth2: vi.fn().mockImplementation(() => ({
+        setCredentials: vi.fn(),
       })),
     },
-    calendar: jest.fn(() => ({
+    calendar: vi.fn().mockImplementation(() => ({
       calendarList: {
-        list: jest.fn(),
-        insert: jest.fn(),
+        list: vi.fn(),
+        insert: vi.fn(),
       },
     })),
   },
@@ -24,12 +23,12 @@ describe('Get or Create RNA Calendar API', () => {
   const mockAccessToken = 'mock-access-token';
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should return existing RNA calendar if it exists', async () => {
-    const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-      method: 'POST',
+    const req = new NextRequest('http://localhost:3000/api/calendar/get-or-create-rna', {
+      method: 'GET',
       headers: {
         'Authorization': `Bearer ${mockAccessToken}`,
       },
@@ -43,12 +42,14 @@ describe('Get or Create RNA Calendar API', () => {
       },
     };
 
-    (google.calendar().calendarList.list as jest.Mock).mockResolvedValue(mockCalendarList);
+    const calendar = vi.mocked(vi.mocked(vi.importActual('googleapis')).google.calendar());
+    calendar.calendarList.list.mockResolvedValue(mockCalendarList);
 
-    await getOrCreateRNACalendar(req as any, res as any);
+    const response = await getOrCreateRNACalendar(req);
+    const responseData = await response.json();
 
-    expect(res._getStatusCode()).toBe(200);
-    expect(JSON.parse(res._getData())).toEqual({
+    expect(response.status).toBe(200);
+    expect(responseData).toEqual({
       success: true,
       calendarId: 'existing-rna-id',
       isNew: false,
@@ -56,8 +57,8 @@ describe('Get or Create RNA Calendar API', () => {
   });
 
   it('should create a new RNA calendar if it does not exist', async () => {
-    const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-      method: 'POST',
+    const req = new NextRequest('http://localhost:3000/api/calendar/get-or-create-rna', {
+      method: 'GET',
       headers: {
         'Authorization': `Bearer ${mockAccessToken}`,
       },
@@ -73,13 +74,15 @@ describe('Get or Create RNA Calendar API', () => {
       data: { id: 'new-rna-id' },
     };
 
-    (google.calendar().calendarList.list as jest.Mock).mockResolvedValue(mockCalendarList);
-    (google.calendar().calendarList.insert as jest.Mock).mockResolvedValue(mockNewCalendar);
+    const calendar = vi.mocked(vi.mocked(vi.importActual('googleapis')).google.calendar());
+    calendar.calendarList.list.mockResolvedValue(mockCalendarList);
+    calendar.calendarList.insert.mockResolvedValue(mockNewCalendar);
 
-    await getOrCreateRNACalendar(req as any, res as any);
+    const response = await getOrCreateRNACalendar(req);
+    const responseData = await response.json();
 
-    expect(res._getStatusCode()).toBe(200);
-    expect(JSON.parse(res._getData())).toEqual({
+    expect(response.status).toBe(200);
+    expect(responseData).toEqual({
       success: true,
       calendarId: 'new-rna-id',
       isNew: true,
@@ -87,27 +90,29 @@ describe('Get or Create RNA Calendar API', () => {
   });
 
   it('should handle API errors when fetching calendar list', async () => {
-    const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-      method: 'POST',
+    const req = new NextRequest('http://localhost:3000/api/calendar/get-or-create-rna', {
+      method: 'GET',
       headers: {
         'Authorization': `Bearer ${mockAccessToken}`,
       },
     });
 
-    (google.calendar().calendarList.list as jest.Mock).mockRejectedValue(new Error('API Error'));
+    const calendar = vi.mocked(vi.mocked(vi.importActual('googleapis')).google.calendar());
+    calendar.calendarList.list.mockRejectedValue(new Error('API Error'));
 
-    await getOrCreateRNACalendar(req as any, res as any);
+    const response = await getOrCreateRNACalendar(req);
+    const responseData = await response.json();
 
-    expect(res._getStatusCode()).toBe(500);
-    expect(JSON.parse(res._getData())).toEqual({
+    expect(response.status).toBe(500);
+    expect(responseData).toEqual({
       success: false,
       error: 'Error fetching calendar list: API Error',
     });
   });
 
   it('should handle API errors when creating a new calendar', async () => {
-    const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-      method: 'POST',
+    const req = new NextRequest('http://localhost:3000/api/calendar/get-or-create-rna', {
+      method: 'GET',
       headers: {
         'Authorization': `Bearer ${mockAccessToken}`,
       },
@@ -119,13 +124,15 @@ describe('Get or Create RNA Calendar API', () => {
       },
     };
 
-    (google.calendar().calendarList.list as jest.Mock).mockResolvedValue(mockCalendarList);
-    (google.calendar().calendarList.insert as jest.Mock).mockRejectedValue(new Error('API Error'));
+    const calendar = vi.mocked(vi.mocked(vi.importActual('googleapis')).google.calendar());
+    calendar.calendarList.list.mockResolvedValue(mockCalendarList);
+    calendar.calendarList.insert.mockRejectedValue(new Error('API Error'));
 
-    await getOrCreateRNACalendar(req as any, res as any);
+    const response = await getOrCreateRNACalendar(req);
+    const responseData = await response.json();
 
-    expect(res._getStatusCode()).toBe(500);
-    expect(JSON.parse(res._getData())).toEqual({
+    expect(response.status).toBe(500);
+    expect(responseData).toEqual({
       success: false,
       error: 'Error creating RNA calendar: API Error',
     });
