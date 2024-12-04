@@ -1,4 +1,4 @@
-//@/components/ui/GoogleCalendarIntegration.tsx
+//@/components/GoogleCalendarIntegration.tsx
 
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
