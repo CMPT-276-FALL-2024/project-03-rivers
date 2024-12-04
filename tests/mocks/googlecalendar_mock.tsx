@@ -14,6 +14,9 @@ export const googleCalendarMock = {
     calendars: {
       insert: vi.fn(),
     },
+    events: {
+      insert: vi.fn(),
+    },
   }),
 };
 
