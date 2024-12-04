@@ -3,34 +3,6 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
 import MockRecipeDetail from '../mocks/mock_recipedetail';
 
-
-// Mock the next/navigation module
-vi.mock('next/navigation', () => ({
-  useSearchParams: vi.fn(() => ({ get: () => '123' })),
-  useRouter: vi.fn(() => ({ push: vi.fn() })),
-}));
-
-// Mock the useFavorites hook
-vi.mock('@/hooks/useFavorites', () => ({
-  useFavorites: () => ({
-    addFavorite: vi.fn(),
-    removeFavorite: vi.fn(),
-    isFavorite: vi.fn(),
-  }),
-}));
-
-// Mock the useToast hook
-vi.mock('@/hooks/use-toast', () => ({
-  useToast: () => ({
-    toast: vi.fn(),
-  }),
-}));
-
-// Mock next/image
-vi.mock('next/image', () => ({
-  default: (props: any) => <img {...props} />
-}));
-
 // Mock the fetch function
 global.fetch = vi.fn();
 
@@ -56,15 +28,14 @@ describe('RecipeDetail Component', () => {
       json: async () => mockRecipe,
     });
 
-    render(<MockRecipeDetail />);
+    render(<MockRecipeDetail recipeId="123" />);
 
     await waitFor(() => {
       expect(screen.getByText('Delicious Recipe')).toBeInTheDocument();
+      expect(screen.getByText('Ingredient 1: 1 cup')).toBeInTheDocument();
+      expect(screen.getByText('Ingredient 2: 2 tbsp')).toBeInTheDocument();
+      expect(screen.getByText('Step 1: Cook. Step 2: Eat.')).toBeInTheDocument();
     });
-
-    expect(screen.getByText('Ingredient 1: 1 cup')).toBeInTheDocument();
-    expect(screen.getByText('Ingredient 2: 2 tbsp')).toBeInTheDocument();
-    expect(screen.getByText('Step 1: Cook. Step 2: Eat.')).toBeInTheDocument();
 
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringContaining('https://api.spoonacular.com/recipes/123/information')
@@ -74,19 +45,14 @@ describe('RecipeDetail Component', () => {
   it('handles API errors when fetching recipe details', async () => {
     (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('API Error'));
 
-    render(<MockRecipeDetail />);
+    render(<MockRecipeDetail recipeId="123" />);
 
     await waitFor(() => {
-      expect(screen.getByTestId('loading-message')).toBeInTheDocument();
+      expect(screen.getByTestId('error-message')).toHaveTextContent('Failed to fetch recipe details');
     });
 
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringContaining('https://api.spoonacular.com/recipes/123/information')
     );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('error-message')).toHaveTextContent('Failed to fetch recipe details');
-    });
   });
 });
-
