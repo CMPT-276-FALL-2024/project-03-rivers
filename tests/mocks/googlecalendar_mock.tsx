@@ -11,6 +11,9 @@ export const googleCalendarMock = {
       list: vi.fn(),
       insert: vi.fn(),
     },
+    calendars: {
+      insert: vi.fn(),
+    },
   }),
 };
 
