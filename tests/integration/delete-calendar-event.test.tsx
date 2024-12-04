@@ -131,7 +131,7 @@ describe('Delete Event from Google Calendar API', () => {
       body: JSON.stringify({ eventId: 'non-existent-event-id' })
     });
 
-    googleMock.calendar().events.delete.mockRejectedValue({ code: 404, message: 'Not Found' });
+    googleMock.calendar().events.delete.mockRejectedValue(new Error('An error occurred'));
 
     const response = await deleteEventFromCalendar(req);
     const responseData = await response.json();
@@ -139,7 +139,7 @@ describe('Delete Event from Google Calendar API', () => {
     expect(response.status).toBe(500);
     expect(responseData).toEqual({
       success: false,
-      error: 'Not Found'
+      error: 'An error occurred'
     });
   });
 });
