@@ -1,24 +1,11 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { NextRequest } from 'next/server';
 import { GET as getOrCreateRNACalendar } from '@/app/api/calendar/get-or-create-rna/route';
+import googleCalendarMock from '../mocks/googlecalendar_mock';
 
-vi.mock('googleapis', () => {
-  return {
-    google: {
-      auth: {
-        OAuth2: vi.fn().mockImplementation(() => ({
-          setCredentials: vi.fn(),
-        })),
-      },
-      calendar: vi.fn().mockReturnValue({
-        calendarList: {
-          list: vi.fn(),
-          insert: vi.fn(),
-        },
-      }),
-    },
-  };
-});
+vi.mock('googleapis', () => ({
+  google: googleCalendarMock
+}));
 
 describe('Get or Create RNA Calendar API', () => {
   const mockAccessToken = 'mock-access-token';
@@ -43,8 +30,7 @@ describe('Get or Create RNA Calendar API', () => {
       },
     };
 
-    const { google } = await import('googleapis');
-    vi.mocked(google.calendar().calendarList.list).mockResolvedValue(mockCalendarList);
+    googleCalendarMock.calendar().calendarList.list.mockResolvedValue(mockCalendarList);
 
     const response = await getOrCreateRNACalendar(req);
     const responseData = await response.json();
@@ -75,9 +61,8 @@ describe('Get or Create RNA Calendar API', () => {
       data: { id: 'new-rna-id' },
     };
 
-    const { google } = await import('googleapis');
-    vi.mocked(google.calendar().calendarList.list).mockResolvedValue(mockCalendarList);
-    vi.mocked(google.calendar().calendarList.insert).mockResolvedValue(mockNewCalendar);
+    googleCalendarMock.calendar().calendarList.list.mockResolvedValue(mockCalendarList);
+    googleCalendarMock.calendar().calendarList.insert.mockResolvedValue(mockNewCalendar);
 
     const response = await getOrCreateRNACalendar(req);
     const responseData = await response.json();
@@ -98,8 +83,7 @@ describe('Get or Create RNA Calendar API', () => {
       },
     });
 
-    const { google } = await import('googleapis');
-    vi.mocked(google.calendar().calendarList.list).mockRejectedValue(new Error('API Error'));
+    googleCalendarMock.calendar().calendarList.list.mockRejectedValue(new Error('API Error'));
 
     const response = await getOrCreateRNACalendar(req);
     const responseData = await response.json();
@@ -126,9 +110,8 @@ describe('Get or Create RNA Calendar API', () => {
       },
     };
 
-    const { google } = await import('googleapis');
-    vi.mocked(google.calendar().calendarList.list).mockResolvedValue(mockCalendarList);
-    vi.mocked(google.calendar().calendarList.insert).mockRejectedValue(new Error('API Error'));
+    googleCalendarMock.calendar().calendarList.list.mockResolvedValue(mockCalendarList);
+    googleCalendarMock.calendar().calendarList.insert.mockRejectedValue(new Error('API Error'));
 
     const response = await getOrCreateRNACalendar(req);
     const responseData = await response.json();
