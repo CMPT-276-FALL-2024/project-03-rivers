@@ -19,8 +19,23 @@ vi.mock('@/hooks/useFavorites', () => ({
   }),
 }));
 
+// Mock the useToast hook
+vi.mock('@/hooks/use-toast', () => ({
+  useToast: () => ({
+    toast: vi.fn(),
+  }),
+}));
+
 // Mock the fetch function
 global.fetch = vi.fn();
+
+// Mock next/image to remove legacy prop warning
+vi.mock('next/image', () => ({
+  default: (props: any) => {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={props.src} alt={props.alt} />;
+  },
+}));
 
 describe('RecipeDetail Component', () => {
   beforeEach(() => {
@@ -46,12 +61,10 @@ describe('RecipeDetail Component', () => {
 
     render(<RecipeDetail />);
 
-    await waitFor(() => {
-      expect(screen.getByText('Delicious Recipe')).toBeInTheDocument();
-      expect(screen.getByText('Ingredient 1: 1 cup')).toBeInTheDocument();
-      expect(screen.getByText('Ingredient 2: 2 tbsp')).toBeInTheDocument();
-      expect(screen.getByText('Step 1: Cook. Step 2: Eat.')).toBeInTheDocument();
-    });
+    await screen.findByText('Delicious Recipe');
+    expect(screen.getByText('Ingredient 1: 1 cup')).toBeInTheDocument();
+    expect(screen.getByText('Ingredient 2: 2 tbsp')).toBeInTheDocument();
+    expect(screen.getByText('Step 1: Cook. Step 2: Eat.')).toBeInTheDocument();
 
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringContaining('https://api.spoonacular.com/recipes/123/information')
@@ -63,16 +76,13 @@ describe('RecipeDetail Component', () => {
 
     render(<RecipeDetail />);
 
-    await waitFor(() => {
-      expect(screen.getByText('Loading')).toBeInTheDocument();
-    });
+    await screen.findByText('Loading');
 
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringContaining('https://api.spoonacular.com/recipes/123/information')
     );
 
-    // might want to add an error message to the component and test for it here
-    // expect(screen.getByText('Failed to fetch recipe details')).toBeInTheDocument();
+    await screen.findByText('Failed to fetch recipe details');
   });
 });
 
