@@ -1,41 +1,10 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
-import RecipeDetail from '@/app/recipe/components/RecipeDetail';
-
-
-// Mock the next/navigation module
-vi.mock('next/navigation', () => ({
-  useSearchParams: vi.fn(() => ({ get: () => '123' })),
-  useRouter: vi.fn(() => ({ push: vi.fn() })),
-}));
-
-// Mock the useFavorites hook
-vi.mock('@/hooks/useFavorites', () => ({
-  useFavorites: () => ({
-    addFavorite: vi.fn(),
-    removeFavorite: vi.fn(),
-    isFavorite: vi.fn(),
-  }),
-}));
-
-// Mock the useToast hook
-vi.mock('@/hooks/use-toast', () => ({
-  useToast: () => ({
-    toast: vi.fn(),
-  }),
-}));
+import MockRecipeDetail from '../mocks/mock_recipedetail';
 
 // Mock the fetch function
 global.fetch = vi.fn();
-
-// Mock next/image to remove legacy prop warning
-vi.mock('next/image', () => ({
-  default: (props: any) => {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={props.src} alt={props.alt} />;
-  },
-}));
 
 describe('RecipeDetail Component', () => {
   beforeEach(() => {
@@ -59,12 +28,14 @@ describe('RecipeDetail Component', () => {
       json: async () => mockRecipe,
     });
 
-    render(<RecipeDetail />);
+    render(<MockRecipeDetail recipeId="123" />);
 
-    await screen.findByText('Delicious Recipe');
-    expect(screen.getByText('Ingredient 1: 1 cup')).toBeInTheDocument();
-    expect(screen.getByText('Ingredient 2: 2 tbsp')).toBeInTheDocument();
-    expect(screen.getByText('Step 1: Cook. Step 2: Eat.')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Delicious Recipe')).toBeInTheDocument();
+      expect(screen.getByText('Ingredient 1: 1 cup')).toBeInTheDocument();
+      expect(screen.getByText('Ingredient 2: 2 tbsp')).toBeInTheDocument();
+      expect(screen.getByText('Step 1: Cook. Step 2: Eat.')).toBeInTheDocument();
+    });
 
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringContaining('https://api.spoonacular.com/recipes/123/information')
@@ -74,15 +45,15 @@ describe('RecipeDetail Component', () => {
   it('handles API errors when fetching recipe details', async () => {
     (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('API Error'));
 
-    render(<RecipeDetail />);
+    render(<MockRecipeDetail recipeId="123" />);
 
-    await screen.findByText('Loading');
+    await waitFor(() => {
+      expect(screen.getByTestId('error-message')).toHaveTextContent('Failed to fetch recipe details');
+    });
 
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringContaining('https://api.spoonacular.com/recipes/123/information')
     );
-
-    await screen.findByText('Failed to fetch recipe details');
   });
 });
 
