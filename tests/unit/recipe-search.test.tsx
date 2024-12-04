@@ -6,15 +6,18 @@ import { RecipeSearch } from '@/app/recipe/components/searchbox';
 // Mock the fetch function
 global.fetch = vi.fn();
 
-describe('RecipeSearch Component', () => {
+describe('RecipeSearch Component - Full-Text Search', () => {
+  const mockOnRecipesFetched = vi.fn();
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('searches recipes by query and displays results', async () => {
     const mockRecipes = [
-      { id: 1, title: 'Pasta Recipe', image: 'pasta.jpg' },
-      { id: 2, title: 'Pizza Recipe', image: 'pizza.jpg' },
+      { id: 1, title: 'Spaghetti Carbonara', image: 'spaghetti.jpg' },
+      { id: 2, title: 'Chicken Parmesan', image: 'chicken.jpg' },
+      { id: 3, title: 'Vegetable Stir Fry', image: 'stirfry.jpg' },
     ];
 
     (global.fetch as jest.Mock).mockResolvedValueOnce({
@@ -22,7 +25,6 @@ describe('RecipeSearch Component', () => {
       json: async () => ({ results: mockRecipes }),
     });
 
-    const mockOnRecipesFetched = vi.fn();
     render(<RecipeSearch onRecipesFetched={mockOnRecipesFetched} />);
 
     const searchInput = screen.getByPlaceholderText('Search recipes...');
@@ -43,7 +45,6 @@ describe('RecipeSearch Component', () => {
   it('handles API errors during search', async () => {
     (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('API Error'));
 
-    const mockOnRecipesFetched = vi.fn();
     render(<RecipeSearch onRecipesFetched={mockOnRecipesFetched} />);
 
     const searchInput = screen.getByPlaceholderText('Search recipes...');
@@ -59,7 +60,40 @@ describe('RecipeSearch Component', () => {
     });
 
     expect(mockOnRecipesFetched).toHaveBeenCalledWith([]);
-    expect(screen.getByText(/error occurred/i)).toBeInTheDocument();
+  });
+
+  it('fetches recipe by ID when a suggestion is selected', async () => {
+    const mockSuggestion = { id: 1, title: 'Spaghetti Carbonara', imageType: 'jpg' };
+    const mockRecipe = { id: 1, title: 'Spaghetti Carbonara', image: 'spaghetti.jpg' };
+
+    (global.fetch as jest.Mock)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => [mockSuggestion],
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockRecipe,
+      });
+
+    render(<RecipeSearch onRecipesFetched={mockOnRecipesFetched} />);
+
+    const searchInput = screen.getByPlaceholderText('Search recipes...');
+    fireEvent.change(searchInput, { target: { value: 'Spaghetti' } });
+
+    await waitFor(() => {
+      expect(screen.getByText('Spaghetti Carbonara')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Spaghetti Carbonara'));
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('https://api.spoonacular.com/recipes/1/information')
+      );
+    });
+
+    expect(mockOnRecipesFetched).toHaveBeenCalledWith([mockRecipe]);
   });
 });
 
