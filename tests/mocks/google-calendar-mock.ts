@@ -1,5 +1,4 @@
-import { Page } from "playwright/test";
-
+import { Page } from '@playwright/test';
 
 export async function mockGoogleCalendarAPI(page: Page) {
   await page.route('**/api/calendar/get-or-create-rna', async route => {

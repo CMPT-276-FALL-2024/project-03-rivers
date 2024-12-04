@@ -1,3 +1,6 @@
+// Will satisfy test only only if its in the folder named e2e due to the script 
+// command ""test:e2e": "bun run playwright test"" in package.json
+
 import { test, expect } from '@playwright/test';
 import { mockGoogleCalendarAPI } from '../mocks/google-calendar-mock';
 
@@ -50,6 +53,40 @@ test.describe('Calendar Integration E2E', () => {
     await expect(page.locator('text=Test Recipe Event')).not.toBeVisible();
   });
 
-  // ... (other tests remain the same)
+  test('should handle errors when adding an event', async ({ page }) => {
+    // Simulate an error response from the API
+    await page.route('**/api/calendar/add-event', async route => {
+      await route.fulfill({
+        status: 500,
+        body: JSON.stringify({ success: false, error: 'Failed to add event' })
+      });
+    });
+
+    // Attempt to add an event
+    await page.click('text=15');
+    await page.fill('input[placeholder="Event title"]', 'Error Test Event');
+    await page.click('button:has-text("Add to Calendar")');
+
+    // Verify error message is displayed
+    await expect(page.locator('text=Failed to add event')).toBeVisible();
+  });
+
+  test('should handle errors when deleting an event', async ({ page }) => {
+    // Simulate an error response from the API
+    await page.route('**/api/calendar/delete-event', async route => {
+      await route.fulfill({
+        status: 500,
+        body: JSON.stringify({ success: false, error: 'Failed to delete event' })
+      });
+    });
+
+    // Attempt to delete an event
+    await page.click('text=Test Recipe Event');
+    await page.click('button:has-text("Delete")');
+    await page.click('button:has-text("Confirm")');
+
+    // Verify error message is displayed
+    await expect(page.locator('text=Failed to delete event')).toBeVisible();
+  });
 });
 
