@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';
 import { SpecificSearch } from '@/app/recipe/components/specific-search';
+import { toast } from '@/hooks/use-toast';
 
 // Mock the fetch function
 global.fetch = vi.fn();
