@@ -1,10 +1,17 @@
 // Will satisfy test only only if its in the folder named e2e due to the script 
 // command ""test:e2e": "bun run playwright test"" in package.json
 
+// test command : 
+
 import { test, expect } from '@playwright/test';
 import { mockGoogleCalendarAPI } from '../mocks/google-calendar-mock';
 
 test.describe('Calendar Integration E2E', () => {
+  test.beforeAll(async () => {
+    // Wait for the server to be ready
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+  });
+
   test.beforeEach(async ({ page }) => {
     // Mock Google Calendar API responses
     await mockGoogleCalendarAPI(page);
@@ -89,4 +96,6 @@ test.describe('Calendar Integration E2E', () => {
     await expect(page.locator('text=Failed to delete event')).toBeVisible();
   });
 });
+
+
 
