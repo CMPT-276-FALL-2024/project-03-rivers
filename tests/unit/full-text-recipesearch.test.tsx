@@ -40,7 +40,7 @@ describe('SpecificSearch Component - Full-Text Search', () => {
     // Select a cuisine
     const cuisineSelect = screen.getByRole('combobox', { name: /cuisine/i });
     fireEvent.click(cuisineSelect);
-    const italianOption = screen.getByText('Italian');
+    const italianOption = screen.getByRole('option', { name: 'Italian' });
     fireEvent.click(italianOption);
 
     // Submit the form
@@ -77,10 +77,12 @@ describe('SpecificSearch Component - Full-Text Search', () => {
       );
     });
 
-    expect(mockOnRecipesFetched).toHaveBeenCalledWith([]);
-    expect(vi.mocked(toast)).toHaveBeenCalledWith({
-      title: "Error",
-      description: "Failed to fetch recipes. Please try again later.",
+    await waitFor(() => {
+      expect(mockOnRecipesFetched).toHaveBeenCalledWith([]);
+      expect(vi.mocked(toast)).toHaveBeenCalledWith({
+        title: "Error",
+        description: "Failed to fetch recipes. Please try again later.",
+      });
     });
   });
 });
