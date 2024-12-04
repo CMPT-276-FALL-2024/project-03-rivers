@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-const googleCalendarMock = {
+export const googleCalendarMock = {
   auth: {
     OAuth2: vi.fn().mockImplementation(() => ({
       setCredentials: vi.fn(),
@@ -14,5 +14,10 @@ const googleCalendarMock = {
   }),
 };
 
-export default googleCalendarMock;
+export const googleMock = {
+  auth: {
+    OAuth2: googleCalendarMock.auth.OAuth2,
+  },
+  calendar: googleCalendarMock.calendar,
+};
 
