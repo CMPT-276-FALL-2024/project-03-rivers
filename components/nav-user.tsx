@@ -151,12 +151,12 @@ export function NavUser({
                 </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+            {/* <DropdownMenuGroup>
                 <DropdownMenuItem>
                 <Sparkles className="mr-2 h-4 w-4" />
                 Favorite
                 </DropdownMenuItem>
-            </DropdownMenuGroup>
+            </DropdownMenuGroup> */}
             {/* <DropdownMenuSeparator />
             <DropdownMenuGroup>
                 <DropdownMenuItem>
