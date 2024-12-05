@@ -10,8 +10,8 @@ export default function Developer() {
       <div className="flex flex-col md:flex-row items-center justify-center gap-8">
         <div className="w-full md:w-2/3 max-w-3xl">
           <HeroVideoDialog
-            videoSrc="https://www.youtube.com/embed/l4jLHlV2KVU"
-            thumbnailSrc="https://i.ytimg.com/vi/l4jLHlV2KVU/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCCdZs-8911DMUte00BLK6Dua-LgA"
+            videoSrc="https://www.youtube.com/embed/fx3ccu59D98"
+            thumbnailSrc="/images/thumbnail.jpeg"
             thumbnailAlt="SEE Yourself at SFU"
           />
         </div>
