@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // OAuth2クライアントの設定
+
     const oauth2Client = new google.auth.OAuth2();
     oauth2Client.setCredentials({ access_token: accessToken });
 
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
       auth: oauth2Client 
     });
 
-    // RNAカレンダーのIDを取得
+
     console.log('Fetching calendar list...');
     const calendarList = await calendar.calendarList.list();
     console.log('Calendar list:', calendarList.data);
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 
     console.log('RNA calendar found:', rnaCalendar.id);
 
-    // イベントを取得
+   
     console.log('Fetching events...');
     const response = await calendar.events.list({
       calendarId: rnaCalendar.id,

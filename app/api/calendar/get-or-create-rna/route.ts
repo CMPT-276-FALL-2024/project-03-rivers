@@ -12,7 +12,7 @@ export async function GET(request: Request) {
       );
     }
 
-    // OAuth2クライアントの設定
+    
     const oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET
@@ -25,7 +25,7 @@ export async function GET(request: Request) {
     });
 
     try {
-      // RNAカレンダーを検索
+      
       console.log('Fetching calendar list...');
       const calendarList = await calendar.calendarList.list();
       console.log('Calendar list fetched:', calendarList.data);
@@ -33,7 +33,7 @@ export async function GET(request: Request) {
       const rnaCalendar = calendarList.data.items?.find(cal => cal.summary === 'RNA');
 
       if (rnaCalendar) {
-        // RNAカレンダーが存在する場合
+        
         console.log('RNA calendar found:', rnaCalendar.id);
         return NextResponse.json({ 
           success: true, 
@@ -42,7 +42,7 @@ export async function GET(request: Request) {
         });
       }
 
-      // RNAカレンダーが存在しない場合、新規作成
+     
       console.log('Creating new calendar...');
       const newCalendar = await calendar.calendars.insert({
         requestBody: {

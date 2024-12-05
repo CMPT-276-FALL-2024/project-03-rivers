@@ -12,7 +12,7 @@ export async function GET(request: Request) {
       );
     }
 
-    // OAuth2クライアントの設定
+   
     const oauth2Client = new google.auth.OAuth2();
     oauth2Client.setCredentials({ access_token: accessToken });
 
@@ -21,12 +21,12 @@ export async function GET(request: Request) {
       auth: oauth2Client 
     });
 
-    // カレンダーリストを取得
+    
     console.log('Fetching calendar list...');
     const calendarList = await calendar.calendarList.list();
     console.log('Calendar list fetched');
 
-    // RNAカレンダーを検索
+    
     const rnaCalendar = calendarList.data.items?.find(cal => cal.summary === 'RNA');
 
     if (!rnaCalendar?.id) {
@@ -40,7 +40,7 @@ export async function GET(request: Request) {
 
     console.log('RNA calendar found:', rnaCalendar.id);
 
-    // 今日から1週間のイベントを取得
+    
     const now = new Date();
     const oneWeekLater = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 

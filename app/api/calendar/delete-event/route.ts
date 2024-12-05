@@ -13,7 +13,7 @@ export async function DELETE(request: Request) {
       );
     }
 
-    // OAuth2クライアントの設定
+    
     const oauth2Client = new google.auth.OAuth2();
     oauth2Client.setCredentials({ access_token: accessToken });
 
@@ -22,7 +22,7 @@ export async function DELETE(request: Request) {
       auth: oauth2Client 
     });
 
-    // RNAカレンダーのIDを取得
+    
     const calendarList = await calendar.calendarList.list();
     const rnaCalendar = calendarList.data.items?.find(cal => cal.summary === 'RNA');
 
@@ -33,7 +33,7 @@ export async function DELETE(request: Request) {
       });
     }
 
-    // イベントを削除
+    
     await calendar.events.delete({
       calendarId: rnaCalendar.id,
       eventId: eventId,
