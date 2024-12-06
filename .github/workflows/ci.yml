@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-  run-tests:
+  run-tests-build:
     needs: setup
     runs-on: ubuntu-latest
     steps:
@@ -66,10 +66,10 @@ jobs:
             bun-version: latest
         - name: Install dependencies
           run: bun install --no-cache
-        - name: Add node_modules/.bin to PATH
-          run: echo 'PATH=$(pwd)/node_modules/.bin:$PATH' >> $GITHUB_ENV
         - name: Remove dependencies
           run: bun remove @testing-library/jest-dom
+        - name: Add node_modules/.bin to PATH
+          run: echo 'PATH=$(pwd)/node_modules/.bin:$PATH' >> $GITHUB_ENV
         - name: Build project
           run: bun run build --verbose > build-log.txt
 
