@@ -68,6 +68,8 @@ jobs:
           run: bun install --no-cache
         - name: Add node_modules/.bin to PATH
           run: echo 'PATH=$(pwd)/node_modules/.bin:$PATH' >> $GITHUB_ENV
+        - name: Remove dependencies
+          run: bun remove @testing-library/jest-dom
         - name: Build project
-          run: bun run build --verbose
+          run: bun run build --verbose > build-log.txt
 
