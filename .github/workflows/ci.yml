@@ -45,9 +45,9 @@ jobs:
         with:
           bun-version: latest
       - name: Run Unit Tests
-        run: bun run vitest tests/unit --coverage
+        run: bun run test tests/unit --coverage
       - name: Run Integration Tests
-        run: bun run vitest tests/integration
+        run: bun run test tests/integration
       - name: Install Playwright
         run: bun add playwright
       - name: Run E2E Tests
