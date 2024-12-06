@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-  run-tests-build:
+  run-tests:
     needs: setup
     runs-on: ubuntu-latest
     steps:
