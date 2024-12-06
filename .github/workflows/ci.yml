@@ -69,5 +69,5 @@ jobs:
         - name: Add node_modules/.bin to PATH
           run: echo 'PATH=$(pwd)/node_modules/.bin:$PATH' >> $GITHUB_ENV
         - name: Build project
-          run: bun run build
+          run: bun run build --verbose
 
