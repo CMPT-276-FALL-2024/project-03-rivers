@@ -29,6 +29,8 @@
     "tests/**/*",
     "**/*.test.ts",
     "**/*.test.tsx",
-    "**/__tests__/**/*"
+    "**/__tests__/**/*",
+    "**/jest.setup.ts",
+    "**/vitest.setup.ts"
   ]
 }
