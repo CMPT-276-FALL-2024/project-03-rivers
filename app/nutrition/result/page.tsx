@@ -1,3 +1,5 @@
+//@/app/result/page.tsx
+
 'use client';
 
 import { useEffect, useState, useCallback, Suspense } from 'react';

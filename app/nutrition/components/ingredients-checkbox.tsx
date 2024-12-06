@@ -1,3 +1,5 @@
+//@/app/result/components/ingredients-checkbox.tsx
+
 "use client";
 
 import React from "react";

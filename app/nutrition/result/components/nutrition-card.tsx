@@ -1,3 +1,5 @@
+//@/app/result/components/nutrition-card.tsx
+
 import * as React from "react";
 
 interface NutritionFactsCardProps {

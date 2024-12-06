@@ -1,3 +1,5 @@
+//@app/calendar/components/weekly-view.tsx
+
 import { addDays, format, isSameDay, parseISO } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { CalendarEvent } from "../types";

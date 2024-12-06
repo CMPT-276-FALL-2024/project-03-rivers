@@ -1,3 +1,5 @@
+//@/components/ui/home-title.tsx
+
 import { Button } from "@/components/ui/button";
 import BoxReveal from "./ui/box-reveal";
 import Link from "next/link";

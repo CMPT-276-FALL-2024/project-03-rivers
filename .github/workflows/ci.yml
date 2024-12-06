@@ -1,10 +1,14 @@
-name: Bun CI/CD
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - ansh-testing-pipeline
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+      - ansh-testing-pipeline
 
 permissions:
   contents: write
@@ -12,66 +16,60 @@ permissions:
 env:
   NEXT_PUBLIC_SPOONACULAR_API_KEY: ${{ secrets.NEXT_PUBLIC_SPOONACULAR_API_KEY }}
   GOOGLE_CALENDAR_API_KEY: ${{ secrets.GOOGLE_CALENDAR_API_KEY }}
+  NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
 
 jobs:
-  build-and-test:
+  setup:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+      - uses: actions/checkout@v3
+      - name: Clean up Git configurations
+        run: |
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          git submodule foreach --recursive 'git config --local --unset-all http.https://github.com/.extraheader || true'
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        run: bun install
 
-    - name: Clean up Git configurations
-      run: |
-        git config --local --unset-all http.https://github.com/.extraheader || true
-        git submodule foreach --recursive 'git config --local --unset-all http.https://github.com/.extraheader || true'
-
-    - name: Use Bun
-      uses: oven-sh/setup-bun@v1
-      with:
-        bun-version: latest
-
-    - name: Install dependencies
-      run: bun install
-
-    - name: Run tests
-      run: bun run test
-
-    - name: Build project
-      run: bun run build
-
-  deploy:
-    needs: build-and-test
+  run-tests:
+    needs: setup
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+      - uses: actions/checkout@v3
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        run: bun install --no-cache
+      - name: Run Unit Tests
+        run: bun run test tests/unit --coverage
+      - name: Run Integration Tests
+        run: bun run test tests/integration
+      - name: Install Playwright
+        run: bun add playwright
+      # - name: Run E2E Tests
+      #   run: bun run playwright test
 
-    - name: Clean up Git configurations
-      run: |
-        git config --local --unset-all http.https://github.com/.extraheader || true
-        git submodule foreach --recursive 'git config --local --unset-all http.https://github.com/.extraheader || true'
+  # build:
+  #     needs: run-tests
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - uses: actions/checkout@v3
+  #       - name: Set up Bun
+  #         uses: oven-sh/setup-bun@v1
+  #         with:
+  #           bun-version: latest
+  #       - name: Install dependencies
+  #         run: bun install --no-cache
+  #       - name: Remove dependencies
+  #         run: bun remove @testing-library/jest-dom
+  #       - name: Add node_modules/.bin to PATH
+  #         run: echo 'PATH=$(pwd)/node_modules/.bin:$PATH' >> $GITHUB_ENV
+  #       - name: Build project
+  #         run: bun run build --verbose > build-log.txt
 
-    - name: Use Bun
-      uses: oven-sh/setup-bun@v1
-      with:
-        bun-version: latest
-
-    - name: Install dependencies
-      run: bun install
-
-    - name: Build project
-      run: bun run build
-
-    # - name: Deploy to Netlify
-    #   if: success() && github.ref == 'refs/heads/main'
-    #   env:
-    #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-    #     NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-    #   run: |
-    #     bun add -g netlify-cli
-    #     netlify deploy --prod

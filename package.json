@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest"
+    "test": "vitest",
+    "test:e2e": "bun run playwright test"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -39,6 +40,7 @@
     "lucide-react": "^0.462.0",
     "next": "15.0.3",
     "next-themes": "^0.4.3",
+    "playwright": "^1.49.0",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-day-picker": "8.10.1",
     "react-dom": "19.0.0-rc-66855b96-20241106",
@@ -49,6 +51,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@types/bun": "^1.1.13",
@@ -56,6 +59,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@vitest/coverage-v8": "^2.1.8",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "jest-environment-jsdom": "^29.7.0",
@@ -63,6 +67,7 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
-    "vitest": "^2.1.5"
-  }
+    "vitest": "^2.1.6"
+  },
+  "type": "module"
 }

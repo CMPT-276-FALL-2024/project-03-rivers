@@ -1,3 +1,5 @@
+//@app/calendar/types/index.ts
+
 export interface CalendarEvent {
     id: string;
     summary: string;

@@ -1,3 +1,5 @@
+//@app/api/calendar/debug/route.ts
+
 import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
 

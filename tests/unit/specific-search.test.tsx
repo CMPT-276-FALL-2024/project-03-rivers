@@ -1,3 +1,18 @@
+//@tests/unit/specific-search.test.tsx
+
+// a) Autocomplete functionality for the search bar.
+// The specific-search.test.tsx tests autocomplete by submitting ingredients like "tomato".
+// b) Filtering recipes by ingredients, cuisine, and diet.
+// The test verifies that users can add/remove ingredients and select filters like cuisine/diet.
+// c) Proper rendering of buttons, inputs, and labels across pages.
+// The form elements and buttons in the SpecificSearch component are tested for proper rendering.
+// d) Searching for recipes and verifying that clicking on "View" navigates to the correct details page.
+// Tests that search results are fetched and the expected data is returned.
+// e) Simulate a failed API call for calendar addition and verify retry or error messaging flow.
+// The test verifies error recovery when the Spoonacular API fails.
+// f) Handling addition/removal of ingredients dynamically.
+// Validating form submission without any ingredients and displaying error messages.
+
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi } from 'vitest';

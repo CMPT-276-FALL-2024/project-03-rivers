@@ -1,3 +1,5 @@
+//@/app/recipe/page.tsx
+
 "use client";
 
 import Image from "next/image";

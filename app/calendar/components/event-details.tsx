@@ -1,3 +1,6 @@
+//check
+//@app/calendar/components/event-details.tsx
+
 import { useState } from "react";
 import { format, parseISO } from "date-fns";
 import { enUS } from "date-fns/locale";

@@ -1,3 +1,5 @@
+//@/components/ui/sidebar.tsx
+
 import {
     Sidebar,
     SidebarContent,

@@ -1,3 +1,5 @@
+//@/app/recipe/result/nutrition/page.tsx
+
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
