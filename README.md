@@ -1,5 +1,5 @@
 # RNA 
-### Recipe - Nutrition Searching and Planning
+### Recipe - Nutrition Searching and Planning🍳
 
 
 
@@ -19,3 +19,15 @@ Also using Google Calenadar API, Sync with users calendar. Detect the calendar c
 This app also has Calendar Page. User can see the recipe schedule that they saved and it's able to go to Recipe result page or Delete event.
 
 
+## APIs
+
+### Spoonacular API
+It allows users to search recipes and pull the information of recipe and recipe nutrition facts.
+
+[Spoonacular API Official](https://spoonacular.com/food-api)
+
+### Google Calendar API
+This api allows users to connect with user Google Account and push & pull calendar information.
+Also, pull the user information (Name, email, and avatar.
+
+[Google Calendar API Official](https://developers.google.com/calendar/api/guides/overview)
