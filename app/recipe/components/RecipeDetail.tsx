@@ -104,10 +104,14 @@ const fetchRecipeDetail = async (id: string) => {
 
 const calculateIngredients = () => {
   if (recipe) {
-    const newIngredients = recipe.ingredients.map(ingredient => ({
-      name: ingredient.name,
-      amount: `${(ingredient.baseAmount * servings).toFixed(2)} ${ingredient.unit}`,
-    }));
+    const newIngredients = recipe.ingredients.map(ingredient => {
+      const amount = ingredient.baseAmount * servings;
+      const formattedAmount = amount % 1 === 0 ? amount.toFixed(0) : amount.toFixed(2).replace(/\.00$/, '');
+      return {
+        name: ingredient.name,
+        amount: `${formattedAmount} ${ingredient.unit}`,
+      };
+    });
     setCalculatedIngredients(newIngredients);
   }
 };
